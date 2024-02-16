@@ -8,18 +8,16 @@ import Cookies from "js-cookie"
 import { useNavigate } from "react-router-dom"
 import { useSelector }	 from "react-redux"
 
-
 const MenuSuperAdmin = () => {
+	const navigate = useNavigate();
+	const user = useSelector(state => state.user)
 
-		const navigate = useNavigate();
-		const user= useSelector(state => state.user)
-
-		useEffect(()=> {
-			if (Cookies.get('casoDiego')=== undefined) {
-				navigate('/')
-			}
-			console.log(user)
-		})
+	useEffect(()=> {
+		if (Cookies.get('casoDiego')=== undefined) {
+			navigate('/')
+		}
+		console.log(user)
+	})
 
 	return (
 		<div className="container mt-5"> 

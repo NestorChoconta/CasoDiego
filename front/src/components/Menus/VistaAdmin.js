@@ -7,11 +7,8 @@ import LogoutButton from "../Login/LogouthButton"
 import Cookies from "js-cookie"
 import { useNavigate } from "react-router-dom"
 import { useSelector }	 from "react-redux"
-import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/userSlice";
 
 const VistaAdmin = () => {
-	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const user = useSelector(state => state.user)
 

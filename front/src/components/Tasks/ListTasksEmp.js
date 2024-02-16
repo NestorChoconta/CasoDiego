@@ -10,6 +10,7 @@ const TaskEmp = () => {
 	const [tasks, setTasks] = useState([]);
 	const [editStatus, setEditStatus] = useState(null);
 	const [newStatus, setNewStatus] = useState("");
+	const [currentEditStatus, setCurrentEditStatus] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
 	const [pageNumber, setPageNumber] = useState(0);
 	const tasksPerPage = 11;
@@ -70,6 +71,13 @@ const TaskEmp = () => {
 		}
 	};
 
+	const handleEditStatus = (taskId, currentStatus) => {
+		// Al hacer clic en editar, establece el estado de edición y guarda el estado actual
+		setEditStatus(taskId);
+		setCurrentEditStatus(currentStatus);
+		setNewStatus(currentStatus); // Configura el nuevo estado con el estado actual
+	};
+
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1>MIS TAREAS</h1>
@@ -125,6 +133,7 @@ const TaskEmp = () => {
 									<select
 										value={newStatus}
 										onChange={(e) => setNewStatus(e.target.value)}
+										className="form-select border-bottom"
 									>
 										<option value="Por iniciar">Por iniciar</option>
 										<option value="Pendiente">Pendiente</option>
@@ -137,7 +146,8 @@ const TaskEmp = () => {
 							<td className="align-middle text-center">
 								{editStatus !== task.id ? ( // Si editStatus no es igual al ID de la tarea, muestra los btones
 									<button
-										onClick={() => setEditStatus(task.id)}
+										//Se llama handleEditStatus para pasar el ID de la tarea y el estado actual.
+										onClick={() => handleEditStatus(task.id, task.status)}
 										className="btn btn-danger btn-md mx-1"
 									>
 										Editar Estado
