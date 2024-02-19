@@ -18,7 +18,7 @@ const TaskManager = () => {
 			navigate("/");
 		}
 		fetchUsersWithTasks();
-	}, );
+	}, []);
 
 	const fetchUsersWithTasks = async () => {
 		try {
@@ -26,6 +26,7 @@ const TaskManager = () => {
 			setUsersWithTasks(response.data);
 		} catch (error) {
 			console.error("Error fetching users with tasks:", error);
+			
 		}
 	};
 
@@ -34,11 +35,6 @@ const TaskManager = () => {
 		offset,
 		offset + tasksPerPage
 	);
-
-	const handleGoBack = () => {
-		navigate(-1); // Regresar a la página anterior
-	};
-
 	const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };

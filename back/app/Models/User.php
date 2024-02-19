@@ -21,16 +21,17 @@ class User extends Authenticatable
                             'phone',
                             'adress',
                             'idRole',
+                            'two_factor_auth',
                             'idDocumentType'];
 
     public function roles(){
         return $this->belongsTo(Role::class, 'idRole');
     }
-    
+
     public function documenttypes(){
         return $this->belongsTo(DocumentType::class, 'idDocumentType');
     }
-    
+
     public function clients(){
         return $this->hasMany(Client::class, 'idUser');
     }

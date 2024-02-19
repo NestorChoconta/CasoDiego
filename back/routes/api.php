@@ -49,4 +49,4 @@ Route::controller(TaskController::class)->group(function (){
 });
 
 Route::get('/regular-users', [UserController::class, 'getRegularUsers']);
-Route::get('/users/{user}/completed-tasks', [TaskController::class, 'getCompletedTasks']);
+    

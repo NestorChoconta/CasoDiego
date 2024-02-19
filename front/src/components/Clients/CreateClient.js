@@ -28,7 +28,6 @@ const CreateClient = () => {
 			navigate('/')
 		}
 
-		
 		getAllUsuDocTypeComp();
 	})
 

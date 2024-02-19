@@ -32,8 +32,33 @@ const EditUserAdmin = () => {
 		if (Cookies.get('casoDiego')=== undefined) {
 			navigate('/')
 		}
-	})
+        getAllRolDocType()
 
+        getUserById()
+	}, [id])
+
+    const getAllRolDocType = async () => {
+        const documentTypesResponse = await axios.get(`http://localhost:8000/api/document-types`)
+        const rolesResponse = await axios.get(`http://localhost:8000/api/roles`)
+        setDocumentTypes(documentTypesResponse.data)
+        setRoles(rolesResponse.data)
+    }
+    
+    const getUserById = async () => {
+        const response = await axios.get(`${endpoint}${id}`)
+        setFirstName(response.data.firstName)
+        setSecondName(response.data.secondName)
+        setSurname(response.data.Surname)
+        setSecondSurname(response.data.secondSurname)
+        setNumDocument(response.data.numDocument)
+        setBirthdate(response.data.birthdate)
+        setEmail(response.data.email)
+        setPassword(response.data.password)
+        setPhone(response.data.phone)
+        setAdress(response.data.adress)
+        setIdRole(response.data.idRole)
+        setIdDocumentType(response.data.idDocumentType)
+    }
     
     const update = async (e) => {
         e.preventDefault()
@@ -93,35 +118,6 @@ const EditUserAdmin = () => {
             })
         }
     }
-
-    useEffect(() => {
-        const getAllRolDocType = async () => {
-            const documentTypesResponse = await axios.get(`http://localhost:8000/api/document-types`)
-            const rolesResponse = await axios.get(`http://localhost:8000/api/roles`)
-            setDocumentTypes(documentTypesResponse.data)
-            setRoles(rolesResponse.data)
-        }
-
-        getAllRolDocType()
-
-        const getUserById = async () => {
-            const response = await axios.get(`${endpoint}${id}`)
-            setFirstName(response.data.firstName)
-            setSecondName(response.data.secondName)
-            setSurname(response.data.Surname)
-            setSecondSurname(response.data.secondSurname)
-            setNumDocument(response.data.numDocument)
-            setBirthdate(response.data.birthdate)
-            setEmail(response.data.email)
-            setPassword(response.data.password)
-            setPhone(response.data.phone)
-            setAdress(response.data.adress)
-            setIdRole(response.data.idRole)
-            setIdDocumentType(response.data.idDocumentType)
-        }
-        getUserById()
-
-    }, [id])
 
     return (
         <div className="container-fluid mt-4 px-md-5">

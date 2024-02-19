@@ -28,7 +28,32 @@ const EditClient = () => {
 		if (Cookies.get('casoDiego')=== undefined) {
 			navigate('/')
 		}
-	})
+        getAllUsuDocTypeComp()
+        getClientById()
+	}, [id])
+
+    const getAllUsuDocTypeComp = async () => {
+        const documentTypesResponse = await axios.get(`http://localhost:8000/api/document-types`)
+        const usersResponse = await axios.get(`http://localhost:8000/api/usuarios`)
+        const companiesResponse = await axios.get(`http://localhost:8000/api/compañias`)
+        setDocumentTypes(documentTypesResponse.data)
+        setUsers(usersResponse.data)
+        setCompanies(companiesResponse.data)
+    }
+    
+    const getClientById = async () => {
+        const response = await axios.get(`${endpoint}${id}`)
+        setFirstNameClient(response.data.firstNameClient)
+        setSecondNameClient(response.data.secondNameClient)
+        setSurnameClient(response.data.SurnameClient)
+        setSecondSurnameClient(response.data.secondSurnameClient)
+        setNumDocument(response.data.numDocument)
+        setPhone(response.data.phone)
+        setIdUser(response.data.idUser)
+        setIdDocumentType(response.data.idDocumentType)
+        setIdCompany(response.data.idCompany)
+        setStatusClient(response.data.statusClient)
+    }
 
     const update = async (e) => {
         e.preventDefault()
@@ -67,34 +92,6 @@ const EditClient = () => {
         })
         navigate('/clientes')
     }
-
-    useEffect(() => {
-        const getAllUsuDocTypeComp = async () => {
-            const documentTypesResponse = await axios.get(`http://localhost:8000/api/document-types`)
-            const usersResponse = await axios.get(`http://localhost:8000/api/usuarios`)
-            const companiesResponse = await axios.get(`http://localhost:8000/api/compañias`)
-            setDocumentTypes(documentTypesResponse.data)
-            setUsers(usersResponse.data)
-            setCompanies(companiesResponse.data)
-        }
-
-        getAllUsuDocTypeComp()
-
-        const getClientById = async () => {
-            const response = await axios.get(`${endpoint}${id}`)
-            setFirstNameClient(response.data.firstNameClient)
-            setSecondNameClient(response.data.secondNameClient)
-            setSurnameClient(response.data.SurnameClient)
-            setSecondSurnameClient(response.data.secondSurnameClient)
-            setNumDocument(response.data.numDocument)
-            setPhone(response.data.phone)
-            setIdUser(response.data.idUser)
-            setIdDocumentType(response.data.idDocumentType)
-            setIdCompany(response.data.idCompany)
-            setStatusClient(response.data.statusClient)
-        }
-        getClientById()
-    }, [id])
 
     const handleGoBack = () => {
         navigate(-1); // Regresar a la página anterior

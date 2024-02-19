@@ -16,7 +16,7 @@ const VistaEmple = () => {
 			navigate('/')
 		}
 		console.log(user)
-	})
+	}, [])
 
 
 	return (

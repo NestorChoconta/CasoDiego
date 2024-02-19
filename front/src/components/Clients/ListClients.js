@@ -21,9 +21,6 @@ const ListClients = () => {
 			navigate("/");
 		}
 		console.log(user)
-	});
-
-	useEffect(() => {
 		getAllClients();
 	}, [pageNumber]);
 
@@ -84,7 +81,7 @@ const ListClients = () => {
 						padding: 0,
 					}}>
 						<li style={{ marginBottom: '30%',marginTop: '30%', cursor: 'pointer' }}>
-							<Link onClick={handleMenuRedirect} style={{ color: 'white', textDecoration: 'none'}}>
+							<Link to={'/MenuSuperAdmin'} style={{ color: 'white', textDecoration: 'none'}}>
 							☰ Menú Principal
 							</Link>
 						</li>

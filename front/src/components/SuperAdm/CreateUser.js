@@ -30,12 +30,8 @@ const CreateUser = () => {
 		if (Cookies.get('casoDiego')=== undefined) {
 			navigate('/')
 		}
-	})
-
-	// Cargar tipos de documento y roles
-	useEffect(() => {
 		getAllRolDocType();
-	}, []);
+	}, [])
 
 	const getAllRolDocType = async () => {
 		const documentTypesResponse = await axios.get(
