@@ -39,9 +39,7 @@ const TaskEmp = () => {
 	};
 
 	const filteredTasks = tasks.filter((task) => {
-		const fullName = `${task.firstName || ""} ${
-			task.Surname || ""
-		}`.toLowerCase(); //Filtra las tareas por el nombre completo del empleado
+		const fullName = `${task.firstName || ""} ${ task.Surname || "" } ${task.secondName || ""} ${ task.secondSurname || "" }`.toLowerCase(); //Filtra las tareas por el nombre completo del empleado
 		return fullName.includes(searchTerm.toLowerCase());
 	});
 
@@ -81,10 +79,8 @@ const TaskEmp = () => {
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1>MIS TAREAS</h1>
-			<div
-				className="d-flex justify-content-between align-items-center mt-4"
-				style={{ fontSize: "16px", width: "80%", margin: "auto" }}
-			>
+			<div className="d-flex justify-content-between align-items-center mt-4"
+				style={{ fontSize: "16px", width: "80%", margin: "auto" }}>
 				<div className="search-bar-container mr-2 w-50">
 					<input
 						type="text"

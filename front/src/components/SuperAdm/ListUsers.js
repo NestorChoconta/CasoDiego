@@ -40,8 +40,9 @@ const ListUsers = () => {
 
 	const filteredUsers = users.filter((user) => {
 		const phone = user.phone ? user.phone.toString() : "";
+		const fullNameUser = `${user.firstName || ""} ${ user.Surname || "" } ${user.secondName || ""} ${ user.secondSurname || "" }`.toLowerCase();
 		return (
-			user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			fullNameUser.includes(searchTerm.toLowerCase()) ||
 			phone.includes(searchTerm)
 		);
 	});

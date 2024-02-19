@@ -38,10 +38,11 @@ const ListUserAdmin = () => {
 
 	const filteredUsers = users.filter((user) => {
 		const phone = user.phone ? user.phone.toString() : "";
+		const fullNameUser = `${user.firstName || ""} ${ user.Surname || "" } ${user.secondName || ""} ${ user.secondSurname || "" }`.toLowerCase();
 		return (
 			user.role &&
 			(user.idRole === 2 || user.idRole === 3) &&
-			(user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			(fullNameUser.includes(searchTerm.toLowerCase()) ||
 				phone.includes(searchTerm))
 		);
 	});

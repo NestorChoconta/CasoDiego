@@ -10,8 +10,9 @@ const endpoint = "http://localhost:8000/api";
 
 const ListClients = () => {
 	const [clients, setClients] = useState([]);
-	const [pageNumber, setPageNumber] = useState(0);
+	const [searchTerm, setSearchTerm] = useState("");
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+	const [pageNumber, setPageNumber] = useState(0);
 	const clientsPerPage = 11; // Número de clientes por página
 	const navigate = useNavigate();
 	const user = useSelector(state => state.user)
@@ -21,9 +22,6 @@ const ListClients = () => {
 			navigate("/");
 		}
 		console.log(user)
-	});
-
-	useEffect(() => {
 		getAllClients();
 	}, [pageNumber]);
 
@@ -32,18 +30,30 @@ const ListClients = () => {
 		setClients(response.data);
 	};
 
-	const pageCount = Math.ceil(clients.length / clientsPerPage);
+	const handleSearch = (event) => {
+		setSearchTerm(event.target.value);
+		setPageNumber(0); // Reiniciar a la primera página al realizar una búsqueda
+	};
+
+	const filteredClient = clients.filter((client) => {
+		const phone = client.phone ? client.phone.toString() : "";
+		const numDocument = client.numDocument ? client.numDocument.toString() : "";
+		const fullName = `${client.firstNameClient || ""} ${ client.SurnameClient || "" } ${client.secondNameClient || ""} ${ client.secondSurnameClient || "" }`.toLowerCase();
+		return (
+			fullName.includes(searchTerm.toLowerCase()) || 
+			phone.includes(searchTerm) || 
+			numDocument.includes(searchTerm)
+		);
+	});
+
+	const pageCount = Math.ceil(filteredClient.length / clientsPerPage);
 
 	const changePage = ({ selected }) => {
 		setPageNumber(selected);
 	};
 
-	const handleGoBack = () => {
-		navigate(-1); // Regresar a la página anterior
-	};
-
 	const offset = pageNumber * clientsPerPage;
-	const paginatedClients = clients.slice(offset, offset + clientsPerPage);
+	const paginatedClients = filteredClient.slice(offset, offset + clientsPerPage);
 
 	const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -108,26 +118,26 @@ const ListClients = () => {
 		);
 	}
 
-// Comprobar el rol del usuario en la página de menú principal
-const idRole = Cookies.get("idRole");
+		// Comprobar el rol del usuario en la página de menú principal
+		const idRole = Cookies.get("idRole");
 
-const handleMenuRedirect = () => {
-    switch (idRole) {
-        case "1":
-            navigate("/MenuSuperAdmin");
-            break;
-        case "2":
-            navigate("/MenuAdmin");
-            break;
-        case "3":
-            navigate("/MenuEmple");
-            break;
-        default:
-            // Si el rol del usuario no está definido, redirige a la página de inicio de sesión
-            navigate("/");
-            break;
-    }
-};
+		const handleMenuRedirect = () => {
+			switch (idRole) {
+				case "1":
+					navigate("/MenuSuperAdmin");
+					break;
+				case "2":
+					navigate("/MenuAdmin");
+					break;
+				case "3":
+					navigate("/MenuEmple");
+					break;
+				default:
+					// Si el rol del usuario no está definido, redirige a la página de inicio de sesión
+					navigate("/");
+					break;
+			}
+		};
 
 	return (
 		<div className="container-fluid mt-4 px-md-5">
@@ -148,10 +158,21 @@ const handleMenuRedirect = () => {
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-			<div className="d-flex justify-content-end align-items-center mt-4">
-				<Link to="/crearC" className="btn btn-success btn-md mx-1">
-					Crear Cliente
-				</Link>
+			<div className="d-flex justify-content-between align-items-center mt-4">
+				<div className="search-bar-container mr-2 w-50">
+					<input
+						type="text"
+						placeholder="Busca clientes por número de teléfono, nombre, documento de identidad o nombre de compañía"
+						value={searchTerm}
+						onChange={handleSearch}
+						className="form-control"
+					/>
+				</div>
+				<div className="ml-auto">
+					<Link to="/crearC" className="btn btn-success btn-md mx-1">
+						Crear Cliente
+					</Link>
+				</div>
 			</div>
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">
