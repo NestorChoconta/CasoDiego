@@ -21,6 +21,8 @@ import ListTasks from "./components/Tasks/ListTasks";
 import ListTasksEmp from "./components/Tasks/ListTasksEmp";
 import CreateTask from "./components/Tasks/CreateTask";
 import EditTask from "./components/Tasks/EditTask";
+import ListClientsSuper from "./components/Clients/ListClientsSuper";
+import ImportClient from "./components/Clients/ImportClient";
 
 function App() {
 	const dispatch = useDispatch();
@@ -55,6 +57,8 @@ function App() {
 					<Route path="/TareasEmp" element={<ListTasksEmp />} />
 					<Route path="/crearT" element={<CreateTask />} />
 					<Route path="/editarT/:id" element={<EditTask />} />
+					<Route path="/clientesSuper" element={<ListClientsSuper />} />
+					<Route path="/importar" element={<ImportClient />} />
 				</Routes>
 			</BrowserRouter>
 		</div>

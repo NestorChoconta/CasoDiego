@@ -6,17 +6,15 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use App\Imports\ClientImport;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClientController extends Controller
 {
     public function index()
     {
-        //El metodo all sirve para traer todos los registros de la tabla
-        $client = DB::table('clients')->join('users', 'clients.idUser', '=', 'users.id')
-            ->join('document_types', 'clients.idDocumentType', '=', 'document_types.id')
-            ->join('companies', 'clients.idCompany', '=', 'companies.id')
-            ->select('clients.*', 'users.firstName', 'users.Surname', 'document_types.description', 'companies.name')
-            ->get();
+        $client = Client::with('users', 'documenttypes', 'companies')->get();
         return Response::json($client);
     }
 
@@ -79,5 +77,20 @@ class ClientController extends Controller
     {
         $client = Client::destroy($id);
         return $client;
+    }
+
+    public function importClients(Request $request)
+    {
+        try {
+            // Realizar la importación del archivo
+            Excel::import(new ClientImport, $request->file);
+
+            return response()->json(['message' => 'Importación exitosa']);
+        } catch (\Exception $e) {
+            // Agregar un log para registrar el error
+            Log::error('Error al importar el archivo: ' . $e->getMessage());
+
+            return response()->json(['error' => 'Error al importar el archivo', 'message' => $e->getMessage()], 500);
+        }
     }
 }

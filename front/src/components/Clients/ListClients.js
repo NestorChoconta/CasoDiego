@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import { FiUsers, FiBriefcase, FiClipboard } from 'react-icons/fi';
+import { FiUsers, FiBriefcase, FiClipboard } from "react-icons/fi";
 import Cookies from "js-cookie";
-import { useSelector }	 from "react-redux"
+import { useSelector } from "react-redux";
 
 const endpoint = "http://localhost:8000/api";
 
@@ -15,13 +15,13 @@ const ListClients = () => {
 	const [pageNumber, setPageNumber] = useState(0);
 	const clientsPerPage = 11; // Número de clientes por página
 	const navigate = useNavigate();
-	const user = useSelector(state => state.user)
+	const user = useSelector((state) => state.user);
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
 			navigate("/");
 		}
-		console.log(user)
+		console.log(user);
 		getAllClients();
 	}, [pageNumber]);
 
@@ -38,10 +38,14 @@ const ListClients = () => {
 	const filteredClient = clients.filter((client) => {
 		const phone = client.phone ? client.phone.toString() : "";
 		const numDocument = client.numDocument ? client.numDocument.toString() : "";
-		const fullName = `${client.firstNameClient || ""} ${ client.SurnameClient || "" } ${client.secondNameClient || ""} ${ client.secondSurnameClient || "" }`.toLowerCase();
+		const fullName = `${client.firstNameClient || ""} ${
+			client.SurnameClient || ""
+		} ${client.secondNameClient || ""} ${
+			client.secondSurnameClient || ""
+		}`.toLowerCase();
 		return (
-			fullName.includes(searchTerm.toLowerCase()) || 
-			phone.includes(searchTerm) || 
+			fullName.includes(searchTerm.toLowerCase()) ||
+			phone.includes(searchTerm) ||
 			numDocument.includes(searchTerm)
 		);
 	});
@@ -53,91 +57,112 @@ const ListClients = () => {
 	};
 
 	const offset = pageNumber * clientsPerPage;
-	const paginatedClients = filteredClient.slice(offset, offset + clientsPerPage);
+	const paginatedClients = filteredClient.slice(
+		offset,
+		offset + clientsPerPage
+	);
 
 	const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
+		setIsSidebarOpen(!isSidebarOpen);
+	};
 
 	const Sidebar = ({ isOpen, toggleSidebar }) => {
 		return (
 			isOpen && (
-				<div style={{
-					position: 'fixed',
-					top: 0,
-					left: 0,
-					width: '200px',
-					height: '100%',
-					backgroundColor: '#333',
-					color: 'white',
-					padding: '20px',
-					boxSizing: 'border-box',
-					zIndex: 100,
-				}}>
+				<div
+					style={{
+						position: "fixed",
+						top: 0,
+						left: 0,
+						width: "200px",
+						height: "100%",
+						backgroundColor: "#333",
+						color: "white",
+						padding: "20px",
+						boxSizing: "border-box",
+						zIndex: 100,
+					}}
+				>
 					<button
 						onClick={toggleSidebar}
 						style={{
-							position: 'absolute',
-							top: '10px',
-							right: '10px',
-							background: 'none',
-							border: 'none',
-							cursor: 'pointer',
-							color: 'white',
-							fontSize: '20px',
+							position: "absolute",
+							top: "10px",
+							right: "10px",
+							background: "none",
+							border: "none",
+							cursor: "pointer",
+							color: "white",
+							fontSize: "20px",
 						}}
 					>
 						X
 					</button>
-					<ul style={{
-						listStyleType: 'none',
-						padding: 0,
-					}}>
-						<li style={{ marginBottom: '30%',marginTop: '30%', cursor: 'pointer' }}>
-							<Link onClick={handleMenuRedirect} style={{ color: 'white', textDecoration: 'none'}}>
-							☰ Menú Principal
+					<ul
+						style={{
+							listStyleType: "none",
+							padding: 0,
+						}}
+					>
+						<li
+							style={{
+								marginBottom: "30%",
+								marginTop: "30%",
+								cursor: "pointer",
+							}}
+						>
+							<Link
+								onClick={handleMenuRedirect}
+								style={{ color: "white", textDecoration: "none" }}
+							>
+								☰ Menú Principal
 							</Link>
 						</li>
-						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
-							<Link to="/Tareas" style={{ color: 'white', textDecoration: 'none' }}>
-								<FiClipboard style={{ marginRight: '10px' }} /> Tareas
+						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
+							<Link
+								to="/Tareas"
+								style={{ color: "white", textDecoration: "none" }}
+							>
+								<FiClipboard style={{ marginRight: "10px" }} /> Tareas
 							</Link>
 						</li>
-						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
-							<Link to="/usuarios" style={{ color: 'white', textDecoration: 'none'}}>
-							<FiUsers style={{ marginRight: '10px' }} /> Usuarios
+						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
+							<Link
+								to="/usuarios"
+								style={{ color: "white", textDecoration: "none" }}
+							>
+								<FiUsers style={{ marginRight: "10px" }} /> Usuarios
 							</Link>
 						</li>
-						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
-							<FiBriefcase style={{ marginRight: '10px' }} /> Compañias
+						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
+							<FiBriefcase style={{ marginRight: "10px" }} /> Compañias
 						</li>
-						
 					</ul>
 				</div>
 			)
 		);
-	}
+	};
 
-		// Comprobar el rol del usuario en la página de menú principal
-		const idRole = Cookies.get("idRole");
+	// Comprobar el rol del usuario en la página de menú principal
+	const idRole = Cookies.get("idRole");
 
-		const handleMenuRedirect = () => {
-			switch (idRole) {
-				case "1":
-					navigate("/MenuSuperAdmin");
-					break;
-				case "2":
-					navigate("/MenuAdmin");
-					break;
-				case "3":
-					navigate("/MenuEmple");
-					break;
-				default:
-					// Si el rol del usuario no está definido, redirige a la página de inicio de sesión
-					navigate("/");
-					break;
-			}
-		};
+	const handleMenuRedirect = () => {
+		switch (idRole) {
+			case "1":
+				navigate("/MenuSuperAdmin");
+				break;
+			case "2":
+				navigate("/MenuAdmin");
+				break;
+			case "3":
+				navigate("/MenuEmple");
+				break;
+			default:
+				// Si el rol del usuario no está definido, redirige a la página de inicio de sesión
+				navigate("/");
+				break;
+		}
+	};
 
 	return (
 		<div className="container-fluid mt-4 px-md-5">
@@ -145,14 +170,14 @@ const ListClients = () => {
 			<button
 				onClick={toggleSidebar}
 				style={{
-					position: 'fixed',
-					top: '20px',
-					left: '20px',
-					background: 'none',
-					border: 'none',
-					cursor: 'pointer',
-					color: 'black',
-					fontSize: '20px',
+					position: "fixed",
+					top: "20px",
+					left: "20px",
+					background: "none",
+					border: "none",
+					cursor: "pointer",
+					color: "black",
+					fontSize: "20px",
 				}}
 			>
 				☰ {/* Icono de hamburguesa */}
@@ -216,15 +241,15 @@ const ListClients = () => {
 								{`${client.SurnameClient || ""} ${client.secondSurnameClient || ""}`}
 							</td>
 							<td className="align-middle text-center">
-								{client.description || "Sin T.D"}
+								{client.documenttypes ? client.documenttypes.description : "Sin T.D"}
 							</td>
 							<td className="align-middle text-center">{client.numDocument}</td>
 							<td className="align-middle text-center">{client.phone}</td>
 							<td className="align-middle text-center">
-								{`${client.firstName || ""} ${client.Surname || ""}` || "Sin Usuario"}
+								{client.users ? `${client.users.firstName || ""} ${client.users.Surname}` : "Sin Usuario"}
 							</td>
 							<td className="align-middle text-center">
-								{client.name || "Sin Compañia"}
+								{client.companies ? client.companies.name : "Sin Compañia"}
 							</td>
 							<td className="align-middle text-center">
 								{client.statusClient}

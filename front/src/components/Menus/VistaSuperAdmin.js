@@ -44,7 +44,7 @@ const MenuSuperAdmin = () => {
 						<div className="card-body">
 							<h1 className="card-title">CLIENTES</h1>
 							<p className="card-text">Aqui puedes ver todos los clientes</p>
-							<a href="/clientes" className="btn btn-success">
+							<a href="/clientesSuper" className="btn btn-success">
 								Ver clientes
 							</a>
 						</div>

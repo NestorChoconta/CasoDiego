@@ -34,6 +34,8 @@ Route::controller(ClientController::class)->group(function () {
     Route::delete('/cliente/{id}', 'destroy');
 });
 
+Route::post('/importarClientes', [ClientController::class, 'importClients']);
+
 Route::get('/compañias', [CompanyController::class, 'index']);
 
 Route::post('/login', [LoginController::class, 'login']);

@@ -175,7 +175,7 @@ final class Cobertura
                     $methodElement->appendChild($methodLinesElement);
 
                     foreach (range($method['startLine'], $method['endLine']) as $line) {
-                        if (!isset($coverageData[$line])) {
+                        if (!isset($coverageData[$line]) || $coverageData[$line] === null) {
                             continue;
                         }
                         $methodLineElement = $document->createElement('line');
@@ -256,7 +256,7 @@ final class Cobertura
                 $methodElement->appendChild($methodLinesElement);
 
                 foreach (range($function['startLine'], $function['endLine']) as $line) {
-                    if (!isset($coverageData[$line])) {
+                    if (!isset($coverageData[$line]) || $coverageData[$line] === null) {
                         continue;
                     }
                     $methodLineElement = $document->createElement('line');
