@@ -17,6 +17,11 @@ const ImportClient = ({ closeModal }) => {
 		}
 	}, []);
 
+	const closeModalAndNavigate = () => {
+		closeModal();
+		navigate("/clientesSuper");
+	};
+
 	const onSubmit = async (data) => {
 		try {
 			const file = data.file[0];
@@ -37,7 +42,6 @@ const ImportClient = ({ closeModal }) => {
 			const formData = new FormData();
 			formData.append("file", file);
 
-
 			await axios.post(`${endpoint}/importarClientes`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
@@ -47,7 +51,7 @@ const ImportClient = ({ closeModal }) => {
 			closeModal();
 			toast.success("Importación exitosa");
 
-			// Forzar la recarga de la página actual
+			//Recarga de la página actual
 			window.location.reload();
 		} catch (error) {
 			console.error("Error al importar el archivo", error);
@@ -96,7 +100,10 @@ const ImportClient = ({ closeModal }) => {
 							/>
 						</div>
 						<div className="mb-3 text-center">
-							<Link to="/clientesSuper" className="btn btn-warning btn-md mx-1">
+							<Link
+								onClick={closeModalAndNavigate}
+								className="btn btn-warning btn-md mx-1"
+							>
 								Cancelar
 							</Link>
 							<button type="submit" className="btn btn-primary" tabIndex="4">
