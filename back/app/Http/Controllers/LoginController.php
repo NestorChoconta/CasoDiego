@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {
@@ -16,20 +16,50 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $idRole = $user->idRole;
-            $token = Str::random(60);
-            
+
+            // Generar el token JWT para el usuario autenticado
+            $customToken = JWTAuth::fromUser($user);
+
+            $verification_code = mt_rand(100000, 999999);
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['verification_code' => $verification_code]);
+
             // Obtener los datos necesarios del usuario
             $id = $user->id;
-    
+
             return response()->json([
                 'user' => $user,
                 'idRole' => $idRole,
-                'access_token' => $token,
-                'id' => $id
+                'access_token' => $customToken,
+                'id' => $id,
+                'verification_code' => $verification_code
             ], 200);
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
+    }
+
+    public function verifyCode(Request $request)
+    {
+        // Verificar si el usuario está autenticadoc
+        if (Auth::check()) {
+            $user = Auth::user(); // Obtener el usuario autenticado
+
+            // Obtener el código enviado por el usuario en la solicitud
+            $userVerificationCode = $request->input('verification_code');
+
+            // Obtener el código guardado en la base de datos para el usuario actual
+            $storedVerificationCode = $user->verification_code;
+
+            // Comparar el código enviado por el usuario con el almacenado en la base de datos
+            if ($userVerificationCode == $storedVerificationCode) {
+                return response()->json(['message' => 'Verificación correcta', 'user' => $user], 200);
+            }
+        }
+
+        // Si la verificación falla o el usuario no está autenticado, devolver un error
+        return response()->json(['error' => 'Verificación fallida'], 401);
     }
 
     public function logout(Request $request)

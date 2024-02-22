@@ -29,7 +29,7 @@ const CreateClient = () => {
 		}
 
 		getAllUsuDocTypeComp();
-	})
+	},[])
 
 	// Cargar tipos de documento, compañias y usuarios
 	const getAllUsuDocTypeComp = async () => {
