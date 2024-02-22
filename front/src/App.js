@@ -1,6 +1,6 @@
 import "./App.css";
 import { UseDispatch, useDispatch } from "react-redux";
-import { useEffect } from "react"; 
+import { useEffect } from "react";
 import { addUser } from "./redux/userSlice";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -22,19 +22,16 @@ import ListTasksEmp from "./components/Tasks/ListTasksEmp";
 import CreateTask from "./components/Tasks/CreateTask";
 import EditTask from "./components/Tasks/EditTask";
 import ListClientsSuper from "./components/Clients/ListClientsSuper";
-import ImportClient from "./components/Clients/ImportClient";
 
 function App() {
 	const dispatch = useDispatch();
-	
+
 	useEffect(() => {
 		fetch("http://localhost:8000/api/usuarios")
-		.then((response) => response.json())
-		.then((data) => dispatch(addUser(data)))
-		.catch((error)  => console.log(error));
-	},[]);
-
-
+			.then((response) => response.json())
+			.then((data) => dispatch(addUser(data)))
+			.catch((error) => console.log(error));
+	}, []);
 
 	return (
 		<div className="App">
@@ -58,7 +55,6 @@ function App() {
 					<Route path="/crearT" element={<CreateTask />} />
 					<Route path="/editarT/:id" element={<EditTask />} />
 					<Route path="/clientesSuper" element={<ListClientsSuper />} />
-					<Route path="/importar" element={<ImportClient />} />
 				</Routes>
 			</BrowserRouter>
 		</div>
