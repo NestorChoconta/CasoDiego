@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerificationCodeMail;
 
 class LoginController extends Controller
 {
@@ -21,6 +23,8 @@ class LoginController extends Controller
             $customToken = JWTAuth::fromUser($user);
 
             $verification_code = mt_rand(100000, 999999);
+
+            Mail::to($user->email)->send(new VerificationCodeMail($verification_code));
             DB::table('users')
                 ->where('id', $user->id)
                 ->update(['verification_code' => $verification_code]);
