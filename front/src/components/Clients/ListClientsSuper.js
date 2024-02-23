@@ -15,6 +15,7 @@ const ListClients = () => {
 	const [clients, setClients] = useState([]);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+	const [importAlert, setImportAlert] = useState(false);
 	const [pageNumber, setPageNumber] = useState(0);
 	const clientsPerPage = 11; // Número de clientes por página
 	const navigate = useNavigate();
@@ -60,12 +61,14 @@ const ListClients = () => {
 	};
 
 	const offset = pageNumber * clientsPerPage;
-	const paginatedClients = filteredClient.slice(offset,offset + clientsPerPage);
+	const paginatedClients = filteredClient.slice(
+		offset,
+		offset + clientsPerPage
+	);
 
 	const toggleSidebar = () => {
 		setIsSidebarOpen(!isSidebarOpen);
 	};
-
 
 	const Sidebar = ({ isOpen, toggleSidebar }) => {
 		return (
@@ -168,23 +171,20 @@ const ListClients = () => {
 	const [isImportOpen, setIsImportOpen] = useState(false);
 
 	const openImport = () => {
-		try {
-			setIsImportOpen(true);
-			//toast.success("Importación iniciada correctamente.");
-		} catch (error) {
-			console.error("Error al abrir la importación", error);
-			//toast.error("NO se puedo inicar la importación.");
-		}
+		setIsImportOpen(true);
 	};
 
 	const closeImport = () => {
-		try {
-			setIsImportOpen(false);
-			//toast.success("Importación finalizada correctamente.");
-		} catch (error) {
-			console.error("Error al cerrar la importación", error);
-			//toast.error("Error al finalizar la importación.");
-		}
+		setIsImportOpen(false);
+	};
+
+	const handleImportFinish = () => {
+		setImportAlert(true);
+		toast.success("Importación finalizada correctamente.", { autoClose: 2000 });
+		setTimeout(() => {
+			setImportAlert(false);
+			navigate("/clientesSuper");
+		}, 2000);
 	};
 
 	return (
@@ -234,7 +234,10 @@ const ListClients = () => {
 						}}
 					>
 						{/* Renderiza el componente ImportClient dentro del modal */}
-						<ImportClient closeModal={closeImport} />
+						<ImportClient
+							closeModal={closeImport}
+							onImportFinish={handleImportFinish}
+						/>
 					</Modal>
 					<Link to="/crearC" className="btn btn-success btn-md mx-1">
 						Crear Cliente
@@ -315,10 +318,16 @@ const ListClients = () => {
 						</tr>
 					))}
 				</tbody>
-				
-			<ToastContainer />
+
+				<ToastContainer />
 			</table>
-			<div className={`pagination mt-4 justify-content-center ${ isImportOpen ? "d-none" : "" }`}>  {/* Utiliza la clase de Bootstrap d-none para ocultar */} 
+			<div
+				className={`pagination mt-4 justify-content-center ${
+					isImportOpen ? "d-none" : ""
+				}`}
+			>
+				{" "}
+				{/* Utiliza la clase de Bootstrap d-none para ocultar */}
 				<ReactPaginate
 					previousLabel={"Anterior"}
 					nextLabel={"Siguiente"}
@@ -337,4 +346,3 @@ const ListClients = () => {
 };
 
 export default ListClients;
-

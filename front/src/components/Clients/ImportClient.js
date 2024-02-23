@@ -7,8 +7,12 @@ import { useForm } from "react-hook-form";
 
 const endpoint = "http://localhost:8000/api";
 
-const ImportClient = ({ closeModal }) => {
-	const { register, handleSubmit } = useForm();
+const ImportClient = ({ closeModal, onImportFinish }) => {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -22,23 +26,29 @@ const ImportClient = ({ closeModal }) => {
 		navigate("/clientesSuper");
 	};
 
+	const validateFile = (value) => {
+		const fileExtension = value[0]?.name
+			.substring(value[0]?.name.lastIndexOf("."))
+			.toLowerCase();
+
+		if (![".xlsx", ".csv"].includes(fileExtension)) {
+			return "El archivo debe ser Excel o CSV.";
+		}
+
+		return true; // Validación exitosa
+	};
+
 	const onSubmit = async (data) => {
 		try {
 			const file = data.file[0];
 
-			// Validar la extensión del archivo
-			const allowedExtensions = [".xls", ".xlsx", ".csv"];
-			const fileExtension = file.name
-				.substring(file.name.lastIndexOf("."))
-				.toLowerCase();
+			const validationError = validateFile(data.file);
 
-			// Valida que se haya seleccionado un archivo
-			if (!allowedExtensions.includes(fileExtension)) {
-				toast.error("Por favor, seleccione un archivo Excel o CSV.");
+			if (validationError !== true) {
+				toast.error(validationError);
 				return;
 			}
 
-			// Crea un objeto FormData y adjunta el archivo
 			const formData = new FormData();
 			formData.append("file", file);
 
@@ -49,13 +59,12 @@ const ImportClient = ({ closeModal }) => {
 			});
 
 			closeModal();
-			toast.success("Importación exitosa");
-
-			//Recarga de la página actual
-			window.location.reload();
+			
 		} catch (error) {
 			console.error("Error al importar el archivo", error);
-			toast.error(error);
+		} finally {
+			// Notificar a ListClients que la importación ha finalizado
+			onImportFinish();
 		}
 	};
 
@@ -74,16 +83,16 @@ const ImportClient = ({ closeModal }) => {
 							<input
 								type="file"
 								{...register("file", {
-									required: "Por favor, seleccione un archivo Excel o CSV.",
-									validate: (value) => {
-										const fileExtension = value[0].name
-											.substring(value[0].name.lastIndexOf("."))
-											.toLowerCase();
-										return [".xls", ".xlsx", ".csv"].includes(fileExtension);
-									},
+									required: "Por favor, seleccione un archivo.",
+									validate: validateFile,
 								})}
-								className="form-control rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+								className={`form-control rounded-0 rounded-end-2 rounded-start-2 border-bottom ${
+									errors.file ? "is-invalid" : ""
+								}`}
 							/>
+							{errors.file && (
+								<p className="text-danger">{errors.file.message}</p>
+							)}
 						</div>
 						<div className="mb-3 text-center">
 							<Link
