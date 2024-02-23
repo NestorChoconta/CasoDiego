@@ -41,30 +41,41 @@ class LoginController extends Controller
     }
 
     public function verifyCode(Request $request)
-    {
-        // Verificar si el usuario está autenticadoc
-        if (Auth::check()) {
-            $user = Auth::user(); // Obtener el usuario autenticado
+{
+    // Usar el middleware Authenticate para obtener el usuario autenticado y el token
+    $user = $request->user();
+    $token = $request->bearerToken();
 
-            // Obtener el código enviado por el usuario en la solicitud
-            $userVerificationCode = $request->input('verification_code');
+    // Verificar si el usuario está autenticado y si se proporciona un token
+    if ($user && $token) {
+        // Obtener el idRole solo si el usuario está autenticado correctamente
+        $idRole = $user->idRole;
 
-            // Obtener el código guardado en la base de datos para el usuario actual
-            $storedVerificationCode = $user->verification_code;
+        // Obtener el código enviado por el usuario en la solicitud
+        $userVerificationCode = $request->input('verification_code');
 
-            // Comparar el código enviado por el usuario con el almacenado en la base de datos
-            if ($userVerificationCode == $storedVerificationCode) {
-                return response()->json(['message' => 'Verificación correcta', 'user' => $user], 200);
-            }
+        // Obtener el código guardado en la base de datos para el usuario actual
+        $storedVerificationCode = $user->verification_code;
+
+        // Comparar el código enviado por el usuario con el almacenado en la base de datos
+        if ($userVerificationCode == $storedVerificationCode) {
+            return response()->json([
+                'message' => 'Verificación correcta',
+                'user' => $user,
+                'access_token' => $token,
+                'idRole' => $idRole,
+                'verification_code' => $storedVerificationCode
+            ], 200);
         }
-
-        // Si la verificación falla o el usuario no está autenticado, devolver un error
-        return response()->json(['error' => 'Verificación fallida'], 401);
     }
+
+    // Si la verificación falla o el usuario no está autenticado, devolver un error
+    return response()->json(['error' => 'Verificación fallida'], 401);
+}
 
     public function logout(Request $request)
     {
         Auth::logout();
-        return response()->json(['message' => 'Logged out'], 200);
+        return response()->json(['message' => 'cierre de session exitoso'], 200);
     }
 }

@@ -5,9 +5,13 @@ import Cookies from "js-cookie";
 
 const LogoutButton = () => {
 	const navigate = useNavigate();
-	const handleLogout = () => {
-		axios
-			.post("http://localhost:8000/api/logout")
+	const token = Cookies.get("casoDiego");
+
+	const handleLogout = () => { axios.post("http://localhost:8000/api/logout", null, {
+			headers: {
+				Authorization: `Bearer ${token}` // Incluir el token de acceso en el encabezado
+			}
+		})
 			.then((response) => {
 				// Manejar la respuesta del logout (redirección, limpieza de datos de sesión, etc.)
 				console.log("cierre de sesión exitoso");
