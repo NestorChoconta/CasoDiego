@@ -30,13 +30,10 @@ const CreateUserAdmin = () => {
 		if (Cookies.get('casoDiego')=== undefined) {
 			navigate('/')
 		}
-	})
-
-	// Cargar tipos de documento y roles
-	useEffect(() => {
 		getAllRolDocType();
-	}, []);
+	},[])
 
+	// Cargar tipos de documento y role
 	const getAllRolDocType = async () => {
 		const documentTypesResponse = await axios.get(
 			`http://localhost:8000/api/document-types`

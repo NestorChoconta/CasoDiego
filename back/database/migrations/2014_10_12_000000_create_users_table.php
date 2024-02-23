@@ -24,13 +24,14 @@ return new class extends Migration
             $table->BigInteger ('phone');
             $table->string('adress', 50);
             $table->unsignedInteger('idRole');
+            $table->string('verification_code')->nullable();
             $table->unsignedInteger('idDocumentType');
             $table->rememberToken();
             $table->timestamps();
         });
     }
 
-    /**
+    /*
      * Reverse the migrations.
      */
     public function down(): void

@@ -17,7 +17,7 @@ const CreateTask = () => {
 			navigate("/");
 		}
 		fetchUsers(); // Llamar a la función para obtener la lista de usuarios
-	});
+	},[]);
 
 	// Función para obtener la lista de usuarios
 	const fetchUsers = async () => {
@@ -25,7 +25,6 @@ const CreateTask = () => {
 			const response = await axios.get(`http://localhost:8000/api/usuarios`);
 			const filteredUsers = response.data.filter((user) => user.idRole === 3);
 			setUsers(filteredUsers); // Guardar la lista de usuarios en el estado
-			console.log(users);
 		} catch (error) {
 			console.error("Error al obtener la lista de usuarios:", error);
 		}

@@ -98,24 +98,13 @@ const ListClients = () => {
 					>
 						X
 					</button>
-					<ul
-						style={{
-							listStyleType: "none",
-							padding: 0,
-						}}
-					>
-						<li
-							style={{
-								marginBottom: "30%",
-								marginTop: "30%",
-								cursor: "pointer",
-							}}
-						>
-							<Link
-								onClick={handleMenuRedirect}
-								style={{ color: "white", textDecoration: "none" }}
-							>
-								☰ Menú Principal
+					<ul style={{
+						listStyleType: 'none',
+						padding: 0,
+					}}>
+						<li style={{ marginBottom: '30%',marginTop: '30%', cursor: 'pointer' }}>
+							<Link to={'/MenuSuperAdmin'} style={{ color: 'white', textDecoration: 'none'}}>
+							☰ Menú Principal
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>

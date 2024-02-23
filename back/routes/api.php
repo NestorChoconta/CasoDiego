@@ -51,4 +51,5 @@ Route::controller(TaskController::class)->group(function (){
 });
 
 Route::get('/regular-users', [UserController::class, 'getRegularUsers']);
-Route::get('/users/{user}/completed-tasks', [TaskController::class, 'getCompletedTasks']);
+//verificacion de codigo
+Route::post('/verify-code', [LoginController::class, 'verifyCode']);

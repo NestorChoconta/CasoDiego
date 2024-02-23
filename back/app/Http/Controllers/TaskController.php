@@ -69,10 +69,4 @@ class TaskController extends Controller
         $task = Task::destroy($id);
         return  $task;
     }
-
-    public function getCompletedTasks($idEmpleado)
-    {
-        $completedTasks = Task::where('idEmpleado', $idEmpleado)->where('status', 'Finalizada')->get();
-        return Response::json($completedTasks);
-    }
 }
