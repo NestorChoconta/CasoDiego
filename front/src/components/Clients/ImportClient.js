@@ -55,21 +55,7 @@ const ImportClient = ({ closeModal }) => {
 			window.location.reload();
 		} catch (error) {
 			console.error("Error al importar el archivo", error);
-			handleError(error);
-		}
-	};
-
-	const handleError = (error) => {
-		if (error.response && error.response.status === 422) {
-			toast(error.response.data.error, {
-				appearance: "error",
-				autoDismiss: true,
-			});
-		} else {
-			toast("Error desconocido. Inténtalo de nuevo.", {
-				appearance: "error",
-				autoDismiss: true,
-			});
+			toast.error(error);
 		}
 	};
 

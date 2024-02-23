@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { useSelector } from "react-redux";
 import Modal from "react-modal";
 import ImportClient from "./ImportClient";
+import { toast, ToastContainer } from "react-toastify";
 
 const endpoint = "http://localhost:8000/api";
 
@@ -59,14 +60,12 @@ const ListClients = () => {
 	};
 
 	const offset = pageNumber * clientsPerPage;
-	const paginatedClients = filteredClient.slice(
-		offset,
-		offset + clientsPerPage
-	);
+	const paginatedClients = filteredClient.slice(offset,offset + clientsPerPage);
 
 	const toggleSidebar = () => {
 		setIsSidebarOpen(!isSidebarOpen);
 	};
+
 
 	const Sidebar = ({ isOpen, toggleSidebar }) => {
 		return (
@@ -169,11 +168,23 @@ const ListClients = () => {
 	const [isImportOpen, setIsImportOpen] = useState(false);
 
 	const openImport = () => {
-		setIsImportOpen(true);
+		try {
+			setIsImportOpen(true);
+			//toast.success("Importación iniciada correctamente.");
+		} catch (error) {
+			console.error("Error al abrir la importación", error);
+			//toast.error("NO se puedo inicar la importación.");
+		}
 	};
 
 	const closeImport = () => {
-		setIsImportOpen(false);
+		try {
+			setIsImportOpen(false);
+			//toast.success("Importación finalizada correctamente.");
+		} catch (error) {
+			console.error("Error al cerrar la importación", error);
+			//toast.error("Error al finalizar la importación.");
+		}
 	};
 
 	return (
@@ -304,6 +315,8 @@ const ListClients = () => {
 						</tr>
 					))}
 				</tbody>
+				
+			<ToastContainer />
 			</table>
 			<div className={`pagination mt-4 justify-content-center ${ isImportOpen ? "d-none" : "" }`}>  {/* Utiliza la clase de Bootstrap d-none para ocultar */} 
 				<ReactPaginate
@@ -324,3 +337,4 @@ const ListClients = () => {
 };
 
 export default ListClients;
+
