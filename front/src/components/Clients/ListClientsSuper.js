@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import Modal from "react-modal";
 import ImportClient from "./ImportClient";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api";
 
@@ -26,19 +27,22 @@ const ListClients = () => {
 			navigate("/");
 		}
 		console.log(user);
-		getAllClients();
+		getClientes();
 	}, [pageNumber]);
 
-	const getAllClients = async () => {
+	//Para obtener todos los clientes
+	const getClientes = async () => {
 		const response = await axios.get(`${endpoint}/clientes`);
 		setClients(response.data);
 	};
 
+	//Para filtrar clientes 
 	const handleSearch = (event) => {
 		setSearchTerm(event.target.value);
 		setPageNumber(0); // Reiniciar a la primera página al realizar una búsqueda
 	};
 
+	//Filtra los clientes según el término de búsqueda.
 	const filteredClient = clients.filter((client) => {
 		const phone = client.phone ? client.phone.toString() : "";
 		const numDocument = client.numDocument ? client.numDocument.toString() : "";
@@ -54,6 +58,7 @@ const ListClients = () => {
 		);
 	});
 
+	//Calcula el número total de páginas necesarias para la paginación.
 	const pageCount = Math.ceil(filteredClient.length / clientsPerPage);
 
 	const changePage = ({ selected }) => {
@@ -61,10 +66,7 @@ const ListClients = () => {
 	};
 
 	const offset = pageNumber * clientsPerPage;
-	const paginatedClients = filteredClient.slice(
-		offset,
-		offset + clientsPerPage
-	);
+	const paginatedClients = filteredClient.slice(offset, offset + clientsPerPage);
 
 	const toggleSidebar = () => {
 		setIsSidebarOpen(!isSidebarOpen);
@@ -180,10 +182,13 @@ const ListClients = () => {
 
 	const handleImportFinish = () => {
 		setImportAlert(true);
-		toast.success("Importación finalizada correctamente.", { autoClose: 2000 });
+		toast.success("Importación finalizada correctamente.", {
+			autoClose: 2000,
+		});
+
 		setTimeout(() => {
-			setImportAlert(false);
-			navigate("/clientesSuper");
+			// Recarga la página después de 2000 milisegundos
+			window.location.reload();
 		}, 2000);
 	};
 

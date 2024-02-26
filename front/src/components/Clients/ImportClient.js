@@ -21,11 +21,13 @@ const ImportClient = ({ closeModal, onImportFinish }) => {
 		}
 	}, []);
 
+	//Para el boton de cancelar 
 	const closeModalAndNavigate = () => {
 		closeModal();
 		navigate("/clientesSuper");
 	};
 
+	//verifica si el archivo seleccionado es un archivo Excel o CSV
 	const validateFile = (value) => {
 		const fileExtension = value[0]?.name
 			.substring(value[0]?.name.lastIndexOf("."))
