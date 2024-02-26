@@ -20,6 +20,7 @@ const CreateUser = () => {
 	const [birthdate, setBirthdate] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 	const [phone, setPhone] = useState();
 	const [adress, setAdress] = useState("");
 	const [idRole, setIdRole] = useState();
@@ -44,6 +45,15 @@ const CreateUser = () => {
 
 	const store = async (e) => {
 		e.preventDefault();
+
+		// Verificar si la contraseña y la confirmación coinciden
+		if (password !== confirmPassword) {
+			toast("La contraseña y la confirmación no coinciden", {
+				appearance: "error",
+				autoDismiss: true,
+			});
+			return;
+		}
 
 		// Validar que el número de documento tenga 8 o 10 dígitos
 		const numDoc = numDocument.toString();
@@ -215,6 +225,16 @@ const CreateUser = () => {
 								type="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
+								className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+								required
+							/>
+						</div>
+						<div className="mb-3">
+							<label className="form-label fs-5">Confirmar Contraseña</label>
+							<input
+								type="password"
+								value={confirmPassword}
+								onChange={(e) => setConfirmPassword(e.target.value)}
 								className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
 								required
 							/>

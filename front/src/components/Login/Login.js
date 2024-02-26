@@ -44,9 +44,9 @@ function Login() {
 
             // Mostrar la alerta de verificación por un tiempo limitado
             setVerificationAlert(verification_code);
-            setTimeout(() => {
-                setVerificationAlert("");
-            }, 10000); // Ocultar la alerta después de 5 segundos
+            //setTimeout(() => {
+                setVerificationAlert("El codigo fue enviado a su correo electronico");
+            //}); // Ocultar la alerta después de 5 segundos
 
             // Mostrar el formulario de verificación después de iniciar sesión
             setShowVerification(true);
