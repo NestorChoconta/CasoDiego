@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 
 
@@ -48,7 +49,7 @@ class UserController extends Controller
         $user->numDocument = $request->numDocument;
         $user->birthdate = $request->birthdate;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        $user->password = Hash::make($request->password);
         $user->phone = $request->phone;
         $user->adress = $request->adress;
         $user->idRole = $request->idRole;
@@ -104,7 +105,6 @@ class UserController extends Controller
         $user->numDocument = $request->numDocument;
         $user->birthdate = $request->birthdate;
         $user->email = $request->email;
-        $user->password = bcrypt($request->password);
         $user->phone = $request->phone;
         $user->adress = $request->adress;
         $user->idRole = $request->idRole;

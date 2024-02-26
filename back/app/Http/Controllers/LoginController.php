@@ -46,7 +46,6 @@ class LoginController extends Controller
 
     public function verifyCode(Request $request)
 {
-    // Usar el middleware Authenticate para obtener el usuario autenticado y el token
     $user = $request->user();
     $token = $request->bearerToken();
 
