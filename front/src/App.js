@@ -1,5 +1,5 @@
 import "./App.css";
-import { UseDispatch, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { addUser } from "./redux/userSlice";
 import React from "react";

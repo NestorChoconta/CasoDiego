@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Cookies from "js-cookie";
 import { FiUsers, FiBriefcase, FiClipboard } from "react-icons/fi";
+import { useSelector }	 from "react-redux"
 
 const endpoint = "http://localhost:8000/api";
 
@@ -14,12 +15,14 @@ const ListUsers = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const usersPerPage = 11; // Número de usuarios por página
 	const navigate = useNavigate();
+	const user = useSelector(state => state.user)	
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
 			navigate("/");
 		}
-
+		
+		console.log(user)
 		getAllUsers();
 	}, [pageNumber, navigate]);
 
@@ -124,7 +127,7 @@ const ListUsers = () => {
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<Link
-								to="/clientes"
+								to="/clientesSuper"
 								style={{ color: "white", textDecoration: "none" }}
 							>
 								<FiUsers style={{ marginRight: "10px" }} /> Clientes

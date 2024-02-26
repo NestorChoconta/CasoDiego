@@ -14,13 +14,16 @@ export const userSlice = createSlice({
     initialState,
     reducers:{
         addUser: (state, action) =>{
-            const {email,password,idRole,firstName,Surname,id} = action.payload;
-            state.email = email;
-            state.password = password;
-            state.idRole = idRole;
-            state.firstName = firstName;
-            state.Surname = Surname;
-            state.id = id;
+            const { email, password, idRole, firstName, Surname, id } = action.payload;
+            return {
+                ...state,
+                email: email,
+                password: password,
+                idRole: idRole,
+                firstName: firstName,
+                Surname: Surname,
+                id: id
+            };
         }
     }
 });

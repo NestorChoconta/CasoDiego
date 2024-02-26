@@ -84,7 +84,7 @@ const TaskManager = () => {
 							</Link>
 						</li>
 						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
-							<Link to="/clientes" style={{ color: 'white', textDecoration: 'none'}}>
+							<Link to="/clientesSuper" style={{ color: 'white', textDecoration: 'none'}}>
 							<FiUsers style={{ marginRight: '10px' }} /> Clientes
 							</Link>
 						</li>

@@ -118,7 +118,7 @@ const ListClients = () => {
 							}}
 						>
 							<Link
-								onClick={handleMenuRedirect}
+								to="/MenuSuperAdmin"
 								style={{ color: "white", textDecoration: "none" }}
 							>
 								☰ Menú Principal
