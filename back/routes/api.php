@@ -7,6 +7,7 @@ use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,11 +33,15 @@ Route::controller(ClientController::class)->group(function () {
     Route::get('/cliente/{id}', 'show');
     Route::put('/cliente/{id}', 'update');
     Route::delete('/cliente/{id}', 'destroy');
+    Route::post('/importarClientes', 'importClients');
 });
 
-Route::post('/importarClientes', [ClientController::class, 'importClients']);
+Route::controller(CompanyController::class)->group(function () {
+    Route::get('/compañias', 'index');
+    Route::post('/compañia', 'store');;
+});
 
-Route::get('/compañias', [CompanyController::class, 'index']);
+Route::get('/servicios', [ServiceController::class, 'index']);
 
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);

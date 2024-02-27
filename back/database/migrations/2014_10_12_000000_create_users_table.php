@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('secondName', 20)->nullable();
             $table->string('Surname', 20);
             $table->string('secondSurname', 20)->nullable();
-            $table->BigInteger ('numDocument');
+            $table->BigInteger ('numDocument')->unique();
             $table->date('birthdate');
             $table->string('email', 50)->unique();
             $table->string('password', 255)->unique();
