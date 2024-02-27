@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { FiUsers, FiBriefcase } from 'react-icons/fi';
 import Cookies from "js-cookie";
 
 const endpoint = "http://localhost:8000/api";
@@ -10,6 +11,7 @@ const TaskEmp = () => {
 	const [tasks, setTasks] = useState([]);
 	const [editStatus, setEditStatus] = useState(null);
 	const [newStatus, setNewStatus] = useState("");
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [currentEditStatus, setCurrentEditStatus] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
 	const [pageNumber, setPageNumber] = useState(0);
@@ -76,9 +78,83 @@ const TaskEmp = () => {
 		setNewStatus(currentStatus); // Configura el nuevo estado con el estado actual
 	};
 
+	const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
+	const Sidebar = ({ isOpen, toggleSidebar }) => {
+		return (
+			isOpen && (
+				<div style={{
+					position: 'fixed',
+					top: 0,
+					left: 0,
+					width: '200px',
+					height: '100%',
+					backgroundColor: '#333',
+					color: 'white',
+					padding: '20px',
+					boxSizing: 'border-box',
+					zIndex: 100,
+				}}>
+					<button
+						onClick={toggleSidebar}
+						style={{
+							position: 'absolute',
+							top: '10px',
+							right: '10px',
+							background: 'none',
+							border: 'none',
+							cursor: 'pointer',
+							color: 'white',
+							fontSize: '20px',
+						}}
+					>
+						X
+					</button>
+					<ul style={{
+						listStyleType: 'none',
+						padding: 0,
+					}}>
+						<li style={{ marginBottom: '30%',marginTop: '30%', cursor: 'pointer' }}>
+							<Link to={'/MenuEmple'} style={{ color: 'white', textDecoration: 'none'}}>
+							☰ Menú Principal
+							</Link>
+						</li>
+						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
+							<Link to={'/clientes'} style={{ color: 'white', textDecoration: 'none'}}>
+							<FiUsers style={{ marginRight: '10px' }} /> Clientes
+							</Link>
+						</li>
+						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
+							<FiBriefcase style={{ marginRight: '10px' }} /> Compañias
+						</li>
+						
+					</ul>
+				</div>
+			)
+		);
+	}
+
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1>MIS TAREAS</h1>
+			<button
+				onClick={toggleSidebar}
+				style={{
+					position: 'fixed',
+					top: '20px',
+					left: '20px',
+					background: 'none',
+					border: 'none',
+					cursor: 'pointer',
+					color: 'black',
+					fontSize: '20px',
+				}}
+			>
+				☰ {/* Icono de hamburguesa */}
+			</button>
+			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 			<div className="d-flex justify-content-between align-items-center mt-4"
 				style={{ fontSize: "16px", width: "80%", margin: "auto" }}>
 				<div className="search-bar-container mr-2 w-50">
@@ -89,11 +165,6 @@ const TaskEmp = () => {
 						onChange={handleSearch}
 						className="form-control"
 					/>
-				</div>
-				<div className="ml-auto">
-					<Link to="/MenuEmple" className="btn btn-success btn-md mx-1">
-						Atrás
-					</Link>
 				</div>
 			</div>
 			<table

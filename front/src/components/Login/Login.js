@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/userSlice";
@@ -42,11 +42,8 @@ function Login() {
 
             dispatch(addUser(data2));
 
-            // Mostrar la alerta de verificación por un tiempo limitado
             setVerificationAlert(verification_code);
-            //setTimeout(() => {
-                setVerificationAlert("El codigo fue enviado a su correo electronico");
-            //}); // Ocultar la alerta después de 5 segundos
+            setVerificationAlert("El codigo fue enviado a su correo electronico");
 
             // Mostrar el formulario de verificación después de iniciar sesión
             setShowVerification(true);

@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { FiUsers, FiBriefcase, FiClipboard } from "react-icons/fi";
 import Cookies from "js-cookie";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
+import { jwtDecode } from "jwt-decode";	
 
 const endpoint = "http://localhost:8000/api";
 
@@ -15,13 +16,17 @@ const ListClients = () => {
 	const [pageNumber, setPageNumber] = useState(0);
 	const clientsPerPage = 11; // Número de clientes por página
 	const navigate = useNavigate();
-	const user = useSelector((state) => state.user);
+	//const user = useSelector((state) => state.user);
 
+	const  token = Cookies.get("casoDiego")
+	const decodificacionToken = jwtDecode(token); 
+	const role = decodificacionToken.sub
+	
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
 			navigate("/");
 		}
-		console.log(user);
+		//console.log(user);
 		getAllClients();
 	}, [pageNumber]);
 
@@ -66,6 +71,37 @@ const ListClients = () => {
 		setIsSidebarOpen(!isSidebarOpen);
 	};
 
+	//funcion para devolver al menu segun el rol que inicio sesion
+	const DeffinitionRole = () => {
+		//console.log(typeof(role));
+		switch (parseInt(role)) {
+			case 3:
+				navigate('/MenuEmple')
+				break;
+			case 2:
+				navigate('/MenuAdmin')
+				break;
+			default:
+				navigate('/clientes')
+				break;
+		}
+	}
+	
+	const DeffinitionTareas = () => {
+		//console.log(typeof(role));
+		switch (parseInt(role)) {
+			case 1 && 2:
+				navigate('/Tareas')
+				break;
+			case 3:
+				navigate('/TareasEmp')
+				break;
+			default:
+				navigate('/clientes')
+				break;
+		}
+	}
+
 	const Sidebar = ({ isOpen, toggleSidebar }) => {
 		return (
 			isOpen && (
@@ -103,26 +139,25 @@ const ListClients = () => {
 						padding: 0,
 					}}>
 						<li style={{ marginBottom: '30%',marginTop: '30%', cursor: 'pointer' }}>
-							<Link to={'/MenuSuperAdmin'} style={{ color: 'white', textDecoration: 'none'}}>
-							☰ Menú Principal
-							</Link>
+							<a onClick={()=>DeffinitionRole()} style={{ color: 'white', textDecoration: 'none'}}>
+								☰ Menú Principal
+							</a>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<Link
-								to="/Tareas"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+							<a onClick={()=>DeffinitionTareas()}  style={{ color: "white", textDecoration: "none" }}>
 								<FiClipboard style={{ marginRight: "10px" }} /> Tareas
-							</Link>
+							</a>
 						</li>
-						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<Link
-								to="/usuarios"
-								style={{ color: "white", textDecoration: "none" }}
-							>
-								<FiUsers style={{ marginRight: "10px" }} /> Usuarios
-							</Link>
-						</li>
+						{parseInt(role) === 2 && (
+							<li style={{ marginBottom: "30%", cursor: "pointer" }}>
+								<Link
+									to="/AdUsuarios"
+									style={{ color: "white", textDecoration: "none" }}
+								>
+									<FiUsers style={{ marginRight: "10px" }} /> Usuarios
+								</Link>
+							</li>
+						)}
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<FiBriefcase style={{ marginRight: "10px" }} /> Compañias
 						</li>
@@ -131,27 +166,7 @@ const ListClients = () => {
 			)
 		);
 	};
-
-	// Comprobar el rol del usuario en la página de menú principal
-	const idRole = Cookies.get("idRole");
-
-	const handleMenuRedirect = () => {
-		switch (idRole) {
-			case "1":
-				navigate("/MenuSuperAdmin");
-				break;
-			case "2":
-				navigate("/MenuAdmin");
-				break;
-			case "3":
-				navigate("/MenuEmple");
-				break;
-			default:
-				// Si el rol del usuario no está definido, redirige a la página de inicio de sesión
-				navigate("/");
-				break;
-		}
-	};
+	
 
 	return (
 		<div className="container-fluid mt-4 px-md-5">

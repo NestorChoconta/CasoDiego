@@ -58,7 +58,7 @@ const VistaEmple = () => {
 						<img src={tareas} className="card-img-top mx-auto d-block mt-1 mb-3" style={{ width: "50%" }} alt=""/>
 						<div className="card-body">
 							<h1 className="card-title">TAREAS</h1>
-							<p className="card-text">Aqui puedes asignar tareas</p>
+							<p className="card-text">Aqui puedes ver tareas</p>
 							<a href="/TareasEmp" className="btn btn-success">
 								Mis Tareas
 							</a>

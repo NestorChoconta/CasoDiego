@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { FiUsers, FiBriefcase } from 'react-icons/fi';
+import { jwtDecode } from "jwt-decode";
 
 const endpoint = "http://localhost:8000/api";
 
@@ -11,12 +12,17 @@ const TaskManager = () => {
 	const [pageNumber] = useState(0);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const tasksPerPage = 11;
-	const navigate = useNavigate();
+	const navigate = useNavigate(); 
 
+	const  token = Cookies.get("casoDiego")
+	const decodificacionToken = jwtDecode(token); 
+	const role = decodificacionToken.sub
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
 			navigate("/");
 		}
+		//console.log(decodificacionToken.sub)
+		console.log(role)
 		fetchUsersWithTasks();
 	}, []);
 
@@ -39,7 +45,53 @@ const TaskManager = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
+	//funcion para devolver al menu segun el rol que inicio sesion
+	const DeffinitionRole = () => {
+		//console.log(typeof(role));
+		switch (parseInt(role)) {
+			case 1:
+				navigate('/MenuSuperAdmin')
+				break;
+			case 2:
+				navigate('/MenuAdmin')
+				break;
+			default:
+				navigate('/Tareas')
+				break;
+		}
+	}
+
+	const DeffinitionUsers = () => {
+		switch (parseInt(role)) {
+			case 1:
+				navigate('/usuarios')
+				break;
+			case 2:
+				navigate('/AdUsuarios')
+				break;
+			default:
+				break;
+		}
+	}
+
+	const DeffinitionClients = () => {
+		switch (parseInt(role)) {
+			case 1:
+				navigate('/clientesSuper')
+				break;
+			case 2:
+				navigate('/clientes')
+				break;
+			case 3:
+				navigate('/clientes')
+				break;
+			default:
+				break;
+		}
+	}
+
 	const Sidebar = ({ isOpen, toggleSidebar }) => {
+		
 		return (
 			isOpen && (
 				<div style={{
@@ -74,19 +126,19 @@ const TaskManager = () => {
 						padding: 0,
 					}}>
 						<li style={{ marginBottom: '30%',marginTop: '30%', cursor: 'pointer' }}>
-							<Link to="/MenuSuperAdmin" style={{ color: 'white', textDecoration: 'none'}}>
+							<a onClick={()=>DeffinitionRole()} style={{ color: 'white', textDecoration: 'none'}}>
 							☰ Menú Principal
-							</Link>
+							</a>
 						</li>
 						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
-							<Link to="/usuarios" style={{ color: 'white', textDecoration: 'none' }}>
+							<a onClick={()=>DeffinitionUsers()} style={{ color: 'white', textDecoration: 'none' }}>
 								<FiUsers style={{ marginRight: '10px' }} /> Usuarios
-							</Link>
+							</a>
 						</li>
 						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
-							<Link to="/clientesSuper" style={{ color: 'white', textDecoration: 'none'}}>
+							<a onClick={()=>DeffinitionClients()} style={{ color: 'white', textDecoration: 'none'}}>
 							<FiUsers style={{ marginRight: '10px' }} /> Clientes
-							</Link>
+							</a>
 						</li>
 						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
 							<FiBriefcase style={{ marginRight: '10px' }} /> Compañias
