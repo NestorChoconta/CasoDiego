@@ -11,7 +11,7 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $company = DB::table('companies')->get();
+        $company = Company::with('services')->get();
         return Response::json($company);
     }
 
@@ -24,7 +24,7 @@ class CompanyController extends Controller
         $company->adress = $request->adress;
         $company->phone = $request->phone;
         $company->nit = $request->nit;
-        $company->client_serv_contract = $request->client_serv_contract;
+        $company->documents = $request->documents;
         $company->statusCompany = $request->statusCompany;
         $company->verification_code = $request->verification_code;
         $company->idService = $request->idService;

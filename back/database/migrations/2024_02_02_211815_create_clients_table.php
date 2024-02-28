@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('SurnameClient', 20);
             $table->string('secondSurnameClient', 20)->nullable();
             $table->BigInteger ('numDocument')->unique();
-            $table->BigInteger ('phone');
+            $table->BigInteger ('phone')->unique();
             $table->unsignedInteger('idUser');
             $table->unsignedInteger('idDocumentType');
             $table->unsignedInteger('idCompany');

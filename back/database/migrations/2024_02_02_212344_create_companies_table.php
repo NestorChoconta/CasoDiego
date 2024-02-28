@@ -13,9 +13,9 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('adress', 50);
-            $table->BigInteger('phone');
+            $table->BigInteger('phone')->unique();
             $table->BigInteger('nit')->unique();
-            $table->binary('client_serv_contract');
+            $table->binary('documents');
             $table->enum('statusCompany', ['Activa', 'Inactiva'])->default('Activa');
             $table->string('verification_code')->nullable();
             $table->unsignedInteger('idService');

@@ -12,7 +12,7 @@ const CreateCompany = () => {
 	const [phone, setPhone] = useState("");
 	const [errorsPhone, setErrorsPhone] = useState([]);
 	const [nit, setNit] = useState("");
-	const [client_serv_contract, setClient_serv_contract] = useState();
+	const [documents, setDocuments] = useState();
 	const [statusCompany, setStatusCompany] = useState("Activa");
 	const [verification_code, setVerification_code] = useState();
 	const [idService, setIdService] = useState();
@@ -52,7 +52,7 @@ const CreateCompany = () => {
 			adress: adress,
 			phone: phone,
 			nit: nit,
-			client_serv_contract: client_serv_contract,
+			documents: documents,
 			statusCompany: statusCompany,
 			verification_code: verification_code,
 			idService: idService,
@@ -142,11 +142,11 @@ const CreateCompany = () => {
 							</select>
 						</div>
 						<div className="mb-3">
-							<label className="form-label fs-5">Contrato del servicio</label>
+							<label className="form-label fs-5">Documento general sobre información de la compañia</label>
 							<input
 								type="file"
-								value={client_serv_contract}
-								onChange={(e) => setClient_serv_contract(e.target.value)}
+								value={documents}
+								onChange={(e) => setDocuments(e.target.value)}
 								className="form-control"
 							/>
 						</div>

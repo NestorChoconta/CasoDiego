@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('birthdate');
             $table->string('email', 50)->unique();
             $table->string('password', 255)->unique();
-            $table->BigInteger ('phone');
+            $table->BigInteger ('phone')->unique();
             $table->string('adress', 50);
             $table->unsignedInteger('idRole');
             $table->string('verification_code')->nullable();
