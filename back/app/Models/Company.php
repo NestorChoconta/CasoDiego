@@ -13,7 +13,7 @@ class Company extends Model
                             'adress',
                             'phone',
                             'nit',
-                            'client_serv_contract',
+                            'documents',
                             'statusCompany',
                             'verification_code',
                             'idService'];
