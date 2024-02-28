@@ -16,7 +16,7 @@ return new class extends Migration
             $table->BigInteger('phone');
             $table->BigInteger('nit')->unique();
             $table->binary('client_serv_contract');
-            $table->enum('statusCompany', ['Activo', 'Inactivo'])->default('Activo');
+            $table->enum('statusCompany', ['Activa', 'Inactiva'])->default('Activa');
             $table->string('verification_code')->nullable();
             $table->unsignedInteger('idService');
             $table->timestamps();
