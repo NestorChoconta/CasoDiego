@@ -87,8 +87,7 @@ const ListClients = () => {
 						padding: "20px",
 						boxSizing: "border-box",
 						zIndex: 100,
-					}}
-				>
+					}}>
 					<button
 						onClick={toggleSidebar}
 						style={{
@@ -100,43 +99,37 @@ const ListClients = () => {
 							cursor: "pointer",
 							color: "white",
 							fontSize: "20px",
-						}}
-					>
+						}}>
 						X
 					</button>
 					<ul
 						style={{
 							listStyleType: "none",
 							padding: 0,
-						}}
-					>
+						}}>
 						<li
 							style={{
 								marginBottom: "30%",
 								marginTop: "30%",
 								cursor: "pointer",
-							}}
-						>
+							}}>
 							<Link
 								to="/MenuSuperAdmin"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								☰ Menú Principal
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<Link
 								to="/Tareas"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								<FiClipboard style={{ marginRight: "10px" }} /> Tareas
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<Link
 								to="/usuarios"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								<FiUsers style={{ marginRight: "10px" }} /> Usuarios
 							</Link>
 						</li>
@@ -147,27 +140,6 @@ const ListClients = () => {
 				</div>
 			)
 		);
-	};
-
-	// Comprobar el rol del usuario en la página de menú principal
-	const idRole = Cookies.get("idRole");
-
-	const handleMenuRedirect = () => {
-		switch (idRole) {
-			case "1":
-				navigate("/MenuSuperAdmin");
-				break;
-			case "2":
-				navigate("/MenuAdmin");
-				break;
-			case "3":
-				navigate("/MenuEmple");
-				break;
-			default:
-				// Si el rol del usuario no está definido, redirige a la página de inicio de sesión
-				navigate("/");
-				break;
-		}
 	};
 
 	const [isImportOpen, setIsImportOpen] = useState(false);
@@ -206,8 +178,7 @@ const ListClients = () => {
 					cursor: "pointer",
 					color: "black",
 					fontSize: "20px",
-				}}
-			>
+				}}>
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -225,7 +196,6 @@ const ListClients = () => {
 					<button onClick={openImport} className="btn btn-success btn-md mx-1">
 						Importar Clientes
 					</button>
-
 					<Modal
 						isOpen={isImportOpen}
 						onRequestClose={closeImport}
@@ -236,13 +206,11 @@ const ListClients = () => {
 								margin: "auto",
 								marginTop: "0%",
 							},
-						}}
-					>
+						}}>
 						{/* Renderiza el componente ImportClient dentro del modal */}
 						<ImportClient
 							closeModal={closeImport}
-							onImportFinish={handleImportFinish}
-						/>
+							onImportFinish={handleImportFinish}/>
 					</Modal>
 					<Link to="/crearC" className="btn btn-success btn-md mx-1">
 						Crear Cliente
@@ -315,8 +283,7 @@ const ListClients = () => {
 							<td className="align-middle text-center">
 								<Link
 									to={`/editarC/${client.id}`}
-									className="btn btn-success btn-sm mx-1"
-								>
+									className="btn btn-success btn-sm mx-1">
 									Editar
 								</Link>
 							</td>
@@ -329,8 +296,7 @@ const ListClients = () => {
 			<div
 				className={`pagination mt-4 justify-content-center ${
 					isImportOpen ? "d-none" : ""
-				}`}
-			>
+				}`}>
 				{" "}
 				{/* Utiliza la clase de Bootstrap d-none para ocultar */}
 				<ReactPaginate

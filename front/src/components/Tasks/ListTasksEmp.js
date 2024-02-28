@@ -108,8 +108,7 @@ const TaskEmp = () => {
 							cursor: 'pointer',
 							color: 'white',
 							fontSize: '20px',
-						}}
-					>
+						}}>
 						X
 					</button>
 					<ul style={{
@@ -150,8 +149,7 @@ const TaskEmp = () => {
 					cursor: 'pointer',
 					color: 'black',
 					fontSize: '20px',
-				}}
-			>
+				}}>
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -169,8 +167,7 @@ const TaskEmp = () => {
 			</div>
 			<table
 				className="table table-striped table-bordered shadow-lg table-hover mt-4"
-				style={{ fontSize: "16px", width: "80%", margin: "auto" }}
-			>
+				style={{ fontSize: "16px", width: "80%", margin: "auto" }}>
 				<thead className="thead-light">
 					<tr>
 						<th scope="col" className="col-4 align-middle text-center">
@@ -200,8 +197,7 @@ const TaskEmp = () => {
 									<select
 										value={newStatus}
 										onChange={(e) => setNewStatus(e.target.value)}
-										className="form-select border-bottom"
-									>
+										className="form-select border-bottom">
 										<option value="Por iniciar">Por iniciar</option>
 										<option value="Pendiente">Pendiente</option>
 										<option value="Finalizada">Finalizada</option>
@@ -215,22 +211,19 @@ const TaskEmp = () => {
 									<button
 										//Se llama handleEditStatus para pasar el ID de la tarea y el estado actual.
 										onClick={() => handleEditStatus(task.id, task.status)}
-										className="btn btn-danger btn-md mx-1"
-									>
+										className="btn btn-danger btn-md mx-1">
 										Editar Estado
 									</button>
 								) : (
 									<div>
 										<button
 											onClick={() => updateStatus(task.id)}
-											className="btn btn-success btn-md mx-1"
-										>
+											className="btn btn-success btn-md mx-1">
 											Guardar Cambios
 										</button>
 										<button
 											onClick={() => setEditStatus(null)}
-											className="btn btn-danger btn-md mx-1"
-										>
+											className="btn btn-danger btn-md mx-1">
 											Cancelar
 										</button>
 									</div>

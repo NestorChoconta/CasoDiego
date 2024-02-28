@@ -25,6 +25,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/usuario/{id}', 'show');
     Route::put('/usuario/{id}', 'update');
     Route::delete('/usuario/{id}', 'destroy');
+    Route::get('/regular-users', 'getRegularUsers');
 });
 
 Route::controller(ClientController::class)->group(function () {
@@ -43,9 +44,6 @@ Route::controller(CompanyController::class)->group(function () {
 
 Route::get('/servicios', [ServiceController::class, 'index']);
 
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout']);
-
 Route::controller(TaskController::class)->group(function (){
     Route::get('/tasks', 'index');
     Route::post('/task', 'store');
@@ -55,6 +53,8 @@ Route::controller(TaskController::class)->group(function (){
     Route::delete('/tasks/{id}', 'destroy');
 });
 
-Route::get('/regular-users', [UserController::class, 'getRegularUsers']);
-//verificacion de codigo
-Route::post('/verify-code', [LoginController::class, 'verifyCode']);
+Route::controller(LoginController::class)->group(function (){
+    Route::post('/login', 'login');
+    Route::post('/logout', 'logout');
+    Route::post('/verify-code', 'verifyCode');
+});

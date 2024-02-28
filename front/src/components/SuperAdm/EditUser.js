@@ -19,7 +19,6 @@ const EditUser = () => {
     const [numDocument, setNumDocument] = useState ()
     const [birthdate, setBirthdate] = useState ('')
     const [email, setEmail] = useState ('')
-    //const [password, setPassword] = useState ('')
     const [phone, setPhone] = useState ()
     const [adress, setAdress] = useState ('')
     const [idRole, setIdRole] = useState ()
@@ -54,7 +53,6 @@ const EditUser = () => {
         setNumDocument(response.data.numDocument)
         setBirthdate(response.data.birthdate)
         setEmail(response.data.email)
-        //setPassword(response.data.password)
         setPhone(response.data.phone)
         setAdress(response.data.adress)
         setIdRole(response.data.idRole)
@@ -93,7 +91,6 @@ const EditUser = () => {
                 numDocument: numDocument,
                 birthdate: birthdate,
                 email: email,
-                //password: password,
                 phone: phone,
                 adress: adress,
                 idRole: idRole,
@@ -269,7 +266,7 @@ const EditUser = () => {
                             </select>
                         </div>
                         <Link to="/usuarios" className="btn btn-warning btn-md mx-1"> Cancelar </Link>
-                        <button  type="submit" className="btn btn-primary" tabIndex="4">Guardar Cambios</button>
+                        <button type="submit" className="btn btn-primary" tabIndex="4">Guardar Cambios</button>
                     </form>
                 </div>
             </div>

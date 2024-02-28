@@ -77,8 +77,7 @@ const ListUserAdmin = () => {
 						padding: "20px",
 						boxSizing: "border-box",
 						zIndex: 100,
-					}}
-				>
+					}}>
 					<button
 						onClick={toggleSidebar}
 						style={{
@@ -90,43 +89,37 @@ const ListUserAdmin = () => {
 							cursor: "pointer",
 							color: "white",
 							fontSize: "20px",
-						}}
-					>
+						}}>
 						X
 					</button>
 					<ul
 						style={{
 							listStyleType: "none",
 							padding: 0,
-						}}
-					>
+						}}>
 						<li
 							style={{
 								marginBottom: "30%",
 								marginTop: "30%",
 								cursor: "pointer",
-							}}
-						>
+							}}>
 							<Link
 								to="/MenuAdmin"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								☰ Menú Principal
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<Link
 								to="/Tareas"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								<FiClipboard style={{ marginRight: "10px" }} /> Tareas
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<Link
 								to="/clientes"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								<FiUsers style={{ marginRight: "10px" }} /> Clientes
 							</Link>
 						</li>
