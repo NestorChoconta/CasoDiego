@@ -26,7 +26,6 @@ function Login() {
 
             let data = response.data;
             const { access_token, verification_code } = response.data; // Obtener el código de verificación de la respuesta
-
             setToken(access_token);
             Cookies.set("casoDiego", access_token);
 
