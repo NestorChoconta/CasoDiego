@@ -49,7 +49,7 @@ const CreateCompany = () => {
 
 		await axios.post(`${endpoint}`, {
 			name: name,
-			adress: adress,
+			adress:adress,
 			phone: phone,
 			nit: nit,
 			documents: documents,
@@ -109,8 +109,8 @@ const CreateCompany = () => {
 								}}
 								className={`form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom 
                                     ${
-																			errorsPhone.length > 0 ? "is-invalid" : ""
-																		}`}
+											errorsPhone.length > 0 ? "is-invalid" : ""
+										}`}
 								required
 							/>
 							{errorsPhone.length > 0 && (
