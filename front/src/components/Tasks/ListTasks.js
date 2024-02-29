@@ -117,8 +117,7 @@ const TaskManager = () => {
 							cursor: 'pointer',
 							color: 'white',
 							fontSize: '20px',
-						}}
-					>
+						}}>
 						X
 					</button>
 					<ul style={{
@@ -164,8 +163,7 @@ const TaskManager = () => {
 					cursor: 'pointer',
 					color: 'black',
 					fontSize: '20px',
-				}}
-			>
+				}}>
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -183,8 +181,7 @@ const TaskManager = () => {
 						padding: "15px",
 						borderRadius: "5px",
 						marginRight: "10px",
-					}}
-				>
+					}}>
 					<h6 style={{ marginBottom: "15px" }}>Por Iniciar</h6>
 					<ul className="list-group">
 						{paginatedUsersWithTasks.map((userWithTasks) =>
@@ -193,8 +190,7 @@ const TaskManager = () => {
 								.map((task) => (
 									<li
 										key={task.id}
-										className="list-group-item d-flex align-items-center"
-									>
+										className="list-group-item d-flex align-items-center">
 										<span className="text-muted">
 											Asignado a: {userWithTasks.firstName}
 										</span>
@@ -202,8 +198,7 @@ const TaskManager = () => {
 										<div>
 											<Link
 												to={`/editarT/${task.id}`}
-												className="btn btn-success btn-sm"
-											>
+												className="btn btn-success btn-sm">
 												Editar
 											</Link>
 										</div>
@@ -220,8 +215,7 @@ const TaskManager = () => {
 						borderRadius: "5px",
 						marginRight: "10px",
 						marginLeft: "10px",
-					}}
-				>
+					}}>
 					<h6 style={{ marginBottom: "15px" }}>Pendientes</h6>
 					<ul className="list-group">
 						{paginatedUsersWithTasks.map((userWithTasks) =>
@@ -230,8 +224,7 @@ const TaskManager = () => {
 								.map((task) => (
 									<li
 										key={task.id}
-										className="list-group-item d-flex align-items-center"
-									>
+										className="list-group-item d-flex align-items-center">
 										<span className="text-muted">
 											Asignado a: {userWithTasks.firstName}
 										</span>
@@ -239,8 +232,7 @@ const TaskManager = () => {
 										<div>
 											<Link
 												to={`/editarT/${task.id}`}
-												className="btn btn-success btn-sm"
-											>
+												className="btn btn-success btn-sm">
 												Editar
 											</Link>
 										</div>
@@ -256,8 +248,7 @@ const TaskManager = () => {
 						padding: "15px",
 						borderRadius: "5px",
 						marginLeft: "10px",
-					}}
-				>
+					}}>
 					<h6 style={{ marginBottom: "15px" }}>Finalizadas</h6>
 					<ul className="list-group">
 						{paginatedUsersWithTasks.map((userWithTasks) =>
@@ -266,8 +257,7 @@ const TaskManager = () => {
 								.map((task) => (
 									<li
 										key={task.id}
-										className="list-group-item d-flex align-items-center"
-									>
+										className="list-group-item d-flex align-items-center">
 										<span className="text-muted">
 											Asignado a: {userWithTasks.firstName}
 										</span>
@@ -275,8 +265,7 @@ const TaskManager = () => {
 										<div>
 											<Link
 												to={`/editarT/${task.id}`}
-												className="btn btn-success btn-sm"
-											>
+												className="btn btn-success btn-sm">
 												Editar
 											</Link>
 										</div>

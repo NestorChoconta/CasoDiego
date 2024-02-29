@@ -35,7 +35,7 @@ const CreateClient = () => {
 	const getAllUsuDocTypeComp = async () => {
 		const documentTypesResponse = await axios.get(`http://localhost:8000/api/document-types`);
 		const usersResponse = await axios.get(`http://localhost:8000/api/usuarios`);
-		const companiesResponse = await axios.get(`http://localhost:8000/api/compañias`);
+		const companiesResponse = await axios.get(`http://localhost:8000/api/companies`);
 		setDocumentTypes(documentTypesResponse.data);
 		setUsers(usersResponse.data);
 		setCompanies(companiesResponse.data);
@@ -74,7 +74,7 @@ const CreateClient = () => {
 			idCompany: idCompany,
 			statusClient: statusClient
 		});
-		navigate("/clientes");
+		navigate(-1);
 	};
 
 	const handleGoBack = () => {
@@ -238,7 +238,7 @@ const CreateClient = () => {
 						</div>
 						<div className="mb-3 text-center">
 							<button onClick={handleGoBack} className="btn btn-warning btn-md mx-1" > Cancelar </button>
-							<button onClick={handleGoBack} type="submit" className="btn btn-primary" tabIndex="4"> Guardar </button>
+							<button type="submit" className="btn btn-primary" tabIndex="4"> Guardar </button>
 						</div>
 					</form>
 				</div>

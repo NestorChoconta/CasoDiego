@@ -50,19 +50,15 @@ const EditTask = () => {
 				idEmpleado: idEmpleado
 			});
 			navigate('/Tareas');
-			handleGoBack();
 		} catch (error) {
 			console.error('Error al guardar la tarea:', error);
 		}
 	};
 
     const handleGoBack = () => {
-		navigate(-2); // Regresar a la página anterior
-	};
-
-	const retroceder = () => {
 		navigate(-1); // Regresar a la página anterior
 	};
+
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1 className="text-center mb-4">EDITAR TAREA</h1>
@@ -109,7 +105,7 @@ const EditTask = () => {
 						</div>
 						<div className="mb-3 text-center">
 							<button
-								onClick={retroceder}
+								onClick={handleGoBack}
 								className="btn btn-warning btn-md mx-1">
 								Cancelar
 							</button>

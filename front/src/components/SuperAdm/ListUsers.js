@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Cookies from "js-cookie";
 import { FiUsers, FiBriefcase, FiClipboard } from "react-icons/fi";
-//import { useSelector }	 from "react-redux"
 import { jwtDecode } from "jwt-decode";
 
 
@@ -17,7 +16,6 @@ const ListUsers = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const usersPerPage = 11; // Número de usuarios por página
 	const navigate = useNavigate();
-	//const user = useSelector(state => state.user)	
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
@@ -25,14 +23,12 @@ const ListUsers = () => {
 		}
 
 		const  token = Cookies.get("casoDiego")
-		//console.log(token)
 		//decodificamos el token con la libreria jwtDecode
 		const decodificacionToken = jwtDecode(token); 
 
 		//sacamos el rol(sub) del token 
 		console.log(decodificacionToken.sub) 
 		getAllUsers();
-		//console.log(user)
 	}, [pageNumber, navigate]);
 
 	const getAllUsers = async () => {
@@ -89,8 +85,7 @@ const ListUsers = () => {
 						padding: "20px",
 						boxSizing: "border-box",
 						zIndex: 100,
-					}}
-				>
+					}}>
 					<button
 						onClick={toggleSidebar}
 						style={{
@@ -102,43 +97,37 @@ const ListUsers = () => {
 							cursor: "pointer",
 							color: "white",
 							fontSize: "20px",
-						}}
-					>
+						}}>
 						X
 					</button>
 					<ul
 						style={{
 							listStyleType: "none",
 							padding: 0,
-						}}
-					>
+						}}>
 						<li
 							style={{
 								marginBottom: "30%",
 								marginTop: "30%",
 								cursor: "pointer",
-							}}
-						>
+							}}>
 							<Link
 								to="/MenuSuperAdmin"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								☰ Menú Principal
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<Link
 								to="/Tareas"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								<FiClipboard style={{ marginRight: "10px" }} /> Tareas
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<Link
 								to="/clientesSuper"
-								style={{ color: "white", textDecoration: "none" }}
-							>
+								style={{ color: "white", textDecoration: "none" }}>
 								<FiUsers style={{ marginRight: "10px" }} /> Clientes
 							</Link>
 						</li>

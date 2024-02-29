@@ -62,16 +62,14 @@ const CreateTask = () => {
 								value={description}
 								onChange={(e) => setDescription(e.target.value)}
 								className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-								required
-							/>
+								required/>
 						</div>
 						<div className="mb-3">
 							<label className="form-label fs-5">Estado</label>
 							<select
 								value={status}
 								onChange={(e) => setStatus(e.target.value)}
-								className="form-select border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-							>
+								className="form-select border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom">
 								<option value="" >Selecciona un estado</option>
 								<option value="Por iniciar">Por iniciar</option>
 								<option value="Pendiente">Pendiente</option>
@@ -84,8 +82,7 @@ const CreateTask = () => {
 								value={idEmpleado}
 								onChange={(e) => setIdEmpleado(e.target.value)}
 								className="form-select border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-								required
-							>
+								required>
 								<option value="" disabled selected>
 									Selecciona el empleado al que desea asignarle la tarea
 								</option>
@@ -99,8 +96,7 @@ const CreateTask = () => {
 						<div className="mb-3 text-center">
 							<button
 								onClick={handleGoBack}
-								className="btn btn-warning btn-md mx-1"
-							>
+								className="btn btn-warning btn-md mx-1">
 								Cancelar
 							</button>
 							<button type="submit" className="btn btn-primary" tabIndex="4">

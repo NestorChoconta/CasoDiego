@@ -90,7 +90,7 @@ const EditClient = () => {
             idCompany : idCompany,
             statusClient : statusClient
         })
-        navigate('/clientes')
+        navigate(-1)
     }
 
     const handleGoBack = () => {
@@ -243,7 +243,7 @@ const EditClient = () => {
 						</div>
                         <div className="mb-3 text-center">
                             <button onClick={handleGoBack} className="btn btn-warning btn-md mx-1">Cancelar</button>
-                            <button onClick={handleGoBack} type="submit" className="btn btn-primary" tabIndex="4">Guardar Cambios</button>
+                            <button type="submit" className="btn btn-primary" tabIndex="4">Guardar Cambios</button>
                         </div>
                         </form>
                 </div>

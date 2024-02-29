@@ -183,10 +183,9 @@ const CreateUser = () => {
 								}}
 								className={`form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom 
                                     ${
-																			errorsNumDoc.length > 0
-																				? "is-invalid"
-																				: ""
-																		}`}
+										errorsNumDoc.length > 0
+										? "is-invalid" : ""
+									}`}
 								required
 							/>
 							{errorsNumDoc.length > 0 && (
@@ -280,8 +279,7 @@ const CreateUser = () => {
 								value={idRole}
 								onChange={(e) => setIdRole(e.target.value)}
 								className="form-select border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-								required
-							>
+								required>
 								<option disabled selected>
 									Seleccione el rol
 								</option>

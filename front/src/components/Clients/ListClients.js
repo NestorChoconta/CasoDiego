@@ -117,8 +117,7 @@ const ListClients = () => {
 						padding: "20px",
 						boxSizing: "border-box",
 						zIndex: 100,
-					}}
-				>
+					}}>
 					<button
 						onClick={toggleSidebar}
 						style={{
@@ -130,8 +129,7 @@ const ListClients = () => {
 							cursor: "pointer",
 							color: "white",
 							fontSize: "20px",
-						}}
-					>
+						}}>
 						X
 					</button>
 					<ul style={{
@@ -182,8 +180,7 @@ const ListClients = () => {
 					cursor: "pointer",
 					color: "black",
 					fontSize: "20px",
-				}}
-			>
+				}}>
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
