@@ -182,7 +182,17 @@ const ListClients = () => {
 							<td className="align-middle text-center">{company.phone}</td>
 							<td className="align-middle text-center">{company.nit}</td>
 							<td className="align-middle text-center">{company.documents}</td>
-							<td className="align-middle text-center">{company.services ? company.services.description : "Sin servicio"}</td>
+							<td className="align-middle text-center">
+								{/* verificar si la relacion se cargo */}
+								{company.services && company.services.length > 0 ? (
+									<ul>
+										{/* iterar sobre los servicios y mostrar cada descripción en un elemento de la lista */}
+										{company.services.map((service) => (
+											<li key={service.id}>{service.description}</li>
+										))}
+									</ul>
+								) : "Sin servicio"}
+							</td>
 							<td className="align-middle text-center">{company.statusCompany}</td>
 							<td className="align-middle text-center">
 								<Link

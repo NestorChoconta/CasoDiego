@@ -15,14 +15,14 @@ class Company extends Model
                             'nit',
                             'documents',
                             'statusCompany',
-                            'verification_code',
-                            'idService'];
+                            'verification_code'];
 
     public function clients(){
         return $this->hasMany(Client::class, 'idCompany');
     }
 
+    //relación muchos a muchos con Service a través de la tabla pivot 'companies_services'
     public function services(){
-        return $this->belongsTo(Service::class, 'idService');
+        return $this->belongsToMany(Service::class, 'companies_services', 'idCompany', 'idService');
     }
 }

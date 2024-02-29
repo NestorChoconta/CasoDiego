@@ -15,7 +15,7 @@ const CreateCompany = () => {
 	const [documents, setDocuments] = useState();
 	const [statusCompany, setStatusCompany] = useState("Activa");
 	const [verification_code, setVerification_code] = useState();
-	const [idService, setIdService] = useState();
+	const [selectedServices, setSelectedServices] = useState([]);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -55,13 +55,28 @@ const CreateCompany = () => {
 			documents: documents,
 			statusCompany: statusCompany,
 			verification_code: verification_code,
-			idService: idService,
+			idService: selectedServices,
 		});
 		navigate(-1);
 	};
 
 	const handleGoBack = () => {
 		navigate(-1); // Regresar a la página anterior
+	};
+
+	// función para manejar el cambio en la selección de servicios
+	const handleServiceChange = (serviceId) => {
+		const updatedServices = [...selectedServices];
+		if (updatedServices.includes(serviceId)) {
+			// si ya está seleccionado, lo eliminamos
+			const index = updatedServices.indexOf(serviceId);
+			updatedServices.splice(index, 1);
+		} else {
+			// si no está seleccionado, lo añadimos
+			updatedServices.push(serviceId);
+		}
+		// cambia el estado del servicio seleccinado
+		setSelectedServices(updatedServices);
 	};
 
 	return (
@@ -124,25 +139,29 @@ const CreateCompany = () => {
 							)}
 						</div>
 						<div className="mb-3">
-							<label className="form-label fs-5">Servicio</label>
-							<select
-								value={idService}
-								onChange={(e) => setIdService(e.target.value)}
-								className="form-select border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-								required
-							>
-								<option disabled selected>
-									Seleccione el servicio
-								</option>
-								{services.map((services) => (
-									<option key={services.id} value={services.id}>
-										{services.description}
-									</option>
-								))}
-							</select>
-						</div>
+							<label className="form-label fs-5">Servicios</label>
+							{services.map((service) => (
+								<div key={service.id} className="form-check text-start">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id={`serviceCheckbox${service.id}`}
+										checked={selectedServices.includes(service.id)}
+										onChange={() => handleServiceChange(service.id)}
+									/>
+									<label
+										className="form-check-label"
+										htmlFor={`serviceCheckbox${service.id}`}
+									>
+										{service.description}
+									</label>
+								</div>
+							))}
+						</div><br></br>
 						<div className="mb-3">
-							<label className="form-label fs-5">Documento general sobre información de la compañia</label>
+							<label className="form-label fs-5">
+								Documento general de la compañía
+							</label>
 							<input
 								type="file"
 								value={documents}

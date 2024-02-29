@@ -18,7 +18,6 @@ return new class extends Migration
             $table->binary('documents');
             $table->enum('statusCompany', ['Activa', 'Inactiva'])->default('Activa');
             $table->string('verification_code')->nullable();
-            $table->unsignedInteger('idService');
             $table->timestamps();
         });
     }

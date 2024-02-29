@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class CompanyController extends Controller
@@ -27,10 +26,12 @@ class CompanyController extends Controller
         $company->documents = $request->documents;
         $company->statusCompany = $request->statusCompany;
         $company->verification_code = $request->verification_code;
-        $company->idService = $request->idService;
 
         //con el metodo save se guarda todo en la tabla
         $company->save();
+
+        //guardar los servicios relacionados con la compañía
+        $company->services()->sync($request->input('idService', []));
 
         return Response::json([
             'company' => $company
