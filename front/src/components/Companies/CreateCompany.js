@@ -84,7 +84,7 @@ const CreateCompany = () => {
 			<h1 className="text-center mb-4">CREAR COMPAÑIAS</h1>
 			<div className="container-fluid mt-4 px-md-5 d-flex align-items-center justify-content-center">
 				<div className="d-flex justify-content-center border p-2 rounded w-50 rounded">
-					<form onSubmit={store} className="col-md-6 w-75" encType="multipart/form-data">
+					<form onSubmit={store} className="col-md-6 w-75" enctype="multipart/form-data">
 						<div className="mb-3">
 							<label className="form-label fs-5">Nombre de la compañia</label>
 							<input

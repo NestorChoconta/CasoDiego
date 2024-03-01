@@ -40,6 +40,7 @@ Route::controller(ClientController::class)->group(function () {
 Route::controller(CompanyController::class)->group(function () {
     Route::get('/companies', 'index');
     Route::post('/company', 'store');
+    Route::get('/companies/{id}/download', 'downloadDocument');
 });
 
 Route::get('/servicios', [ServiceController::class, 'index']);
