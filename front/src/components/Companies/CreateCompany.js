@@ -8,7 +8,7 @@ const endpoint = "http://localhost:8000/api/company";
 const CreateCompany = () => {
 	const [services, setServices] = useState([]);
 	const [name, setName] = useState("");
-	const [adress, setAdress] = useState("");
+	const [address, setAddress] = useState("");
 	const [phone, setPhone] = useState("");
 	const [errorsPhone, setErrorsPhone] = useState([]);
 	const [nit, setNit] = useState("");
@@ -49,7 +49,7 @@ const CreateCompany = () => {
 
 		await axios.post(`${endpoint}`, {
 			name: name,
-			adress:adress,
+			address:address,
 			phone: phone,
 			nit: nit,
 			documents: documents,
@@ -84,7 +84,7 @@ const CreateCompany = () => {
 			<h1 className="text-center mb-4">CREAR COMPAÑIAS</h1>
 			<div className="container-fluid mt-4 px-md-5 d-flex align-items-center justify-content-center">
 				<div className="d-flex justify-content-center border p-2 rounded w-50 rounded">
-					<form onSubmit={store} className="col-md-6 w-75">
+					<form onSubmit={store} className="col-md-6 w-75" encType="multipart/form-data">
 						<div className="mb-3">
 							<label className="form-label fs-5">Nombre de la compañia</label>
 							<input
@@ -99,8 +99,8 @@ const CreateCompany = () => {
 							<label className="form-label fs-5">Dirección</label>
 							<input
 								type="text"
-								value={adress}
-								onChange={(e) => setAdress(e.target.value)}
+								value={address}
+								onChange={(e) => setAddress(e.target.value)}
 								className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
 							/>
 						</div>

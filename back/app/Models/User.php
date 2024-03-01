@@ -21,7 +21,7 @@ class User extends Authenticatable implements JWTSubject // Implementar la inter
         'email',
         'password',
         'phone',
-        'adress',
+        'address',
         'idRole',
         'two_factor_auth',
         'idDocumentType'

@@ -20,7 +20,7 @@ class CompanyController extends Controller
 
         //se capturan los valores que se tienen en el formulario
         $company->name = $request->name;
-        $company->adress = $request->adress;
+        $company->address = $request->address;
         $company->phone = $request->phone;
         $company->nit = $request->nit;
         $company->documents = $request->documents;

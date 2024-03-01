@@ -233,7 +233,7 @@ const ListUsers = () => {
 							<td className="align-middle text-center"> {user.birthdate} </td>
 							<td className="align-middle text-center"> {user.email} </td>
 							<td className="align-middle text-center"> {user.phone} </td>
-							<td className="align-middle text-center"> {user.adress} </td>
+							<td className="align-middle text-center"> {user.address} </td>
 							<td className="align-middle text-center">
 								<Link
 									to={`/editarU/${user.id}`}

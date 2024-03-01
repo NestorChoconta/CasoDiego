@@ -51,7 +51,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->phone = $request->phone;
-        $user->adress = $request->adress;
+        $user->address = $request->address;
         $user->idRole = $request->idRole;
         $user->idDocumentType = $request->idDocumentType;
 
@@ -106,7 +106,7 @@ class UserController extends Controller
         $user->birthdate = $request->birthdate;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->adress = $request->adress;
+        $user->address = $request->address;
         $user->idRole = $request->idRole;
         $user->idDocumentType = $request->idDocumentType;
 
