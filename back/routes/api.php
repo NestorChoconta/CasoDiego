@@ -37,9 +37,11 @@ Route::controller(ClientController::class)->group(function () {
     Route::post('/importarClientes', 'importClients');
 });
 
+
 Route::controller(CompanyController::class)->group(function () {
     Route::get('/companies', 'index');
-    Route::post('/company', 'store');
+    Route::post('/company/verify', 'store');
+    Route::post('/company', 'VerifyCreateCompany'); // Ruta para crear el codigo
 });
 
 Route::get('/servicios', [ServiceController::class, 'index']);
