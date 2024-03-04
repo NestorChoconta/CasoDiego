@@ -30,7 +30,7 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->verification_code === $request->user_verification_code) {
+        //if ($request->verification_code === $request->user_verification_code) {
 
         $company = new Company();
         //se capturan los valores que se tienen en el formulario
@@ -40,24 +40,23 @@ class CompanyController extends Controller
         $company->nit = $request->nit;
         $company->documents = $request->documents;
         $company->statusCompany = $request->statusCompany;
-        //$company->verification_code = $request->verification_code;
-        //guardar los servicios relacionados con la compañía
-        $company->services()->sync($request->input('idService', []));
+        $company->verification_code = $request->verificationCode;
+
         //con el metodo save se guarda todo en la tabla
         $company->save();
-
-
-            return Response::json([
-                'company' => $company,
-                'message'=>'Verificación exitosa'
-            ], 200);
-        } else  {
-            return Response::json([
-                'message' => 'codigo de verificación no valido'
-            ], 400);
+        //guardar los servicios relacionados con la compañía
+        $company->services()->sync($request->input('idService', []));
+        return Response::json([
+            'company' => $company,
+            'message'=>'Verificación exitosa'
+        ], 200);
+        //} else  {
+            //return Response::json([
+              //  'message' => 'codigo de verificación no valido'
+            //], 400);
         }
 
-    }
+
 
     public function show(string $id)
     {
