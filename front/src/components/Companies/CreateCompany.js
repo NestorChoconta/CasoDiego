@@ -102,6 +102,7 @@ const CreateCompany = () => {
 								value={address}
 								onChange={(e) => setAddress(e.target.value)}
 								className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+								required
 							/>
 						</div>
 						<div className="mb-3">
@@ -111,6 +112,7 @@ const CreateCompany = () => {
 								value={nit}
 								onChange={(e) => setNit(e.target.value)}
 								className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+								required
 							/>
 						</div>
 						<div className="mb-3">
@@ -167,6 +169,7 @@ const CreateCompany = () => {
 								value={documents}
 								onChange={(e) => setDocuments(e.target.value)}
 								className="form-control"
+								required
 							/>
 						</div>
 						<div className="mb-3">
@@ -175,6 +178,7 @@ const CreateCompany = () => {
 								value={statusCompany}
 								onChange={(e) => setStatusCompany(e.target.value)}
 								className="form-select border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+								required
 							>
 								<option value="Activa">Activa</option>
 								<option value="Inactiva">Inactiva</option>
