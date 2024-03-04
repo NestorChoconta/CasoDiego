@@ -89,7 +89,7 @@ const CreateCompany = () => {
                 // Guardar la compañía si el código de verificación es correcto
                 await axios.post(`${endpoint}/company/verify`, {
                     name: name,
-                    address: address,
+                    adress: address,
                     phone: phone,
                     nit: nit,
                     documents: documents,

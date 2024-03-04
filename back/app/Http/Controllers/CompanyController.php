@@ -40,7 +40,7 @@ class CompanyController extends Controller
         $company->nit = $request->nit;
         $company->documents = $request->documents;
         $company->statusCompany = $request->statusCompany;
-        $company->verification_code = $request->verificationCode;
+        $company->verification_code = $request->verification_code;
 
         //con el metodo save se guarda todo en la tabla
         $company->save();
