@@ -21,7 +21,7 @@ const EditUserAdmin = () => {
     const [email, setEmail] = useState ('')
     const [password, setPassword] = useState ('')
     const [phone, setPhone] = useState ()
-    const [adress, setAdress] = useState ('')
+    const [address, setAddress] = useState ('')
     const [idRole, setIdRole] = useState ()
     const [idDocumentType, setIdDocumentType] = useState ()
     const {id} = useParams()
@@ -55,7 +55,7 @@ const EditUserAdmin = () => {
         setEmail(response.data.email)
         setPassword(response.data.password)
         setPhone(response.data.phone)
-        setAdress(response.data.adress)
+        setAddress(response.data.address)
         setIdRole(response.data.idRole)
         setIdDocumentType(response.data.idDocumentType)
     }
@@ -94,7 +94,7 @@ const EditUserAdmin = () => {
                 email: email,
                 password: password,
                 phone: phone,
-                adress: adress,
+                address: address,
                 idRole: idRole,
                 idDocumentType: idDocumentType
             })
@@ -260,8 +260,8 @@ const EditUserAdmin = () => {
                             <label className="form-label fs-5">Dirección</label>
                             <input
                                 type="text"
-                                value={adress}
-                                onChange={ (e)=> setAdress(e.target.value) }
+                                value={address}
+                                onChange={ (e)=> setAddress(e.target.value) }
                                 className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
                                 required
                             />

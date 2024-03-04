@@ -42,6 +42,7 @@ Route::controller(CompanyController::class)->group(function () {
     Route::get('/companies', 'index');
     Route::post('/company/verify', 'store');
     Route::post('/company', 'VerifyCreateCompany'); // Ruta para crear el codigo
+    Route::get('/companies/{id}/download', 'downloadDocument');
 });
 
 Route::get('/servicios', [ServiceController::class, 'index']);

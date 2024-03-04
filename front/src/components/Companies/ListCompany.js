@@ -178,10 +178,17 @@ const ListClients = () => {
 					{paginatedCompanies.map((company) => (
 						<tr key={company.id}>
 							<td className="align-middle text-center">{company.name}</td>
-							<td className="align-middle text-center">{company.adress}</td>
+							<td className="align-middle text-center">{company.address}</td>
 							<td className="align-middle text-center">{company.phone}</td>
 							<td className="align-middle text-center">{company.nit}</td>
-							<td className="align-middle text-center">{company.documents}</td>
+							<td className="align-middle text-center">
+								{/* Mostrar solo el nombre del archivo */}
+								{company.documents && company.documents.length > 0 && (
+								<a href={`${endpoint}/companies/${company.id}/download`} download>
+									{`DocumentoCompañia${company.name}.${company.documents[0].extension}`}
+								</a>
+								)}
+							</td>
 							<td className="align-middle text-center">
 								{/* verificar si la relacion se cargo */}
 								{company.services && company.services.length > 0 ? (

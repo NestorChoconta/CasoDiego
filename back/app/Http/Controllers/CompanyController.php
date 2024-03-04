@@ -35,7 +35,7 @@ class CompanyController extends Controller
         $company = new Company();
         //se capturan los valores que se tienen en el formulario
         $company->name = $request->name;
-        $company->adress = $request->adress;
+        $company->address = $request->address;
         $company->phone = $request->phone;
         $company->nit = $request->nit;
         $company->documents = $request->documents;
@@ -57,6 +57,23 @@ class CompanyController extends Controller
         }
 
 
+
+    public function downloadDocument(string $id)
+    {
+        $company = Company::find($id);
+
+        // Verifica que haya al menos un documento asociado a la compañía
+        if ($company->documents) {
+            // Descargar el documento
+            return response($company->documents, 200, [
+                'Content-Type' => $company->mime_type,
+                'Content-Disposition' => 'attachment; filename="' . $company->name . '"',
+            ]);
+        }
+
+        // Manejar el caso donde no hay documentos
+        return response()->json(['error' => 'No hay documentos disponibles para descargar'], 404);
+    }
 
     public function show(string $id)
     {
