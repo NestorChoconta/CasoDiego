@@ -20,6 +20,7 @@ class CompanyVerificationMail extends Mailable
     public function build()
     {
         return $this->subject('Código de verificación para la creación de la compañía')
-                    ->view('emails.company_verification_code');
+                    ->view('emails.company_verification_code')
+                    ->with(['codigo' => $this->verificationCode]);
     }
 }

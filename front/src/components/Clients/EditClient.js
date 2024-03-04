@@ -35,7 +35,7 @@ const EditClient = () => {
     const getAllUsuDocTypeComp = async () => {
         const documentTypesResponse = await axios.get(`http://localhost:8000/api/document-types`)
         const usersResponse = await axios.get(`http://localhost:8000/api/usuarios`)
-        const companiesResponse = await axios.get(`http://localhost:8000/api/compañias`)
+        const companiesResponse = await axios.get(`http://localhost:8000/api/companies`)
         setDocumentTypes(documentTypesResponse.data)
         setUsers(usersResponse.data)
         setCompanies(companiesResponse.data)

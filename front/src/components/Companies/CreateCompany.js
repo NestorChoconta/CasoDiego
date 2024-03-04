@@ -67,7 +67,7 @@ const CreateCompany = () => {
             // Generar un nuevo código de verificación
             const response = await axios.post(`${endpoint}/company`);
             const newVerificationCode = response.data.verification_code;
-			console.log("Código de Verificación:", newVerificationCode);
+			// console.log("Código de Verificación:", newVerificationCode);
             setVerificationCode(newVerificationCode);
 
             // Mostrar el modal para que el usuario valide el código de verificación
@@ -85,7 +85,7 @@ const CreateCompany = () => {
             const enteredVerificationCodeNum = parseInt(enteredVerificationCode);
             // Verificar si el código ingresado por el usuario coincide con el generado
             if (verificationCode === enteredVerificationCodeNum) {
-                console.log("entraste aqui")
+                
                 // Guardar la compañía si el código de verificación es correcto
                 await axios.post(`${endpoint}/company/verify`, {
                     name: name,
@@ -98,10 +98,9 @@ const CreateCompany = () => {
                     idService: selectedServices,
                     //user_verification_code: enteredVerificationCode
                 });
+                console.log("La Compañia se creó")
                 navigate(-1); // Redirigir después de guardar la compañía
             } else {
-				console.log(verificationCode);
-                
                 console.log("Código de verificación incorrecto");
             }
         } catch (error) {

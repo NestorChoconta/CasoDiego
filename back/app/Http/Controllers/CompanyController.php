@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Company;
+use App\Mail\CompanyVerificationMail;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
-use PHPUnit\TextUI\XmlConfiguration\Logging\Logging;
 
 class CompanyController extends Controller
 {
@@ -21,6 +24,15 @@ class CompanyController extends Controller
         // Aquí solo se recopilan los datos del formulario y se envía el código de verificación
         // No se guarda la compañía en la base de datos en este punto
         $verification_code = mt_rand(100000, 999999); // Generar código de verificación único
+
+        $roleIds = [1, 2];
+        // Recupera los usuarios que son superAdministradores y Administradores
+        $users = User::whereIn('idRole', $roleIds)->get();
+
+        // Envía el correo electrónico a cada uno de ellos
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new CompanyVerificationMail($verification_code));
+        }
 
         // Envía el código de verificación en la respuesta
         return Response::json([

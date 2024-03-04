@@ -93,27 +93,35 @@ const ListClients = () => {
 								cursor: "pointer",
 							}}
 						>
-							<a style={{ color: "white", textDecoration: "none" }}>
+							<Link
+								to="/MenuSuperAdmin"
+								style={{ color: "white", textDecoration: "none" }}>
 								☰ Menú Principal
-							</a>
+							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<a style={{ color: "white", textDecoration: "none" }}>
-								<FiClipboard style={{ marginRight: "10px" }} /> Tareas
-							</a>
+						<Link
+							to="/Tareas"
+							style={{ color: "white", textDecoration: "none" }}>
+							<FiClipboard style={{ marginRight: "10px" }} /> Tareas
+						</Link>
 						</li>
-						{parseInt(role) === 2 && (
+						{/*{parseInt(role) === 2 && (*/}
 							<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 								<Link
-									to="/AdUsuarios"
+									to="/usuarios"
 									style={{ color: "white", textDecoration: "none" }}
 								>
 									<FiUsers style={{ marginRight: "10px" }} /> Usuarios
 								</Link>
 							</li>
-						)}
+						{/*)}*/}
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<FiBriefcase style={{ marginRight: "10px" }} /> Compañias
+							<Link
+								to="/clientesSuper"
+								style={{ color: "white", textDecoration: "none" }}>
+								<FiUsers style={{ marginRight: "10px" }} /> Clientes
+							</Link>
 						</li>
 					</ul>
 				</div>
