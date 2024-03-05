@@ -13,13 +13,43 @@ use Illuminate\Support\Facades\Response;
 class CompanyController extends Controller
 {
     public function index()
+{
+    // Obtener todas las compañías, independientemente de su estado
+    $companies = Company::all();
+    
+    // Devolver todas las compañías
+    return response()->json($companies);
+}
+
+
+    public function approveCompany(Request $request, string $id)
     {
-        $company = Company::with('services')->get();
-        return Response::json($company);
+        $company = Company::findOrFail($id);
+
+        if ($company->statusCompany === 'Activa') {
+            return response()->json(['message' => 'La compañía ya ha sido aprobada anteriormente'], 400);
+        }
+
+        $company->statusCompany = 'Activa';
+        $company->save();
+
+        return response()->json(['message' => 'La compañía ha sido aprobada exitosamente'], 200);
     }
 
+    public function rejectCompany(Request $request, string $id)
+    {
+        $company = Company::findOrFail($id);
 
-    public function VerifyCreateCompany(Request $request)
+        if ($company->statusCompany === 'Inactiva') {
+            return response()->json(['message' => 'La compañía ya ha sido rechazada anteriormente'], 400);
+        }
+
+        $company->delete();
+
+        return response()->json(['message' => 'La compañía ha sido rechazada y eliminada exitosamente'], 200);
+    }
+
+    /*public function VerifyCreateCompany(Request $request)
     {
         // Aquí solo se recopilan los datos del formulario y se envía el código de verificación
         // No se guarda la compañía en la base de datos en este punto
@@ -38,7 +68,7 @@ class CompanyController extends Controller
         return Response::json([
             'verification_code' => $verification_code
         ]);
-    }
+    }*/
 
     public function store(Request $request)
     {

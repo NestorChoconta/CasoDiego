@@ -24,6 +24,7 @@ import EditTask from "./components/Tasks/EditTask";
 import ListClientsSuper from "./components/Clients/ListClientsSuper";
 import CreateCompany from "./components/Companies/CreateCompany";
 import ListCompany from "./components/Companies/ListCompany";
+import CompaniesForAproved from "./components/Companies/CompaniesForAproved";
 
 function App() {
 	const dispatch = useDispatch();
@@ -59,6 +60,7 @@ function App() {
 					<Route path="/clientesSuper" element={<ListClientsSuper />} />
 					<Route path="/compañias" element={<ListCompany />} />
 					<Route path="/crearCompañia" element={<CreateCompany />} />
+					<Route path="/compañiasEspera" element={<CompaniesForAproved />} />
 				</Routes>
 			</BrowserRouter>
 		</div>

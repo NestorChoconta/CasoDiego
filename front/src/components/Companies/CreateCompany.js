@@ -51,7 +51,7 @@ const CreateCompany = () => {
     };
 
     // Manejar el envío del formulario
-    const handleFormSubmit = async (e) => {
+    /*const handleFormSubmit = async (e) => {
         e.preventDefault();
 
         // Validar número de teléfono
@@ -75,16 +75,16 @@ const CreateCompany = () => {
         } catch (error) {
             console.error("Error creating company:", error);
         }
-    };
+    };*/
 
     // Manejar la validación del código de verificación
-    const handleVerificationSubmit = async () => {
-        
+    const handleVerificationSubmit = async (e) => {
+        e.preventDefault();
         try {
             
-            const enteredVerificationCodeNum = parseInt(enteredVerificationCode);
+            //const enteredVerificationCodeNum = parseInt(enteredVerificationCode);
             // Verificar si el código ingresado por el usuario coincide con el generado
-            if (verificationCode === enteredVerificationCodeNum) {
+            //if (verificationCode === enteredVerificationCodeNum) {
                 
                 // Guardar la compañía si el código de verificación es correcto
                 await axios.post(`${endpoint}/company/verify`, {
@@ -100,9 +100,9 @@ const CreateCompany = () => {
                 });
                 console.log("La Compañia se creó")
                 navigate(-1); // Redirigir después de guardar la compañía
-            } else {
-                console.log("Código de verificación incorrecto");
-            }
+            //} else {
+              //  console.log("Código de verificación incorrecto");
+            //}
         } catch (error) {
             console.error("se va para aqui:", error);
         }
@@ -117,7 +117,7 @@ const CreateCompany = () => {
             <h1 className="text-center mb-4">CREAR COMPAÑIAS</h1>
             <div className="container-fluid mt-4 px-md-5 d-flex align-items-center justify-content-center">
                 <div className="d-flex justify-content-center border p-2 rounded w-50 rounded">
-                    <form onSubmit={handleFormSubmit} className="col-md-6 w-75">
+                    <form onSubmit={handleVerificationSubmit} className="col-md-6 w-75">
                         <div className="mb-3">
                             <label className="form-label fs-5">Nombre de la compañia</label>
                             <input

@@ -8,13 +8,12 @@ import { jwtDecode } from "jwt-decode";
 
 const endpoint = "http://localhost:8000/api";
 
-const ListClients = () => {
+const ListCompanies = () => {
 	const [companies, setCompanies] = useState([]);
 	const [pageNumber, setPageNumber] = useState(0);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
-	const companiesPerPage = 11;
-
+	const companiesPerPage = 5;
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
 	const role = decodificacionToken.sub;
@@ -29,7 +28,8 @@ const ListClients = () => {
 
 	const getAllCompanies = async () => {
 		const response = await axios.get(`${endpoint}/companies`);
-		setCompanies(response.data);
+		const activeCompanies = response.data.filter(company => company.statusCompany === 'Activa');
+		setCompanies(activeCompanies);
 	};
 
     // Se utiliza para calcular el número total de páginas necesarias para mostrar todas las compañías
@@ -153,6 +153,11 @@ const ListClients = () => {
 					Crear Compañia
 				</Link>
 			</div>
+			<div className="d-flex justify-content-end align-items-center mt-4">
+				<Link to="/compañiasEspera" className="btn btn-success btn-md mx-1">
+					Compañias en espera
+				</Link>
+			</div>
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">
 					<tr>
@@ -237,4 +242,4 @@ const ListClients = () => {
 	);
 };
 
-export default ListClients;
+export default ListCompanies;
