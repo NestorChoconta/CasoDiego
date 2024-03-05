@@ -1,30 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const endpoint = "http://localhost:8000/api/company";
+const endpoint = "http://localhost:8000/api/company/";
 
-const CreateCompany = () => {
+const EditClient = () => {
 	const [services, setServices] = useState([]);
 	const [name, setName] = useState("");
 	const [address, setAddress] = useState("");
 	const [phone, setPhone] = useState("");
 	const [errorsPhone, setErrorsPhone] = useState([]);
 	const [nit, setNit] = useState("");
-	const [documents, setDocuments] = useState();
 	const [statusCompany, setStatusCompany] = useState("Activa");
-	const [verification_code, setVerification_code] = useState();
 	const [selectedServices, setSelectedServices] = useState([]);
+	const { id } = useParams();
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
 			navigate("/");
 		}
-
 		getAllServices();
-	}, []);
+		getCompanyById();
+	}, [id]);
 
 	// Cargar servicios
 	const getAllServices = async () => {
@@ -34,7 +33,17 @@ const CreateCompany = () => {
 		setServices(servicesResponse.data);
 	};
 
-	const store = async (e) => {
+	const getCompanyById = async () => {
+		const response = await axios.get(`${endpoint}${id}`);
+		setName(response.data.name);
+		setAddress(response.data.address);
+		setPhone(response.data.phone);
+		setNit(response.data.nit);
+		setStatusCompany(response.data.statusCompany);
+		setSelectedServices(response.data.services.map(service => service.id));
+	};
+
+	const update = async (e) => {
 		e.preventDefault();
 
 		//Se crea para que lo pase a string
@@ -47,14 +56,12 @@ const CreateCompany = () => {
 			setErrorsPhone([]);
 		}
 
-		await axios.post(`${endpoint}`, {
+		await axios.put(`${endpoint}${id}`, {
 			name: name,
-			address:address,
+			address: address,
 			phone: phone,
 			nit: nit,
-			documents: documents,
 			statusCompany: statusCompany,
-			verification_code: verification_code,
 			idService: selectedServices,
 		});
 		navigate(-1);
@@ -81,10 +88,14 @@ const CreateCompany = () => {
 
 	return (
 		<div className="container-fluid mt-4 px-md-5">
-			<h1 className="text-center mb-4">CREAR COMPAÑIAS</h1>
+			<h1 className="text-center mb-4">EDITAR COMPAÑIA</h1>
 			<div className="container-fluid mt-4 px-md-5 d-flex align-items-center justify-content-center">
 				<div className="d-flex justify-content-center border p-2 rounded w-50 rounded">
-					<form onSubmit={store} className="col-md-6 w-75" enctype="multipart/form-data">
+					<form
+						onSubmit={update}
+						className="col-md-6 w-75"
+						enctype="multipart/form-data"
+					>
 						<div className="mb-3">
 							<label className="form-label fs-5">Nombre de la compañia</label>
 							<input
@@ -126,8 +137,8 @@ const CreateCompany = () => {
 								}}
 								className={`form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom 
                                     ${
-											errorsPhone.length > 0 ? "is-invalid" : ""
-										}`}
+																			errorsPhone.length > 0 ? "is-invalid" : ""
+																		}`}
 								required
 							/>
 							{errorsPhone.length > 0 && (
@@ -142,36 +153,30 @@ const CreateCompany = () => {
 						</div>
 						<div className="mb-3">
 							<label className="form-label fs-5">Servicios</label>
-							{services.map((service) => (
-								<div key={service.id} className="form-check text-start">
-									<input
-										className="form-check-input"
-										type="checkbox"
-										id={`serviceCheckbox${service.id}`}
-										checked={selectedServices.includes(service.id)}
-										onChange={() => handleServiceChange(service.id)}
-									/>
-									<label
-										className="form-check-label"
-										htmlFor={`serviceCheckbox${service.id}`}
-									>
-										{service.description}
-									</label>
-								</div>
-							))}
-						</div><br></br>
-						<div className="mb-3">
-							<label className="form-label fs-5">
-								Documento general de la compañía
-							</label>
-							<input
-								type="file"
-								value={documents}
-								onChange={(e) => setDocuments(e.target.value)}
-								className="form-control"
-								required
-							/>
+							{services &&
+								services.map((service) => (
+									<div key={service.id} className="form-check text-start">
+										<input
+											className="form-check-input"
+											type="checkbox"
+											id={`serviceCheckbox${service.id}`}
+											checked={
+												selectedServices
+													? selectedServices.includes(service.id)
+													: false
+											}
+											onChange={() => handleServiceChange(service.id)}
+										/>
+										<label
+											className="form-check-label"
+											htmlFor={`serviceCheckbox${service.id}`}
+										>
+											{service.description}
+										</label>
+									</div>
+								))}
 						</div>
+						<br></br>
 						<div className="mb-3">
 							<label className="form-label fs-5">Estado de la compañia</label>
 							<select
@@ -184,26 +189,15 @@ const CreateCompany = () => {
 								<option value="Inactiva">Inactiva</option>
 							</select>
 						</div>
-						<div className="mb-3">
-							<label className="form-label fs-5">Codigo de verificación</label>
-							<input
-								type="number"
-								value={verification_code}
-								onChange={(e) => setVerification_code(e.target.value)}
-								className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-							/>
-						</div>
 						<div className="mb-3 text-center">
 							<button
 								onClick={handleGoBack}
 								className="btn btn-warning btn-md mx-1"
 							>
-								{" "}
-								Cancelar{" "}
+								Cancelar
 							</button>
 							<button type="submit" className="btn btn-primary" tabIndex="4">
-								{" "}
-								Guardar{" "}
+								Guardar Cambios
 							</button>
 						</div>
 					</form>
@@ -214,4 +208,4 @@ const CreateCompany = () => {
 	);
 };
 
-export default CreateCompany;
+export default EditClient;
