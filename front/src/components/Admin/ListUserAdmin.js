@@ -124,7 +124,11 @@ const ListUserAdmin = () => {
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<FiBriefcase style={{ marginRight: "10px" }} /> Compañias
+						<Link
+								to="/compañias"
+								style={{ color: "white", textDecoration: "none" }}>
+								<FiBriefcase style={{ marginRight: "10px" }} /> compañias
+						</Link>
 						</li>
 					</ul>
 				</div>
@@ -164,9 +168,6 @@ const ListUserAdmin = () => {
 				<div className="ml-auto">
 					<Link to="/AdCrearU" className="btn btn-success btn-md mx-1">
 						Crear Usuario
-					</Link>
-					<Link to="/MenuAdmin" className="btn btn-success btn-md mx-1">
-						Atrás
 					</Link>
 				</div>
 			</div>

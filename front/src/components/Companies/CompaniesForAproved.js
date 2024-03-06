@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { toast, ToastContainer } from "react-toastify";
 
 const endpoint = "http://localhost:8000/api";
 
@@ -15,6 +16,10 @@ const ListCompaniesForAproved = () => {
     const token = Cookies.get("casoDiego");
     const decodificacionToken = jwtDecode(token);
     const role = decodificacionToken.sub;
+    const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
+    const [enteredVerificationCode, setEnteredVerificationCode] = useState(); // Estado para almacenar el código de verificación ingresado por el usuario
+    const [verificationCode, setVerificationCode] = useState();
+
 
     useEffect(() => {
         if (Cookies.get("casoDiego") === undefined) {
@@ -24,19 +29,54 @@ const ListCompaniesForAproved = () => {
         getAllCompanies();
     }, [pageNumber]); // Se actualiza cuando cambia la página
 
+    useEffect(() => {
+        setEnteredVerificationCode("");
+    }, [showModal]);
+
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+
+
+        try {
+            // Generar un nuevo código de verificación
+            const response = await axios.post(`${endpoint}/company`);
+            const newVerificationCode = response.data.verification_code;
+			// console.log("Código de Verificación:", newVerificationCode);
+            setVerificationCode(newVerificationCode);
+
+            // Mostrar el modal para que el usuario valide el código de verificación
+            setShowModal(true);
+        } catch (error) {
+            console.error("Error creating company:", error);
+        }
+    };
+
+
     const approveCompany = async (companyId) => {
         try {
-            await axios.post(`${endpoint}/company/${companyId}/approve`);
-            setCompanies(companies.filter(company => company.id !== companyId));
+            const enteredVerificationCodeNum = parseInt(enteredVerificationCode);
+            if (verificationCode === enteredVerificationCodeNum) {
+                await axios.post(`${endpoint}/company/${companyId}/approve`);
+                setCompanies(companies.filter(company => company.id !== companyId));
+                toast.success("¡La compañía ha sido aprobada con éxito!");
+                setShowModal(false); // Cerrar el modal después de validar y mostrar la notificación
+            } else {
+                console.log("Código de verificación incorrecto");
+            }
         } catch (error) {
             console.error('Error al aprobar la compañía:', error);
         }
     };
 
+
+
+
     const rejectCompany = async (companyId) => {
         try {
             await axios.delete(`${endpoint}/company/${companyId}/reject`);
             setCompanies(companies.filter(company => company.id !== companyId));
+            toast.error("¡La compañía ha sido rechazada y eliminada!");
         } catch (error) {
             console.error('Error al rechazar la compañía:', error);
         }
@@ -48,7 +88,7 @@ const ListCompaniesForAproved = () => {
             // Filtrar las compañías con estado 'Inactiva'
             const inactiveCompanies = response.data.filter(company => company.statusCompany === 'Inactiva');
             setCompanies(inactiveCompanies);
-            console.log(inactiveCompanies);
+            //console.log(inactiveCompanies);
         } catch (error) {
             console.error('Error al obtener las compañías:', error);
         }
@@ -121,17 +161,50 @@ const ListCompaniesForAproved = () => {
                             </td>
                             <td className="align-middle text-center">
                                 <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() => approveCompany(company.id)}
+                                    className="btn btn-primary btn-sm mb-1"
+                                    onClick={handleFormSubmit}
                                 >
                                     Aprobar
                                 </button>
                                 <button
-                                    className="btn btn-danger btn-sm ml-2"
+                                    className="btn btn-danger btn-sm"
                                     onClick={() => rejectCompany(company.id)}
                                 >
                                     Rechazar
                                 </button>
+                                {/* Modal para validar código de verificación */}
+                                {showModal && (
+                                    <div className="modal" style={{ display: "block" }}>
+                                        <div className="modal-dialog" role="document">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <h5 className="modal-title">Validar Código de Verificación</h5>
+                                                    <button type="button" className="close" onClick={() => setShowModal(false)}>
+                                                        <span>&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div className="modal-body">
+                                                    <div className="form-group">
+                                                        <label>El codigo de verificación fue enviado a su correo electronico </label><br/><br/>
+                                                        <label>Por favor digite el codigo:</label>
+                                                        <input
+                                                            type="number"
+                                                            className="form-control"
+                                                            value={enteredVerificationCode}
+                                                            onChange={(e) => setEnteredVerificationCode(e.target.value)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar</button>
+                                                    <button type="button" className="btn btn-primary" onClick={() => approveCompany(company.id)}>Validar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                {/* Fondo oscuro cuando el modal está abierto */}
+                                {showModal && <div className="modal-backdrop fade show"></div>}
                             </td>
                         </tr>
                     ))}
@@ -149,6 +222,8 @@ const ListCompaniesForAproved = () => {
                 activeClassName={"page-item active"}
                 pageLinkClassName={"page-link"}
             />
+            {/* ToastContainer para mostrar las notificaciones */}
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
         </div>
     );
 };

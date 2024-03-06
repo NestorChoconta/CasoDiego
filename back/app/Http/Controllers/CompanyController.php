@@ -15,10 +15,11 @@ class CompanyController extends Controller
     public function index()
 {
     // Obtener todas las compañías, independientemente de su estado
-    $companies = Company::all();
-    
+    //$companies = Company::all();
+    $company= Company::with('services')->get();
+
     // Devolver todas las compañías
-    return response()->json($companies);
+    return response()->json($company);
 }
 
 
@@ -37,22 +38,20 @@ class CompanyController extends Controller
     }
 
     public function rejectCompany(Request $request, string $id)
+{
+    $company = Company::findOrFail($id);
+
+    // Eliminar los registros relacionados en la tabla companies_services
+    $company->services()->detach();
+
+    // Eliminar la compañía
+    $company->delete();
+
+    return response()->json(['message' => 'La compañía ha sido rechazada y eliminada exitosamente'], 200);
+}
+
+    public function VerifyCreateCompany(Request $request)
     {
-        $company = Company::findOrFail($id);
-
-        if ($company->statusCompany === 'Inactiva') {
-            return response()->json(['message' => 'La compañía ya ha sido rechazada anteriormente'], 400);
-        }
-
-        $company->delete();
-
-        return response()->json(['message' => 'La compañía ha sido rechazada y eliminada exitosamente'], 200);
-    }
-
-    /*public function VerifyCreateCompany(Request $request)
-    {
-        // Aquí solo se recopilan los datos del formulario y se envía el código de verificación
-        // No se guarda la compañía en la base de datos en este punto
         $verification_code = mt_rand(100000, 999999); // Generar código de verificación único
 
         $roleIds = [1, 2];
@@ -68,7 +67,7 @@ class CompanyController extends Controller
         return Response::json([
             'verification_code' => $verification_code
         ]);
-    }*/
+    }
 
     public function store(Request $request)
     {

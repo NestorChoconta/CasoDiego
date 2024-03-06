@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api"; // Base URL para las solicitudes API
 
@@ -13,11 +15,9 @@ const CreateCompany = () => {
     const [errorsPhone, setErrorsPhone] = useState([]);
     const [nit, setNit] = useState("");
     const [documents, setDocuments] = useState();
-    const [statusCompany, setStatusCompany] = useState("Activa");
+    const [statusCompany, setStatusCompany] = useState("Inactiva");
     const [verificationCode, setVerificationCode] = useState();
     const [selectedServices, setSelectedServices] = useState([]);
-    const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
-    const [enteredVerificationCode, setEnteredVerificationCode] = useState(); // Estado para almacenar el código de verificación ingresado por el usuario
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,59 +50,23 @@ const CreateCompany = () => {
         setSelectedServices(updatedServices);
     };
 
-    // Manejar el envío del formulario
-    /*const handleFormSubmit = async (e) => {
-        e.preventDefault();
-
-        // Validar número de teléfono
-        const phoneStr = phone.toString();
-        if (phoneStr.length !== 10) {
-            setErrorsPhone(["El número de teléfono debe tener 10 dígitos."]);
-            return;
-        } else {
-            setErrorsPhone([]);
-        }
-
-        try {
-            // Generar un nuevo código de verificación
-            const response = await axios.post(`${endpoint}/company`);
-            const newVerificationCode = response.data.verification_code;
-			// console.log("Código de Verificación:", newVerificationCode);
-            setVerificationCode(newVerificationCode);
-
-            // Mostrar el modal para que el usuario valide el código de verificación
-            setShowModal(true);
-        } catch (error) {
-            console.error("Error creating company:", error);
-        }
-    };*/
-
     // Manejar la validación del código de verificación
     const handleVerificationSubmit = async (e) => {
         e.preventDefault();
         try {
-            
-            //const enteredVerificationCodeNum = parseInt(enteredVerificationCode);
-            // Verificar si el código ingresado por el usuario coincide con el generado
-            //if (verificationCode === enteredVerificationCodeNum) {
-                
-                // Guardar la compañía si el código de verificación es correcto
-                await axios.post(`${endpoint}/company/verify`, {
-                    name: name,
-                    address: address,
-                    phone: phone,
-                    nit: nit,
-                    documents: documents,
-                    statusCompany: statusCompany,
-                    verification_code: verificationCode,
-                    idService: selectedServices,
-                    //user_verification_code: enteredVerificationCode
-                });
-                console.log("La Compañia se creó")
-                navigate(-1); // Redirigir después de guardar la compañía
-            //} else {
-              //  console.log("Código de verificación incorrecto");
-            //}
+            await axios.post(`${endpoint}/company/verify`, {
+                name: name,
+                address: address,
+                phone: phone,
+                nit: nit,
+                documents: documents,
+                statusCompany: statusCompany,
+                verification_code: verificationCode,
+                idService: selectedServices,
+                //user_verification_code: enteredVerificationCode
+            });
+            navigate(-1); // Redirigir después de guardar la compañía
+            toast.success("¡La compañía fue registrada y está lista para aprobación!");
         } catch (error) {
             console.error("se va para aqui:", error);
         }
@@ -202,63 +166,31 @@ const CreateCompany = () => {
                         </div>
                         <div className="mb-3">
                             <label className="form-label fs-5">Estado de la compañia</label>
-                            <select
+                            <input
+                                type="text"
                                 value={statusCompany}
                                 onChange={(e) => setStatusCompany(e.target.value)}
-                                className="form-select border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-                            >
-                                <option value="Activa">Activa</option>
-                                <option value="Inactiva">Inactiva</option>
-                            </select>
-                        </div>
+                                className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+                                readOnly // Esto evita que el usuario edite el campo
+                            />
+                        </div><br/>
                         <div className="mb-3 text-center">
-                            <button
-                                onClick={handleGoBack}
-                                className="btn btn-warning btn-md mx-1"
+                        <button type="submit" className="btn btn-primary" tabIndex="4">
+                                Guardar en espera
+                        </button><br/><br/>
+                        <button
+                            onClick={handleGoBack}
+                            className="btn btn-warning btn-md mx-1"
                             >
-                                {" "}
-                                Cancelar{" "}
-                            </button>
-                            <button type="submit" className="btn btn-primary" tabIndex="4">
-                                {" "}
-                                Guardar{" "}
-                            </button>
+                            {" "}
+                            Cancelar{" "}
+                        </button>
                         </div>
                     </form>
                 </div>
             </div>
-            {/* Modal para validar código de verificación */}
-            {showModal && (
-                <div className="modal" style={{ display: "block" }}>
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Validar Código de Verificación</h5>
-                                <button type="button" className="close" onClick={() => setShowModal(false)}>
-                                    <span>&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <div className="form-group">
-                                    <label>Código de Verificación:</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        value={enteredVerificationCode}
-                                        onChange={(e) => setEnteredVerificationCode(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar</button>
-                                <button type="button" className="btn btn-primary" onClick={handleVerificationSubmit}>Validar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {/* Fondo oscuro cuando el modal está abierto */}
-            {showModal && <div className="modal-backdrop fade show"></div>}
+            {/* ToastContainer para mostrar las notificaciones */}
+            <ToastContainer position="top-right" autoClose={3000} />
         </div>
     );
 };

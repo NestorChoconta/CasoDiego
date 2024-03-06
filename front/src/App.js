@@ -25,6 +25,7 @@ import ListClientsSuper from "./components/Clients/ListClientsSuper";
 import CreateCompany from "./components/Companies/CreateCompany";
 import ListCompany from "./components/Companies/ListCompany";
 import CompaniesForAproved from "./components/Companies/CompaniesForAproved";
+import ListCompaniesEmple from './components/Companies/ListCompaniesEmple';
 
 function App() {
 	const dispatch = useDispatch();
@@ -61,6 +62,7 @@ function App() {
 					<Route path="/compañias" element={<ListCompany />} />
 					<Route path="/crearCompañia" element={<CreateCompany />} />
 					<Route path="/compañiasEspera" element={<CompaniesForAproved />} />
+					<Route path="/compañiasEmple" element={<ListCompaniesEmple />} />
 				</Routes>
 			</BrowserRouter>
 		</div>

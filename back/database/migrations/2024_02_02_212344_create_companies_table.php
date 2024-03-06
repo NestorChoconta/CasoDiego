@@ -16,7 +16,7 @@ return new class extends Migration
             $table->BigInteger('phone')->unique();
             $table->BigInteger('nit')->unique();
             $table->binary('documents');
-            $table->enum('statusCompany', ['Activa', 'Inactiva'])->default('Activa');
+            $table->enum('statusCompany', ['Activa', 'Inactiva'])->default('Inactiva');
             $table->string('verification_code')->nullable();
             $table->timestamps();
         });

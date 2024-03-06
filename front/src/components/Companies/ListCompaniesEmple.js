@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import { FiUsers, FiBriefcase, FiClipboard } from "react-icons/fi";
+import { FiUsers, FiClipboard } from "react-icons/fi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -13,7 +13,7 @@ const ListCompanies = () => {
 	const [pageNumber, setPageNumber] = useState(0);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
-	const companiesPerPage = 7;
+	const companiesPerPage = 9;
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
 	const role = decodificacionToken.sub;
@@ -56,6 +56,9 @@ const ListCompanies = () => {
 				break;
 			case 2:
 				navigate('/MenuAdmin')
+				break;
+			case 3:
+				navigate('/MenuEmple')
 				break;
 			default:
 				break;
@@ -142,18 +145,18 @@ const ListCompanies = () => {
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 						<Link
-							to="/Tareas"
+							to="/TareasEmp"
 							style={{ color: "white", textDecoration: "none" }}>
 							<FiClipboard style={{ marginRight: "10px" }} /> Tareas
 						</Link>
 						</li>
-						{/*{parseInt(role) === 2 && (*/}
+						{parseInt(role) === 2 && (
 							<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 							<a onClick={()=>DeffinitionUsers()} style={{ color: 'white', textDecoration: 'none' }}>
 								<FiUsers style={{ marginRight: '10px' }} /> Usuarios
 							</a>
 							</li>
-						{/*)}*/}
+						)}
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 						<a onClick={()=>DeffinitionClients()} style={{ color: 'white', textDecoration: 'none'}}>
 							<FiUsers style={{ marginRight: '10px' }} /> Clientes
@@ -187,11 +190,6 @@ const ListCompanies = () => {
 			<div className="d-flex justify-content-end align-items-center mt-4">
 				<Link to="/crearCompañia" className="btn btn-success btn-md mx-1">
 					Crear Compañia
-				</Link>
-			</div>
-			<div className="d-flex justify-content-end align-items-center mt-4">
-				<Link to="/compañiasEspera" className="btn btn-success btn-md mx-1">
-					Compañias en espera
 				</Link>
 			</div>
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">

@@ -126,7 +126,9 @@ const TaskEmp = () => {
 							</Link>
 						</li>
 						<li style={{ marginBottom: '30%', cursor: 'pointer' }}>
+							<Link to={'/compañiasEmple'} style={{ color: 'white', textDecoration: 'none'}}>
 							<FiBriefcase style={{ marginRight: '10px' }} /> Compañias
+							</Link>
 						</li>
 						
 					</ul>
