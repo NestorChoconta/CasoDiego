@@ -102,6 +102,20 @@ const ListClients = () => {
 		}
 	}
 
+	const DeffinitionCompany = () => {
+		//console.log(typeof(role));
+		switch (parseInt(role)) {
+			case 3:
+				navigate('/compañiasEmple')
+				break;
+			case 2:
+				navigate('/compañias')
+				break;
+			default:
+				break;
+		}
+	}
+
 	const Sidebar = ({ isOpen, toggleSidebar }) => {
 		return (
 			isOpen && (
@@ -157,7 +171,9 @@ const ListClients = () => {
 							</li>
 						)}
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<FiBriefcase style={{ marginRight: "10px" }} /> Compañias
+						<a onClick={()=>DeffinitionCompany()}  style={{ color: "white", textDecoration: "none" }}>
+								<FiBriefcase style={{ marginRight: "10px" }} /> Compañias
+							</a>
 						</li>
 					</ul>
 				</div>

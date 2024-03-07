@@ -134,7 +134,11 @@ const ListClients = () => {
 							</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<FiBriefcase style={{ marginRight: "10px" }} /> Compañias
+						<Link
+								to="/compañias"
+								style={{ color: "white", textDecoration: "none" }}>
+								<FiBriefcase style={{ marginRight: "10px" }} /> compañias
+						</Link>
 						</li>
 					</ul>
 				</div>

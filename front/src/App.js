@@ -23,6 +23,8 @@ import CreateTask from "./components/Tasks/CreateTask";
 import EditTask from "./components/Tasks/EditTask";
 import ListClientsSuper from "./components/Clients/ListClientsSuper";
 import ListCompany from "./components/Companies/ListCompany";
+import CompaniesForAproved from "./components/Companies/CompaniesForAproved";
+import ListCompaniesEmple from './components/Companies/ListCompaniesEmple';
 import CreateCompany from "./components/Companies/CreateCompany";
 import EditCompany from "./components/Companies/EditCompany";
 
@@ -60,6 +62,8 @@ function App() {
 					<Route path="/clientesSuper" element={<ListClientsSuper />} />
 					<Route path="/compañias" element={<ListCompany />} />
 					<Route path="/crearCompañia" element={<CreateCompany />} />
+					<Route path="/compañiasEspera" element={<CompaniesForAproved />} />
+					<Route path="/compañiasEmple" element={<ListCompaniesEmple />} />
 					<Route path="/editarCompañia/:id" element={<EditCompany />} />
 				</Routes>
 			</BrowserRouter>

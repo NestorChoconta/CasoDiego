@@ -10,16 +10,17 @@ class CompanyVerificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $verificationCode;
+    public $CompanyVerificationCode;
 
-    public function __construct($verificationCode)
+    public function __construct($CompanyVerificationCode)
     {
-        $this->verificationCode = $verificationCode;
+        $this->CompanyVerificationCode = $CompanyVerificationCode;
     }
 
     public function build()
     {
         return $this->subject('Código de verificación para la creación de la compañía')
-                    ->view('emails.company_verification_code');
+                    ->view('emails.company_verification_code')
+                    ->with(['codigo' => $this->CompanyVerificationCode]);
     }
 }

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
-
 <head>
-    <title></title>
+    <title>Codigo de verificación para el inicio de sesión</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]--><!--[if !mso]><!--><!--<![endif]-->
     <style>
@@ -127,7 +126,7 @@
 														<tr>
 															<td class="pad">
 																<div style="color:#506bec;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:38px;line-height:120%;text-align:left;mso-line-height-alt:45.6px;">
-																	<p style="margin: 0; word-break: break-word;"><strong><span>TU CODIGO DE APROBACIÓN</span></strong></p>
+																	<p style="margin: 0; word-break: break-word;"><strong><span>TU CODIGO DE VERIFICACIÓN</span></strong></p>
 																</div>
 															</td>
 														</tr>
@@ -145,7 +144,7 @@
 														<tr>
 															<td class="pad">
 																<div style="color:#40507a;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:16px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-																	<p style="margin: 0; word-break: break-word;">A continuación, te proporcionamos tu código de verificación:</p>
+																	<p style="margin: 0; word-break: break-word;">A continuación, te proporcionamos tu código de verificación para la compañia:</p>
 																</div>
 															</td>
 														</tr>
