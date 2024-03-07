@@ -61,7 +61,7 @@ const CreateCompany = () => {
                 nit: nit,
                 documents: documents,
                 statusCompany: statusCompany,
-                verification_code: verificationCode,
+                //verification_code: verificationCode,
                 idService: selectedServices,
                 //user_verification_code: enteredVerificationCode
             });
