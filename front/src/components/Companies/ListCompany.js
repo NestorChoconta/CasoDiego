@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import { FiUsers, FiBriefcase, FiClipboard } from "react-icons/fi";
+import { FiUsers, FiClipboard } from "react-icons/fi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -17,6 +17,7 @@ const ListCompanies = () => {
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
 	const role = decodificacionToken.sub;
+	const [inactiveCompaniesCount, setInactiveCompaniesCount] = useState(0);
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
@@ -30,6 +31,8 @@ const ListCompanies = () => {
 		const response = await axios.get(`${endpoint}/companies`);
 		const activeCompanies = response.data.filter(company => company.statusCompany === 'Activa');
 		setCompanies(activeCompanies);
+		const inactiveCount = response.data.filter(company => company.statusCompany === 'Inactiva').length;
+    	setInactiveCompaniesCount(inactiveCount);
 	};
 
     // Se utiliza para calcular el número total de páginas necesarias para mostrar todas las compañías
@@ -184,15 +187,21 @@ const ListCompanies = () => {
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-			<div className="d-flex justify-content-end align-items-center mt-4">
+			<div className="d-flex justify-content-end align-items-center mt-4" style={{ paddingRight: '20px' }}>
+				<div style={{ marginLeft: 'auto' }}>
 				<Link to="/crearCompañia" className="btn btn-success btn-md mx-1">
-					Crear Compañia
-				</Link>
-			</div>
-			<div className="d-flex justify-content-end align-items-center mt-4">
-				<Link to="/compañiasEspera" className="btn btn-success btn-md mx-1">
-					Compañias en espera
-				</Link>
+						Crear Compañia
+					</Link>
+					<Link to="/compañiasEspera" className="btn btn-success btn-md mx-1" style={{ position: 'relative' }}>
+						Compañías en espera
+						{/* Añade un elemento visual para mostrar el número de compañías inactivas */}
+						{inactiveCompaniesCount > 0 && (
+							<span style={{ position: 'absolute', top: '-10px', right: '-10px', background: 'red', color: 'white', borderRadius: '50%', padding: '0 7px', fontSize: '12px', border: '1px solid white'}}>
+								{inactiveCompaniesCount}
+							</span>
+						)}
+					</Link>
+				</div>
 			</div>
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">

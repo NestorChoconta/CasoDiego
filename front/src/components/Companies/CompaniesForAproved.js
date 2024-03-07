@@ -19,6 +19,7 @@ const ListCompaniesForAproved = () => {
     const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
     const [enteredVerificationCode, setEnteredVerificationCode] = useState(); // Estado para almacenar el código de verificación ingresado por el usuario
     const [verificationCode, setVerificationCode] = useState();
+    const [selectedCompanyId, setSelectedCompanyId] = useState(null);
 
 
     useEffect(() => {
@@ -34,7 +35,7 @@ const ListCompaniesForAproved = () => {
     }, [showModal]);
 
 
-    const handleFormSubmit = async (e) => {
+    const handleFormSubmit = async (companyId ,e) => {
         e.preventDefault();
 
 
@@ -44,6 +45,7 @@ const ListCompaniesForAproved = () => {
             const newVerificationCode = response.data.verification_code;
 			// console.log("Código de Verificación:", newVerificationCode);
             setVerificationCode(newVerificationCode);
+            setSelectedCompanyId(companyId);
 
             // Mostrar el modal para que el usuario valide el código de verificación
             setShowModal(true);
@@ -53,14 +55,16 @@ const ListCompaniesForAproved = () => {
     };
 
 
-    const approveCompany = async (companyId) => {
+    const approveCompany = async () => {
+        if (!selectedCompanyId) return; // Comprobar si hay una compañía seleccionada
         try {
             const enteredVerificationCodeNum = parseInt(enteredVerificationCode);
             if (verificationCode === enteredVerificationCodeNum) {
-                await axios.post(`${endpoint}/company/${companyId}/approve`);
-                setCompanies(companies.filter(company => company.id !== companyId));
+                await axios.post(`${endpoint}/company/${selectedCompanyId}/approve`);
+                setCompanies(companies.filter(company => company.id !== selectedCompanyId));
                 toast.success("¡La compañía ha sido aprobada con éxito!");
                 setShowModal(false); // Cerrar el modal después de validar y mostrar la notificación
+                setSelectedCompanyId(null); // Resetear el ID seleccionado
             } else {
                 console.log("Código de verificación incorrecto");
             }
@@ -68,7 +72,6 @@ const ListCompaniesForAproved = () => {
             console.error('Error al aprobar la compañía:', error);
         }
     };
-
 
 
 
@@ -162,7 +165,7 @@ const ListCompaniesForAproved = () => {
                             <td className="align-middle text-center">
                                 <button
                                     className="btn btn-primary btn-sm mb-1"
-                                    onClick={handleFormSubmit}
+                                    onClick={(e) => handleFormSubmit(company.id, e)}
                                 >
                                     Aprobar
                                 </button>
