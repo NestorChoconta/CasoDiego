@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api/company";
 
@@ -65,15 +67,31 @@ const CreateCompany = () => {
 			documents: fileInput  // Incluir el archivo aquí
 		};
 		
-		const response = await axios.post(endpoint, responseForm, {
-			headers: {
-				"Content-Type": "multipart/form-data",
-			},
-		});
+		try {
+            const response = await axios.post(endpoint, responseForm, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
 
-		console.log(response);
+            console.log(response);
 
-		navigate(-1);
+            navigate(-1);
+        } catch (error) {
+            if (error.response && error.response.status === 422) {
+                const { nitError, phoneError } = error.response.data;
+
+                if (nitError) {
+                    toast.error(nitError);
+                }
+
+                if (phoneError) {
+                    toast.error(phoneError);
+                }
+            } else {
+                console.error("Error al crear la compañía:", error.message);
+            }
+        }
 	};
 
 	const handleGoBack = () => {
@@ -230,6 +248,7 @@ const CreateCompany = () => {
 					</form>
 				</div>
 			</div>
+			<ToastContainer />
 			<br></br>
 		</div>
 	);

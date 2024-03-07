@@ -6,6 +6,7 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException; 
 
 class CompanyController extends Controller
 {
@@ -17,18 +18,27 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'documents' => 'required|file|mimes:pdf',
-            // Otros campos de validación...
-        ]);
+        // Validación personalizada para NIT y teléfono únicos
+        try {
+            $request->validate([
+                'nit' => 'unique:companies',
+                'phone' => 'unique:companies',
+            ], [
+                'nit.unique' => 'Ya existe una compañia registrada con este NIT.',
+                'phone.unique' => 'Ya existe una compañia registrada con este número de teléfono.',
+            ]);
+        } catch (ValidationException $e) {
+            // Captura la excepción de validación
+            $errors = $e->errors();
+            $response = [
+                'nitError' => isset($errors['nit']) ? $errors['nit'][0] : null,
+                'phoneError' => isset($errors['phone']) ? $errors['phone'][0] : null,
+            ];
+            return response()->json($response, 422); // Devuelve el error como JSON
+        }
 
-        $request->validate([
-            'documents' => 'required|file|mimes:pdf',
-            // Otros campos de validación...
-        ]);
-        
         $company = new Company();
-        
+
         // Llenar los campos de la compañía
         $company->name = $request->name;
         $company->address = $request->address;
@@ -36,18 +46,18 @@ class CompanyController extends Controller
         $company->nit = $request->nit;
         $company->statusCompany = $request->statusCompany;
         $company->verification_code = $request->verification_code;
-        
+
         if ($request->hasFile('documents')) {
             $file = $request->file('documents');
             $fileName = time() . '_' . $file->getClientOriginalName();
-        
+
             // Almacenar el archivo en el sistema de archivos de Laravel
             $filePath = $file->storeAs('documents', $fileName, 'public');
-        
+
             // Asignar directamente el campo 'documents'
             $company->documents = $filePath;
         }
-        
+
         // Guardar cambios
         $company->save();
 
@@ -60,7 +70,7 @@ class CompanyController extends Controller
 
         // Verifica que haya al menos un documento asociado a la compañía
         if ($company->documents) {
-             // Convertir las barras diagonales a barras invertidas para la ruta
+            // Convertir las barras diagonales a barras invertidas para la ruta
             $filePath = str_replace('/', '\\', $company->documents);
             // Descargar el documento
             return response()->download(storage_path("app/public/{$filePath}"), $company->name . '.pdf');
