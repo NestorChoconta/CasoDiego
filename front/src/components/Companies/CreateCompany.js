@@ -12,7 +12,8 @@ const CreateCompany = () => {
 	const [phone, setPhone] = useState("");
 	const [errorsPhone, setErrorsPhone] = useState([]);
 	const [nit, setNit] = useState("");
-	const [documents, setDocuments] = useState();
+	const [documents, setDocuments] = useState("");
+	const [fileInput, setFileInput] = useState(null);
 	const [statusCompany, setStatusCompany] = useState("Activa");
 	const [verification_code, setVerification_code] = useState();
 	const [selectedServices, setSelectedServices] = useState([]);
@@ -34,6 +35,12 @@ const CreateCompany = () => {
 		setServices(servicesResponse.data);
 	};
 
+	// Manejar cambio en el input de archivo
+	const handleFileChange = async (e) => {
+		setFileInput(e.target.files[0]);
+		setDocuments(e.target.value);
+	};
+
 	const store = async (e) => {
 		e.preventDefault();
 
@@ -47,16 +54,25 @@ const CreateCompany = () => {
 			setErrorsPhone([]);
 		}
 
-		await axios.post(`${endpoint}`, {
+		const responseForm = {
 			name: name,
-			address:address,
+			address: address,
 			phone: phone,
 			nit: nit,
-			documents: documents,
 			statusCompany: statusCompany,
 			verification_code: verification_code,
 			idService: selectedServices,
+			documents: fileInput  // Incluir el archivo aquí
+		};
+		
+		const response = await axios.post(endpoint, responseForm, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
 		});
+
+		console.log(response);
+
 		navigate(-1);
 	};
 
@@ -84,7 +100,11 @@ const CreateCompany = () => {
 			<h1 className="text-center mb-4">CREAR COMPAÑIAS</h1>
 			<div className="container-fluid mt-4 px-md-5 d-flex align-items-center justify-content-center">
 				<div className="d-flex justify-content-center border p-2 rounded w-50 rounded">
-					<form onSubmit={store} className="col-md-6 w-75" enctype="multipart/form-data">
+					<form
+						onSubmit={store}
+						className="col-md-6 w-75"
+						encType="multipart/form-data"
+					>
 						<div className="mb-3">
 							<label className="form-label fs-5">Nombre de la compañia</label>
 							<input
@@ -126,8 +146,8 @@ const CreateCompany = () => {
 								}}
 								className={`form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom 
                                     ${
-											errorsPhone.length > 0 ? "is-invalid" : ""
-										}`}
+																			errorsPhone.length > 0 ? "is-invalid" : ""
+																		}`}
 								required
 							/>
 							{errorsPhone.length > 0 && (
@@ -159,15 +179,16 @@ const CreateCompany = () => {
 									</label>
 								</div>
 							))}
-						</div><br></br>
+						</div>
+						<br></br>
 						<div className="mb-3">
 							<label className="form-label fs-5">
-								Documento general de la compañía
+								Documento general de la compañía (SOLO PDF)
 							</label>
 							<input
 								type="file"
 								value={documents}
-								onChange={(e) => setDocuments(e.target.value)}
+								onChange={handleFileChange}
 								className="form-control"
 								required
 							/>

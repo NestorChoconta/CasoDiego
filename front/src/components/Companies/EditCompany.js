@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 const endpoint = "http://localhost:8000/api/company/";
 
-const EditClient = () => {
+const EditCompany = () => {
 	const [services, setServices] = useState([]);
 	const [name, setName] = useState("");
 	const [address, setAddress] = useState("");
@@ -208,4 +208,4 @@ const EditClient = () => {
 	);
 };
 
-export default EditClient;
+export default EditCompany;

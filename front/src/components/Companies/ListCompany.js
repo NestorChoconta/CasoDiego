@@ -8,12 +8,12 @@ import { jwtDecode } from "jwt-decode";
 
 const endpoint = "http://localhost:8000/api";
 
-const ListClients = () => {
+const ListCompanies = () => {
 	const [companies, setCompanies] = useState([]);
 	const [pageNumber, setPageNumber] = useState(0);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
-	const companiesPerPage = 11;
+	const companiesPerPage = 10;
 
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
@@ -121,6 +121,30 @@ const ListClients = () => {
 		);
 	};
 
+	const downloadFile = async (id, name) => {
+        try {
+            const response = await axios.get(`${endpoint}/companies/${id}/download`, {
+                responseType: 'blob', // Indica que la respuesta es un archivo binario
+            });
+
+            // Crea un objeto Blob con los datos recibidos
+            const blob = new Blob([response.data]);
+
+            // Crea un enlace (link) temporal
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `DocumentoCompañia${name}.pdf`;
+
+            // Simula un clic en el enlace para iniciar la descarga
+            link.click();
+
+            // Libera recursos al finalizar
+            window.URL.revokeObjectURL(link.href);
+        } catch (error) {
+            console.error('Error al descargar el archivo:', error.message);
+        }
+    };
+
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1>COMPAÑIAS</h1>
@@ -184,9 +208,12 @@ const ListClients = () => {
 							<td className="align-middle text-center">
 								{/* Mostrar solo el nombre del archivo */}
 								{company.documents && company.documents.length > 0 && (
-								<a href={`${endpoint}/companies/${company.id}/download`} download>
-									{`DocumentoCompañia${company.name}.${company.documents[0].extension}`}
-								</a>
+									<button
+                                    onClick={() => downloadFile(company.id, company.name)}
+                                    className="btn btn-link"
+									>
+										Descargar Documento
+									</button>
 								)}
 							</td>
 							<td className="align-middle text-center">
@@ -229,4 +256,4 @@ const ListClients = () => {
 	);
 };
 
-export default ListClients;
+export default ListCompanies;

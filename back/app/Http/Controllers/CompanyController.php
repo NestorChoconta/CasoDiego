@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
@@ -16,26 +17,41 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-        $company = new Company();
+        $request->validate([
+            'documents' => 'required|file|mimes:pdf',
+            // Otros campos de validación...
+        ]);
 
-        //se capturan los valores que se tienen en el formulario
+        $request->validate([
+            'documents' => 'required|file|mimes:pdf',
+            // Otros campos de validación...
+        ]);
+        
+        $company = new Company();
+        
+        // Llenar los campos de la compañía
         $company->name = $request->name;
         $company->address = $request->address;
         $company->phone = $request->phone;
         $company->nit = $request->nit;
-        $company->documents = $request->documents;
         $company->statusCompany = $request->statusCompany;
         $company->verification_code = $request->verification_code;
-
-        //con el metodo save se guarda todo en la tabla
+        
+        if ($request->hasFile('documents')) {
+            $file = $request->file('documents');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+        
+            // Almacenar el archivo en el sistema de archivos de Laravel
+            $filePath = $file->storeAs('documents', $fileName, 'public');
+        
+            // Asignar directamente el campo 'documents'
+            $company->documents = $filePath;
+        }
+        
+        // Guardar cambios
         $company->save();
 
-        //guardar los servicios relacionados con la compañía
-        $company->services()->sync($request->input('idService', []));
-
-        return Response::json([
-            'company' => $company
-        ]);
+        return response()->json($company);
     }
 
     public function downloadDocument(string $id)
@@ -44,14 +60,12 @@ class CompanyController extends Controller
 
         // Verifica que haya al menos un documento asociado a la compañía
         if ($company->documents) {
+             // Convertir las barras diagonales a barras invertidas para la ruta
+            $filePath = str_replace('/', '\\', $company->documents);
             // Descargar el documento
-            return response($company->documents, 200, [
-                'Content-Type' => $company->mime_type,
-                'Content-Disposition' => 'attachment; filename="' . $company->name . '"',
-            ]);
+            return response()->download(storage_path("app/public/{$filePath}"), $company->name . '.pdf');
         }
 
-        // Manejar el caso donde no hay documentos
         return response()->json(['error' => 'No hay documentos disponibles para descargar'], 404);
     }
 
