@@ -16,7 +16,7 @@ const CreateCompany = () => {
     const [nit, setNit] = useState("");
     const [documents, setDocuments] = useState();
     const [statusCompany, setStatusCompany] = useState("Inactiva");
-    const [verificationCode, setVerificationCode] = useState();
+    //const [verificationCode, setVerificationCode] = useState();
     const [selectedServices, setSelectedServices] = useState([]);
     const navigate = useNavigate();
 

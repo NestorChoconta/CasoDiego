@@ -118,12 +118,32 @@ class CompanyController extends Controller
 
     public function show(string $id)
     {
-        //
+        //El metodo find sirve para traer solo un registro
+        $company = Company::with('services')->find($id);
+        return $company;
     }
 
     public function update(Request $request, string $id)
     {
-        //
+        // Busca el usuario por su ID
+        $company = Company::find($id);
+
+        //se capturan los valores que se tienen en el formulario
+        $company->name = $request->name;
+        $company->address = $request->address;
+        $company->phone = $request->phone;
+        $company->nit = $request->nit;
+        $company->statusCompany = $request->statusCompany;
+
+        //Guarda cambios
+        $company->save();
+
+        //guardar los servicios relacionados con la compañía
+        $company->services()->sync($request->input('idService', []));
+
+        return Response::json([
+            'company' => $company
+        ]);
     }
 
     public function destroy(string $id)
