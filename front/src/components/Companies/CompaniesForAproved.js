@@ -149,7 +149,7 @@ const ListCompaniesForAproved = () => {
                             <td className="align-middle text-center">
                                 {company.documents && company.documents.length > 0 && (
                                     <a href={`${endpoint}/companies/${company.id}/download`} download>
-                                        {`DocumentoCompañia${company.name}.${company.documents[0].extension}`}
+                                        Descargar Documento
                                     </a>
                                 )}
                             </td>
