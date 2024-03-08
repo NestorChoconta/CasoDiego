@@ -27,7 +27,7 @@ const ListUsers = () => {
 		const decodificacionToken = jwtDecode(token); 
 
 		//sacamos el rol(sub) del token 
-		console.log(decodificacionToken.sub) 
+		console.log(decodificacionToken.role) 
 		getAllUsers();
 	}, [pageNumber, navigate]);
 

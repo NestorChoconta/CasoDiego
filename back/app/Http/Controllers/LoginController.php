@@ -20,7 +20,7 @@ class LoginController extends Controller
             $idRole = $user->idRole;
 
             // Generar el token JWT para el usuario autenticado
-            $customToken = JWTAuth::fromUser($user);
+            $customToken = JWTAuth::claims(['id' => $user->id, 'role' => $idRole])->fromUser($user);
 
             $verification_code = mt_rand(100000, 999999);
 

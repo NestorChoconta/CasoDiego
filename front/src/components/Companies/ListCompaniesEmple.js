@@ -16,7 +16,7 @@ const ListCompanies = () => {
 	const companiesPerPage = 9;
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
-	const role = decodificacionToken.sub;
+	const role = decodificacionToken.role;
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
