@@ -5,6 +5,8 @@ import ReactPaginate from "react-paginate";
 import { FiUsers, FiClipboard } from "react-icons/fi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api";
 
@@ -189,7 +191,12 @@ const ListCompanies = () => {
             // Libera recursos al finalizar
             window.URL.revokeObjectURL(link.href);
         } catch (error) {
-            console.error('Error al descargar el archivo:', error.message);
+            if (error.response && error.response.status === 404) {
+				// Muestra la alerta si el archivo no se encuentra
+				toast.error("El documento no se encuentra en nuestro sistema.");
+			} else {
+				console.error('Error al descargar el archivo:', error.message);
+			}
         }
     };
 
@@ -311,6 +318,7 @@ const ListCompanies = () => {
 				activeClassName={"page-item active"}
 				pageLinkClassName={"page-link"} // Agregar esta línea para estilizar los números de página
 			/>
+			<ToastContainer />
 		</div>
 	);
 };

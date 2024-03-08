@@ -5,10 +5,12 @@ import ReactPaginate from "react-paginate";
 import { FiUsers, FiClipboard } from "react-icons/fi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api";
 
-const ListCompanies = () => {
+const ListCompaniesEmp = () => {
 	const [companies, setCompanies] = useState([]);
 	const [pageNumber, setPageNumber] = useState(0);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -168,6 +170,35 @@ const ListCompanies = () => {
 		);
 	};
 
+	const downloadFile = async (id, name) => {
+        try {
+            const response = await axios.get(`${endpoint}/companies/${id}/download`, {
+                responseType: 'blob', // Indica que la respuesta es un archivo binario
+            });
+
+            // Crea un objeto Blob con los datos recibidos
+            const blob = new Blob([response.data]);
+
+            // Crea un enlace (link) temporal
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `DocumentoCompañia${name}.pdf`;
+
+            // Simula un clic en el enlace para iniciar la descarga
+            link.click();
+
+            // Libera recursos al finalizar
+            window.URL.revokeObjectURL(link.href);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+				// Muestra la alerta si el archivo no se encuentra
+				toast.error("El documento no se encuentra en nuestro sistema.");
+			} else {
+				console.error('Error al descargar el archivo:', error.message);
+			}
+        }
+    };
+
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1>COMPAÑIAS</h1>
@@ -231,9 +262,12 @@ const ListCompanies = () => {
 							<td className="align-middle text-center">
 								{/* Mostrar solo el nombre del archivo */}
 								{company.documents && company.documents.length > 0 && (
-								<a href={`${endpoint}/companies/${company.id}/download`} download>
-									{`DocumentoCompañia${company.name}.${company.documents[0].extension}`}
-								</a>
+									<button
+									onClick={() => downloadFile(company.id, company.name)}
+									className="btn btn-link"
+									>
+										Descargar Documento
+									</button>
 								)}
 							</td>
 							<td className="align-middle text-center">
@@ -276,4 +310,4 @@ const ListCompanies = () => {
 	);
 };
 
-export default ListCompanies;
+export default ListCompaniesEmp;

@@ -66,10 +66,11 @@ const ListCompaniesForAproved = () => {
                 setShowModal(false); // Cerrar el modal después de validar y mostrar la notificación
                 setSelectedCompanyId(null); // Resetear el ID seleccionado
             } else {
-                console.log("Código de verificación incorrecto");
+                toast.error("Código de verificación incorrecto");
             }
         } catch (error) {
             console.error('Error al aprobar la compañía:', error);
+            toast.error("Error al aprobar la compañía");
         }
     };
 
@@ -103,6 +104,35 @@ const ListCompaniesForAproved = () => {
 
     const changePage = ({ selected }) => {
         setPageNumber(selected);
+    };
+
+    const downloadFile = async (id, name) => {
+        try {
+            const response = await axios.get(`${endpoint}/companies/${id}/download`, {
+                responseType: 'blob', // Indica que la respuesta es un archivo binario
+            });
+
+            // Crea un objeto Blob con los datos recibidos
+            const blob = new Blob([response.data]);
+
+            // Crea un enlace (link) temporal
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `DocumentoCompañia${name}.pdf`;
+
+            // Simula un clic en el enlace para iniciar la descarga
+            link.click();
+
+            // Libera recursos al finalizar
+            window.URL.revokeObjectURL(link.href);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+				// Muestra la alerta si el archivo no se encuentra
+				toast.error("El documento no se encuentra en nuestro sistema.");
+			} else {
+				console.error('Error al descargar el archivo:', error.message);
+			}
+        }
     };
 
     return (
@@ -148,9 +178,12 @@ const ListCompaniesForAproved = () => {
                             <td className="align-middle text-center">{company.nit}</td>
                             <td className="align-middle text-center">
                                 {company.documents && company.documents.length > 0 && (
-                                    <a href={`${endpoint}/companies/${company.id}/download`} download>
-                                        {`DocumentoCompañia${company.name}.${company.documents[0].extension}`}
-                                    </a>
+                                    <button
+									onClick={() => downloadFile(company.id, company.name)}
+									className="btn btn-link"
+									>
+										Descargar Documento
+									</button>
                                 )}
                             </td>
                             <td className="align-middle text-center">

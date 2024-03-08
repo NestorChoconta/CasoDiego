@@ -131,8 +131,14 @@ class CompanyController extends Controller
         if ($company->documents) {
             // Convertir las barras diagonales a barras invertidas para la ruta
             $filePath = str_replace('/', '\\', $company->documents);
-            // Descargar el documento
-            return response()->download(storage_path("app/public/{$filePath}"), $company->name . '.pdf');
+            // Verificar si el archivo existe
+            if (Storage::exists("public/{$filePath}")) {
+                // Descargar el documento
+                return response()->download(storage_path("app/public/{$filePath}"), $company->name . '.pdf');
+            } else {
+                // Devolver un código de estado HTTP 404 si el archivo no se encuentra
+                return response()->json(['error' => 'El documento no se encuentra en nuestro sistema'], 404);
+            }
         }
 
         return response()->json(['error' => 'No hay documentos disponibles para descargar'], 404);
