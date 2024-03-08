@@ -71,29 +71,47 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-        // Validación personalizada para NIT y teléfono únicos
         try {
             $request->validate([
-                'nit' => 'unique:companies',
-                'phone' => 'unique:companies',
+                'name' => 'required',
+                'address' => 'required',
+                'nit' => 'required|unique:companies',
+                'phone' => 'required|unique:companies',
+                'documents' => 'required|mimes:pdf', // Añade la validación para que el documento sea un PDF
+                'statusCompany' => 'required',
+                'idService' => 'required|array|min:1', // Asegura que al menos un servicio esté seleccionado
             ], [
+                'name.required' => 'El nombre de la compañía es obligatorio.',
+                'address.required' => 'La dirección de la compañía es obligatoria.',
+                'nit.required' => 'El NIT de la compañía es obligatorio.',
                 'nit.unique' => 'Ya existe una compañia registrada con este NIT.',
+                'phone.required' => 'El número de teléfono de la compañía es obligatorio.',
                 'phone.unique' => 'Ya existe una compañia registrada con este número de teléfono.',
+                'documents.required' => 'Por favor, seleccione un documento.',
+                'documents.mimes' => 'El archivo debe ser un documento PDF.',
+                'statusCompany.required' => 'El estado de la compañía es obligatorio.',
+                'idService.required' => 'Seleccione al menos un servicio.',
+                'idService.array' => 'Los servicios deben ser proporcionados como un arreglo.',
+                'idService.min' => 'Seleccione al menos un servicio.',
             ]);
         } catch (ValidationException $e) {
             // Captura la excepción de validación
             $errors = $e->errors();
             $response = [
+                'nameError' => isset($errors['name']) ? $errors['name'][0] : null,
+                'addressError' => isset($errors['address']) ? $errors['address'][0] : null,
                 'nitError' => isset($errors['nit']) ? $errors['nit'][0] : null,
                 'phoneError' => isset($errors['phone']) ? $errors['phone'][0] : null,
+                'documentsError' => isset($errors['documents']) ? $errors['documents'][0] : null,
+                'statusCompanyError' => isset($errors['statusCompany']) ? $errors['statusCompany'][0] : null,
+                'idServiceError' => isset($errors['idService']) ? $errors['idService'][0] : null,
             ];
             return response()->json($response, 422); // Devuelve el error como JSON
         }
 
         // Llenar los campos de la compañía
-
         $company = new Company();
-        //se capturan los valores que se tienen en el formulario
+        // se capturan los valores que se tienen en el formulario
         $company->name = $request->name;
         $company->address = $request->address;
         $company->phone = $request->phone;
@@ -102,6 +120,12 @@ class CompanyController extends Controller
 
         if ($request->hasFile('documents')) {
             $file = $request->file('documents');
+            
+            // Verificar si el archivo es un PDF
+            if ($file->getClientOriginalExtension() !== 'pdf') {
+                return response()->json(['documentsError' => 'El archivo debe ser un documento PDF.'], 422);
+            }
+
             $fileName = time() . '_' . $file->getClientOriginalName();
 
             // Almacenar el archivo en el sistema de archivos de Laravel
@@ -114,12 +138,12 @@ class CompanyController extends Controller
         // Guardar cambios
         $company->save();
 
-        //guardar los servicios relacionados con la compañía
+        // guardar los servicios relacionados con la compañía
         $company->services()->sync($request->input('idService', []));
 
         return Response::json([
             'company' => $company,
-            'message'=>'Verificación exitosa'
+            'message' => 'Verificación exitosa',
         ], 200);
     }
 

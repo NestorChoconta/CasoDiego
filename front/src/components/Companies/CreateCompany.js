@@ -48,6 +48,12 @@ const CreateCompany = () => {
     const handleVerificationSubmit = async (e) => {
         e.preventDefault();
 
+        // Validar que todos los campos estén llenos
+        if (!name || !address || !nit || !phone || !fileInput || selectedServices.length === 0) {
+            toast.error("Por favor, complete todos los campos del formulario.");
+            return;
+        }
+
         //Se crea para que lo pase a string
         const Phone = phone.toString();
         // Validar que el número de telefono tenga 10 dígitos
@@ -56,6 +62,12 @@ const CreateCompany = () => {
             return;
         } else {
             setErrorsPhone([]);
+        }
+
+        // Validar si el archivo seleccionado es un documento PDF
+        if (!fileInput.name.toLowerCase().endsWith(".pdf")) {
+            toast.error("El archivo debe ser un documento PDF.");
+            return;
         }
 
         try {
