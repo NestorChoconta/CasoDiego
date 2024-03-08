@@ -53,18 +53,6 @@ const ListCompanies = () => {
 		setIsSidebarOpen(!isSidebarOpen);
 	};
 
-	const DeffinitionUsers = () => {
-		switch (parseInt(role)) {
-			case 1:
-				navigate('/usuarios')
-				break;
-			case 2:
-				navigate('/AdUsuarios')
-				break;
-			default:
-				break;
-		}
-	}
 
 	const DeffinitionClients = () => {
 		switch (parseInt(role)) {

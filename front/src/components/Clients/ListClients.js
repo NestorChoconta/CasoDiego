@@ -26,6 +26,7 @@ const ListClients = () => {
 		if (Cookies.get("casoDiego") === undefined) {
 			navigate("/");
 		}
+		console.log(decodificacionToken);
 		//console.log(user);
 		getAllClients();
 	}, [pageNumber]);
