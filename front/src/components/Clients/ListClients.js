@@ -20,12 +20,13 @@ const ListClients = () => {
 
 	const  token = Cookies.get("casoDiego")
 	const decodificacionToken = jwtDecode(token); 
-	const role = decodificacionToken.sub
+	const role = decodificacionToken.role;
 	
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
 			navigate("/");
 		}
+		console.log(decodificacionToken);
 		//console.log(user);
 		getAllClients();
 	}, [pageNumber]);

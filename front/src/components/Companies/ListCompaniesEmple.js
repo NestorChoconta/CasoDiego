@@ -15,10 +15,13 @@ const ListCompaniesEmp = () => {
 	const [pageNumber, setPageNumber] = useState(0);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
-	const companiesPerPage = 9;
+	const companiesPerPage = 10;
+
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
-	const role = decodificacionToken.sub;
+	const role = decodificacionToken.role;
+
+	const [inactiveCompaniesCount, setInactiveCompaniesCount] = useState(0);
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
@@ -32,6 +35,8 @@ const ListCompaniesEmp = () => {
 		const response = await axios.get(`${endpoint}/companies`);
 		const activeCompanies = response.data.filter(company => company.statusCompany === 'Activa');
 		setCompanies(activeCompanies);
+		const inactiveCount = response.data.filter(company => company.statusCompany === 'Inactiva').length;
+    	setInactiveCompaniesCount(inactiveCount);
 	};
 
     // Se utiliza para calcular el número total de páginas necesarias para mostrar todas las compañías
@@ -50,35 +55,6 @@ const ListCompaniesEmp = () => {
 		setIsSidebarOpen(!isSidebarOpen);
 	};
 
-	const DeffinitionRole = () => {
-		//console.log(typeof(role));
-		switch (parseInt(role)) {
-			case 1:
-				navigate('/MenuSuperAdmin')
-				break;
-			case 2:
-				navigate('/MenuAdmin')
-				break;
-			case 3:
-				navigate('/MenuEmple')
-				break;
-			default:
-				break;
-		}
-	}
-
-	const DeffinitionUsers = () => {
-		switch (parseInt(role)) {
-			case 1:
-				navigate('/usuarios')
-				break;
-			case 2:
-				navigate('/AdUsuarios')
-				break;
-			default:
-				break;
-		}
-	}
 
 	const DeffinitionClients = () => {
 		switch (parseInt(role)) {
@@ -141,9 +117,11 @@ const ListCompaniesEmp = () => {
 								cursor: "pointer",
 							}}
 						>
-							<a onClick={()=>DeffinitionRole()} style={{ color: 'white', textDecoration: 'none'}}>
+							<Link
+							to="/MenuEmple"
+							style={{ color: "white", textDecoration: "none" }}>
 							☰ Menú Principal
-							</a>
+						</Link>
 						</li>
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 						<Link
@@ -152,13 +130,6 @@ const ListCompaniesEmp = () => {
 							<FiClipboard style={{ marginRight: "10px" }} /> Tareas
 						</Link>
 						</li>
-						{parseInt(role) === 2 && (
-							<li style={{ marginBottom: "30%", cursor: "pointer" }}>
-							<a onClick={()=>DeffinitionUsers()} style={{ color: 'white', textDecoration: 'none' }}>
-								<FiUsers style={{ marginRight: '10px' }} /> Usuarios
-							</a>
-							</li>
-						)}
 						<li style={{ marginBottom: "30%", cursor: "pointer" }}>
 						<a onClick={()=>DeffinitionClients()} style={{ color: 'white', textDecoration: 'none'}}>
 							<FiUsers style={{ marginRight: '10px' }} /> Clientes
@@ -218,10 +189,12 @@ const ListCompaniesEmp = () => {
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-			<div className="d-flex justify-content-end align-items-center mt-4">
-				<Link to="/crearCompañia" className="btn btn-success btn-md mx-1">
-					Crear Compañia
-				</Link>
+			<div className="d-flex justify-content-end align-items-center mt-4" style={{ paddingRight: '20px' }}>
+				<div style={{ marginLeft: 'auto' }}>
+					<Link to="/crearCompañia" className="btn btn-success btn-md mx-1">
+						Crear Compañia
+					</Link>
+				</div>
 			</div>
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">

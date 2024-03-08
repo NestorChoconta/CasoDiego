@@ -19,7 +19,8 @@ const ListCompanies = () => {
 
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
-	const role = decodificacionToken.sub;
+	const role = decodificacionToken.role;
+
 	const [inactiveCompaniesCount, setInactiveCompaniesCount] = useState(0);
 
 	useEffect(() => {
