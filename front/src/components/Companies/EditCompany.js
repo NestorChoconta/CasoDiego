@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api/company/";
 
@@ -40,11 +42,17 @@ const EditCompany = () => {
 		setPhone(response.data.phone);
 		setNit(response.data.nit);
 		setStatusCompany(response.data.statusCompany);
-		setSelectedServices(response.data.services.map(service => service.id));
+		setSelectedServices(response.data.services.map((service) => service.id));
 	};
 
 	const update = async (e) => {
 		e.preventDefault();
+
+		// Validar que todos los campos estén llenos
+		if (!name || !address || !nit || !phone || selectedServices.length === 0) {
+			toast.error("Por favor, complete todos los campos del formulario.");
+			return;
+		}
 
 		//Se crea para que lo pase a string
 		const Phone = phone.toString();
@@ -204,6 +212,8 @@ const EditCompany = () => {
 				</div>
 			</div>
 			<br></br>
+			{/* ToastContainer para mostrar las notificaciones */}
+			<ToastContainer position="top-right" autoClose={3000} />
 		</div>
 	);
 };

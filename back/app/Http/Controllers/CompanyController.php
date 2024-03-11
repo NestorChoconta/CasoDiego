@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CompanyCreationNotification;
 use App\Models\Company;
 use App\Mail\CompanyVerificationMail;
 use App\Models\User;
@@ -20,53 +21,6 @@ class CompanyController extends Controller
 
         // Devolver todas las compañías
         return response()->json($company);
-    }
-
-
-    public function approveCompany(Request $request, string $id)
-    {
-        $company = Company::findOrFail($id);
-
-        if ($company->statusCompany === 'Activa') {
-            return response()->json(['message' => 'La compañía ya ha sido aprobada anteriormente'], 400);
-        }
-
-        $company->statusCompany = 'Activa';
-        $company->save();
-
-        return response()->json(['message' => 'La compañía ha sido aprobada exitosamente'], 200);
-    }
-
-    public function rejectCompany(Request $request, string $id)
-    {
-        $company = Company::findOrFail($id);
-
-        // Eliminar los registros relacionados en la tabla companies_services
-        $company->services()->detach();
-
-        // Eliminar la compañía
-        $company->delete();
-
-        return response()->json(['message' => 'La compañía ha sido rechazada y eliminada exitosamente'], 200);
-    }
-
-    public function VerifyCreateCompany(Request $request)
-    {
-        $verification_code = mt_rand(100000, 999999); // Generar código de verificación único
-
-        $roleIds = [1, 2];
-        // Recupera los usuarios que son superAdministradores y Administradores
-        $users = User::whereIn('idRole', $roleIds)->get();
-
-        // Envía el correo electrónico a cada uno de ellos
-        foreach ($users as $user) {
-            Mail::to($user->email)->send(new CompanyVerificationMail($verification_code));
-        }
-
-        // Envía el código de verificación en la respuesta
-        return Response::json([
-            'verification_code' => $verification_code
-        ]);
     }
 
     public function store(Request $request)
@@ -147,6 +101,64 @@ class CompanyController extends Controller
         ], 200);
     }
 
+    public function approveCompany(Request $request, string $id)
+    {
+        $company = Company::findOrFail($id);
+
+        if ($company->statusCompany === 'Activa') {
+            return response()->json(['message' => 'La compañía ya ha sido aprobada anteriormente'], 400);
+        }
+
+        $company->statusCompany = 'Activa';
+        $company->save();
+
+        $nameCompany = $company->name;
+
+        $roleIds = [1];
+
+        // Recupera los usuarios que son Super Administradores
+        $users = User::whereIn('idRole', $roleIds)->get();
+
+        // Envía el correo electrónico a cada uno de ellos
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new CompanyCreationNotification($nameCompany));
+        }
+
+        return response()->json(['message' => 'La compañía ha sido aprobada exitosamente'], 200);
+    }
+
+    public function rejectCompany(Request $request, string $id)
+    {
+        $company = Company::findOrFail($id);
+
+        // Eliminar los registros relacionados en la tabla companies_services
+        $company->services()->detach();
+
+        // Eliminar la compañía
+        $company->delete();
+
+        return response()->json(['message' => 'La compañía ha sido rechazada y eliminada exitosamente'], 200);
+    }
+
+    public function VerifyCreateCompany(Request $request)
+    {
+        $verification_code = mt_rand(100000, 999999); // Generar código de verificación único
+
+        $roleIds = [1, 2];
+        // Recupera los usuarios que son superAdministradores y Administradores
+        $users = User::whereIn('idRole', $roleIds)->get();
+
+        // Envía el correo electrónico a cada uno de ellos
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new CompanyVerificationMail($verification_code));
+        }
+
+        // Envía el código de verificación en la respuesta
+        return Response::json([
+            'verification_code' => $verification_code
+        ]);
+    }
+
     public function downloadDocument(string $id)
     {
         $company = Company::find($id);
@@ -177,6 +189,40 @@ class CompanyController extends Controller
 
     public function update(Request $request, string $id)
     {
+        try {
+            $request->validate([
+                'name' => 'required',
+                'address' => 'required',
+                'nit' => 'required|unique:companies,nit,' . $id,
+                'phone' => 'required|unique:companies,phone,' . $id,
+                'statusCompany' => 'required',
+                'idService' => 'required|array|min:1',
+            ], [
+                'name.required' => 'El nombre de la compañía es obligatorio.',
+                'address.required' => 'La dirección de la compañía es obligatoria.',
+                'nit.required' => 'El NIT de la compañía es obligatorio.',
+                'nit.unique' => 'Ya existe una compañía registrada con este NIT.',
+                'phone.required' => 'El número de teléfono de la compañía es obligatorio.',
+                'phone.unique' => 'Ya existe una compañía registrada con este número de teléfono.',
+                'statusCompany.required' => 'El estado de la compañía es obligatorio.',
+                'idService.required' => 'Seleccione al menos un servicio.',
+                'idService.array' => 'Los servicios deben ser proporcionados como un arreglo.',
+                'idService.min' => 'Seleccione al menos un servicio.',
+            ]);
+        } catch (ValidationException $e) {
+            // Captura la excepción de validación
+            $errors = $e->errors();
+            $response = [
+                'nameError' => isset($errors['name']) ? $errors['name'][0] : null,
+                'addressError' => isset($errors['address']) ? $errors['address'][0] : null,
+                'nitError' => isset($errors['nit']) ? $errors['nit'][0] : null,
+                'phoneError' => isset($errors['phone']) ? $errors['phone'][0] : null,
+                'statusCompanyError' => isset($errors['statusCompany']) ? $errors['statusCompany'][0] : null,
+                'idServiceError' => isset($errors['idService']) ? $errors['idService'][0] : null,
+            ];
+            return response()->json($response, 422); // Devuelve el error como JSON
+        }
+
         // Busca el usuario por su ID
         $company = Company::find($id);
 
