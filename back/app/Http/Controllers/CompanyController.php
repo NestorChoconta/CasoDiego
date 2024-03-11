@@ -74,7 +74,7 @@ class CompanyController extends Controller
 
         if ($request->hasFile('documents')) {
             $file = $request->file('documents');
-            
+
             // Verificar si el archivo es un PDF
             if ($file->getClientOriginalExtension() !== 'pdf') {
                 return response()->json(['documentsError' => 'El archivo debe ser un documento PDF.'], 422);
