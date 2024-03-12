@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { addUser } from "./redux/userSlice";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify"; // Importa el ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Asegúrate de importar los estilos de react-toastify
 import ListUsers from "./components/SuperAdm/ListUsers";
 import CreateUser from "./components/SuperAdm/CreateUser";
 import EditUser from "./components/SuperAdm/EditUser";
@@ -67,6 +69,7 @@ function App() {
 					<Route path="/editarCompañia/:id" element={<EditCompany />} />
 				</Routes>
 			</BrowserRouter>
+			<ToastContainer position="top-right" autoClose={3000} /> {/* Agrega el ToastContainer aquí */}
 		</div>
 	);
 }

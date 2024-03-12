@@ -1,30 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api"; // Base URL para las solicitudes API
 
-const CreateCompany = () => {
-	const [services, setServices] = useState([]);
-	const [name, setName] = useState("");
-	const [address, setAddress] = useState("");
-	const [phone, setPhone] = useState("");
-	const [errorsPhone, setErrorsPhone] = useState([]);
-	const [nit, setNit] = useState("");
-	const [documents, setDocuments] = useState("");
-	const [fileInput, setFileInput] = useState(null);
-	const [statusCompany, setStatusCompany] = useState("Inactiva");
-	const [selectedServices, setSelectedServices] = useState([]);
-	const navigate = useNavigate();
+const CreateCompany = ({ closeModal, ModalCloseSinNoti}) => {
+    const [services, setServices] = useState([]);
+    const [name, setName] = useState("");
+    const [address, setAddress] = useState("");
+    const [phone, setPhone] = useState("");
+    const [errorsPhone, setErrorsPhone] = useState([]);
+    const [nit, setNit] = useState("");
+    const [documents, setDocuments] = useState("");
+    const [fileInput, setFileInput] = useState(null);
+    const [statusCompany, setStatusCompany] = useState("Inactiva");
+    const [selectedServices, setSelectedServices] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (Cookies.get("casoDiego") === undefined) {
-            navigate("/");
-        }
-
         getAllServices();
     }, []);
 
@@ -38,11 +33,11 @@ const CreateCompany = () => {
         }
     };
 
-	// Manejar cambio en el input de archivo
-	const handleFileChange = async (e) => {
-		setFileInput(e.target.files[0]);
-		setDocuments(e.target.value);
-	};
+    // Manejar cambio en el input de archivo
+    const handleFileChange = async (e) => {
+        setFileInput(e.target.files[0]);
+        setDocuments(e.target.value);
+    };
 
     // Manejar la validación del código de verificación
     const handleVerificationSubmit = async (e) => {
@@ -57,7 +52,7 @@ const CreateCompany = () => {
         //Se crea para que lo pase a string
         const Phone = phone.toString();
         // Validar que el número de telefono tenga 10 dígitos
-        if (Phone.length < 10 || Phone.length > 10) {
+        if (Phone.length !== 10) {
             setErrorsPhone(["El número de telefono debe tener 10 números."]);
             return;
         } else {
@@ -78,28 +73,28 @@ const CreateCompany = () => {
                 nit: nit,
                 statusCompany: statusCompany,
                 idService: selectedServices,
-                documents: fileInput  // Incluir el archivo aquí
+                documents: fileInput, // Incluir el archivo aquí
             };
-            
+
             try {
                 const response = await axios.post(`${endpoint}/company/verify`, responseForm, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
                 });
-    
+
                 console.log(response);
-    
+
+                closeModal();
                 navigate(-1);
-                toast.success("¡La compañía fue registrada y está lista para aprobación!");
             } catch (error) {
                 if (error.response && error.response.status === 422) {
                     const { nitError, phoneError } = error.response.data;
-    
+
                     if (nitError) {
                         toast.error(nitError);
                     }
-    
+
                     if (phoneError) {
                         toast.error(phoneError);
                     }
@@ -113,8 +108,9 @@ const CreateCompany = () => {
     };
 
     const handleGoBack = () => {
-        navigate(-1);
+        ModalCloseSinNoti()
     };
+    
 
     // función para manejar el cambio en la selección de servicios
     const handleServiceChange = (serviceId) => {
@@ -133,9 +129,9 @@ const CreateCompany = () => {
 
     return (
         <div className="container-fluid mt-4 px-md-5">
-            <h1 className="text-center mb-4">CREAR COMPAÑIAS</h1>
+            <h1 className="text-center mb-4">REGISTRO COMPAÑIA</h1>
             <div className="container-fluid mt-4 px-md-5 d-flex align-items-center justify-content-center">
-                <div className="d-flex justify-content-center border p-2 rounded w-50 rounded">
+                <div className="d-flex justify-content-center border p-2 rounded" style={{ width: "90%" }}>
                     <form onSubmit={handleVerificationSubmit} className="col-md-6 w-75">
                         <div className="mb-3">
                             <label className="form-label fs-5">Nombre de la compañia</label>
@@ -174,8 +170,9 @@ const CreateCompany = () => {
                                     setPhone(e.target.value);
                                     setErrorsPhone([]);
                                 }}
-                                className={`form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom 
-									${errorsPhone.length > 0 ? "is-invalid" : ""}`}
+                                className={`form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom ${
+                                    errorsPhone.length > 0 ? "is-invalid" : ""
+                                }`}
                                 required
                             />
                             {errorsPhone.length > 0 && (
@@ -199,53 +196,29 @@ const CreateCompany = () => {
                                         checked={selectedServices.includes(service.id)}
                                         onChange={() => handleServiceChange(service.id)}
                                     />
-                                    <label
-                                        className="form-check-label"
-                                        htmlFor={`serviceCheckbox${service.id}`}
-                                    >
+                                    <label className="form-check-label" htmlFor={`serviceCheckbox${service.id}`}>
                                         {service.description}
                                     </label>
                                 </div>
                             ))}
                         </div>
                         <div className="mb-3">
-                            <label className="form-label fs-5">
-                                Documento general de la compañía
-                            </label>
-                            <input
-                                type="file"
-                                value={documents}
-                                onChange={handleFileChange}
-                                className="form-control"
-                            />
+                            <label className="form-label fs-5">Documento general de la compañía</label>
+                            <input type="file" value={documents} onChange={handleFileChange} className="form-control" />
                         </div>
-                        <div className="mb-3">
-                            <label className="form-label fs-5">Estado de la compañia</label>
-                            <input
-                                type="text"
-                                value={statusCompany}
-                                onChange={(e) => setStatusCompany(e.target.value)}
-                                className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-                                readOnly // Esto evita que el usuario edite el campo
-                            />
-                        </div><br/>
                         <div className="mb-3 text-center">
-                        <button type="submit" className="btn btn-primary" tabIndex="4">
+                            <button type="submit" className="btn btn-primary" tabIndex="4">
                                 Guardar en espera
-                        </button><br/><br/>
-                        <button
-                            onClick={handleGoBack}
-                            className="btn btn-warning btn-md mx-1"
-                            >
-                            {" "}
-                            Cancelar{" "}
-                        </button>
+                            </button>
+                            <br />
+                            <br />
+                            <button onClick={handleGoBack} className="btn btn-warning btn-md mx-1">
+                                Cancelar
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
-            {/* ToastContainer para mostrar las notificaciones */}
-            <ToastContainer position="top-right" autoClose={3000} />
         </div>
     );
 };

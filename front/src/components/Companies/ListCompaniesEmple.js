@@ -189,13 +189,6 @@ const ListCompaniesEmp = () => {
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-			<div className="d-flex justify-content-end align-items-center mt-4" style={{ paddingRight: '20px' }}>
-				<div style={{ marginLeft: 'auto' }}>
-					<Link to="/crearCompañia" className="btn btn-success btn-md mx-1">
-						Crear Compañia
-					</Link>
-				</div>
-			</div>
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">
 					<tr>

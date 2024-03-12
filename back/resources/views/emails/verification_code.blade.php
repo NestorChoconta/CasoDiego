@@ -144,7 +144,7 @@
 														<tr>
 															<td class="pad">
 																<div style="color:#40507a;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:16px;line-height:120%;text-align:left;mso-line-height-alt:19.2px;">
-																	<p style="margin: 0; word-break: break-word;">A continuación, te proporcionamos tu código de verificación para la compañia:</p>
+																	<p style="margin: 0; word-break: break-word;">A continuación, te proporcionamos tu código de verificación para el inicio de sesión:</p>
 																</div>
 															</td>
 														</tr>
