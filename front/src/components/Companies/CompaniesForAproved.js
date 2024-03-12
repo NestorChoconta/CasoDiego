@@ -35,25 +35,20 @@ const ListCompaniesForAproved = () => {
     }, [showModal]);
 
 
-    const handleFormSubmit = async (companyId ,e) => {
+    const handleFormSubmit = async (company, e) => {
         e.preventDefault();
-
-
+    
         try {
-            // Generar un nuevo código de verificación
-            const response = await axios.post(`${endpoint}/company`);
+            const response = await axios.post(`${endpoint}/company`, { name: company.name });
             const newVerificationCode = response.data.verification_code;
-			// console.log("Código de Verificación:", newVerificationCode);
             setVerificationCode(newVerificationCode);
-            setSelectedCompanyId(companyId);
-
-            // Mostrar el modal para que el usuario valide el código de verificación
+            setSelectedCompanyId(company.id);
             setShowModal(true);
         } catch (error) {
             console.error("Error creating company:", error);
         }
     };
-
+    
 
     const approveCompany = async () => {
         if (!selectedCompanyId) return; // Comprobar si hay una compañía seleccionada
@@ -198,7 +193,7 @@ const ListCompaniesForAproved = () => {
                             <td className="align-middle text-center">
                                 <button
                                     className="btn btn-primary btn-sm mb-1"
-                                    onClick={(e) => handleFormSubmit(company.id, e)}
+                                    onClick={(e) => handleFormSubmit(company,e)}    
                                 >
                                     Aprobar
                                 </button>

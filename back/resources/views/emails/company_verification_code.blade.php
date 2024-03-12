@@ -102,7 +102,7 @@
 													<table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
 														<tr>
 															<td class="pad" style="padding-top:20px;text-align:center;width:100%;">
-																<h1 style="margin: 0; color: #a4c8c4; direction: ltr; font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif; font-size: 29px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 34.8px;"><strong>CODIGO DE APROBACIÓN PARA <br>LA COMPAÑIA</strong></h1>
+																<h1 style="margin: 0; color: #a4c8c4; direction: ltr; font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif; font-size: 29px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 34.8px;"><strong>Código De Aprobación Para <br>La Compañia {{ $companyName }}</strong></h1>
 															</td>
 														</tr>
 													</table>

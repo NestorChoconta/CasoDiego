@@ -144,13 +144,14 @@ class CompanyController extends Controller
     {
         $verification_code = mt_rand(100000, 999999); // Generar código de verificación único
 
+        $companyName =$request->input('name');
         $roleIds = [1, 2];
         // Recupera los usuarios que son superAdministradores y Administradores
         $users = User::whereIn('idRole', $roleIds)->get();
 
         // Envía el correo electrónico a cada uno de ellos
         foreach ($users as $user) {
-            Mail::to($user->email)->send(new CompanyVerificationMail($verification_code));
+            Mail::to($user->email)->send(new CompanyVerificationMail($verification_code, $companyName));
         }
 
         // Envía el código de verificación en la respuesta
