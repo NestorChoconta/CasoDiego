@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CompanyCreationNotification extends Mailable
+class CompanyApproved extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +19,7 @@ class CompanyCreationNotification extends Mailable
 
     public function build()
     {
-        return $this->subject('Confirmación exitosa de creación de compañía')
+        return $this->subject('Aprobación de compañia exitosa')
                     ->view('emails.notificacion_creation_company')
                     ->with(['nombreCompañia' => $this->nameCompany]);
     }

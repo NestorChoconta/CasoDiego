@@ -14,6 +14,7 @@ const CreateCompany = () => {
 	const [phone, setPhone] = useState("");
 	const [errorsPhone, setErrorsPhone] = useState([]);
 	const [nit, setNit] = useState("");
+	const [email, setEmail] = useState("");
 	const [documents, setDocuments] = useState("");
 	const [fileInput, setFileInput] = useState(null);
 	const [statusCompany, setStatusCompany] = useState("Inactiva");
@@ -49,7 +50,7 @@ const CreateCompany = () => {
         e.preventDefault();
 
         // Validar que todos los campos estén llenos
-        if (!name || !address || !nit || !phone || !fileInput || selectedServices.length === 0) {
+        if (!name || !address || !nit || !email || !phone || !fileInput || selectedServices.length === 0) {
             toast.error("Por favor, complete todos los campos del formulario.");
             return;
         }
@@ -76,6 +77,7 @@ const CreateCompany = () => {
                 address: address,
                 phone: phone,
                 nit: nit,
+                email: email,
                 statusCompany: statusCompany,
                 idService: selectedServices,
                 documents: fileInput  // Incluir el archivo aquí
@@ -187,6 +189,15 @@ const CreateCompany = () => {
                                     ))}
                                 </div>
                             )}
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label fs-5">Correo Electrónico</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+                            />
                         </div>
                         <div className="mb-3">
                             <label className="form-label fs-5">Servicios</label>

@@ -102,7 +102,7 @@
                                                     <table class="heading_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                         <tr>
                                                             <td class="pad" style="padding-top:20px;text-align:center;width:100%;">
-                                                                <h1 style="margin: 0; color: #a4c8c4; direction: ltr; font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif; font-size: 29px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 34.8px;"><strong>Tu Compañia Fue Aprobada De Manera <br> Exitosa En Nuestro Sistema</strong></h1>
+                                                                <h1 style="margin: 0; color: #a4c8c4; direction: ltr; font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif; font-size: 29px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 34.8px;"><strong>Tu Compañia Fue Rechaza Y No Pudo<br> Registrarse En Nuestro Sistema</strong></h1>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -120,8 +120,8 @@
                                                             <td class="pad" style="padding-left:45px;padding-right:45px;padding-top:10px;">
                                                                 <div style="color:#393d47;font-family:'Cabin',Arial,'Helvetica Neue',Helvetica,sans-serif;font-size:19px;line-height:150%;text-align:center;mso-line-height-alt:28.5px;">
                                                                     <p style="margin: 0; word-break: break-word;"> {{ $nameCompany }} </p>
-                                                                    <p style="margin: 0; word-break: break-word;">Nos complace informarte que tu compañía ha sido exitosamente aprobada en nuestro sistema. Después de una revisión completa, hemos confirmado que todos los documentos y
-                                                                        detalles proporcionados cumplen con nuestros estándares. Nos complace confirmar que todo se encontraba en orden y que la documentación presentada era completa y precisa. Esperamos que tengas una experiencia positiva en nuestro sistema.</p>
+                                                                    <p style="margin: 0; word-break: break-word;">Tu compañia fue rechazada por el siguiente motivo: </p>
+                                                                    <p style="margin: 0; word-break: break-word;"> - {{ $rejectionReason }} </p>
                                                                 </div>
                                                             </td>
                                                         </tr>

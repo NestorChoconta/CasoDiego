@@ -249,6 +249,9 @@ const ListCompanies = () => {
 							Telefono
 						</th>
 						<th scope="col" className="col-1 align-middle text-center">
+							Correo Electrónico
+						</th>
+						<th scope="col" className="col-1 align-middle text-center">
 							NIT
 						</th>
 						<th scope="col" className="col-1 align-middle text-center">
@@ -271,6 +274,7 @@ const ListCompanies = () => {
 							<td className="align-middle text-center">{company.name}</td>
 							<td className="align-middle text-center">{company.address}</td>
 							<td className="align-middle text-center">{company.phone}</td>
+							<td className="align-middle text-center">{company.email}</td>
 							<td className="align-middle text-center">{company.nit}</td>
 							<td className="align-middle text-center">
 								{/* Mostrar solo el nombre del archivo */}

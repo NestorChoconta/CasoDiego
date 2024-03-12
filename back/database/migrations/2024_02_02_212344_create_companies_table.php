@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('name', 50);
             $table->string('address', 50);
             $table->BigInteger('phone')->unique();
+            $table->string('email', 50)->unique();
             $table->BigInteger('nit')->unique();
             $table->binary('documents');
             $table->enum('statusCompany', ['Activa', 'Inactiva'])->default('Inactiva');

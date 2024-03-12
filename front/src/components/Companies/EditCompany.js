@@ -14,7 +14,8 @@ const EditCompany = () => {
 	const [phone, setPhone] = useState("");
 	const [errorsPhone, setErrorsPhone] = useState([]);
 	const [nit, setNit] = useState("");
-	const [statusCompany, setStatusCompany] = useState("Activa");
+	const [email, setEmail] = useState("");
+	const [statusCompany, setStatusCompany] = useState("Inactiva");
 	const [selectedServices, setSelectedServices] = useState([]);
 	const { id } = useParams();
 	const navigate = useNavigate();
@@ -41,6 +42,7 @@ const EditCompany = () => {
 		setAddress(response.data.address);
 		setPhone(response.data.phone);
 		setNit(response.data.nit);
+		setEmail(response.data.email);
 		setStatusCompany(response.data.statusCompany);
 		setSelectedServices(response.data.services.map((service) => service.id));
 	};
@@ -49,7 +51,7 @@ const EditCompany = () => {
 		e.preventDefault();
 
 		// Validar que todos los campos estén llenos
-		if (!name || !address || !nit || !phone || selectedServices.length === 0) {
+		if (!name || !address || !nit || !email || !phone || selectedServices.length === 0) {
 			toast.error("Por favor, complete todos los campos del formulario.");
 			return;
 		}
@@ -69,6 +71,7 @@ const EditCompany = () => {
 			address: address,
 			phone: phone,
 			nit: nit,
+			email: email,
 			statusCompany: statusCompany,
 			idService: selectedServices,
 		});
@@ -159,6 +162,16 @@ const EditCompany = () => {
 								</div>
 							)}
 						</div>
+						<div className="mb-3">
+                            <label className="form-label fs-5">Correo Electrónico</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+								required
+                            />
+                        </div>
 						<div className="mb-3">
 							<label className="form-label fs-5">Servicios</label>
 							{services &&

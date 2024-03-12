@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\CompanyCreationNotification;
+use App\Mail\CompanyApproved;
+use App\Mail\CompanyRejected;
 use App\Models\Company;
 use App\Mail\CompanyVerificationMail;
 use App\Models\User;
@@ -17,7 +18,7 @@ class CompanyController extends Controller
     public function index()
     {
         // Obtener todas las compañías, independientemente de su estado
-        $company= Company::with('services')->get();
+        $company = Company::with('services')->get();
 
         // Devolver todas las compañías
         return response()->json($company);
@@ -31,9 +32,10 @@ class CompanyController extends Controller
                 'address' => 'required',
                 'nit' => 'required|unique:companies',
                 'phone' => 'required|unique:companies',
-                'documents' => 'required|mimes:pdf', // Añade la validación para que el documento sea un PDF
+                'email' => 'required|email|unique:companies',
+                'documents' => 'required|mimes:pdf',
                 'statusCompany' => 'required',
-                'idService' => 'required|array|min:1', // Asegura que al menos un servicio esté seleccionado
+                'idService' => 'required|array|min:1',
             ], [
                 'name.required' => 'El nombre de la compañía es obligatorio.',
                 'address.required' => 'La dirección de la compañía es obligatoria.',
@@ -41,6 +43,8 @@ class CompanyController extends Controller
                 'nit.unique' => 'Ya existe una compañia registrada con este NIT.',
                 'phone.required' => 'El número de teléfono de la compañía es obligatorio.',
                 'phone.unique' => 'Ya existe una compañia registrada con este número de teléfono.',
+                'email.required' => 'El correo electrónico de la compañía es obligatorio.',
+                'email.unique' => 'Ya existe una compañia registrada con este correo electrónico',
                 'documents.required' => 'Por favor, seleccione un documento.',
                 'documents.mimes' => 'El archivo debe ser un documento PDF.',
                 'statusCompany.required' => 'El estado de la compañía es obligatorio.',
@@ -49,18 +53,18 @@ class CompanyController extends Controller
                 'idService.min' => 'Seleccione al menos un servicio.',
             ]);
         } catch (ValidationException $e) {
-            // Captura la excepción de validación
             $errors = $e->errors();
             $response = [
                 'nameError' => isset($errors['name']) ? $errors['name'][0] : null,
                 'addressError' => isset($errors['address']) ? $errors['address'][0] : null,
                 'nitError' => isset($errors['nit']) ? $errors['nit'][0] : null,
                 'phoneError' => isset($errors['phone']) ? $errors['phone'][0] : null,
+                'emailError' => isset($errors['email']) ? $errors['email'][0] : null,
                 'documentsError' => isset($errors['documents']) ? $errors['documents'][0] : null,
                 'statusCompanyError' => isset($errors['statusCompany']) ? $errors['statusCompany'][0] : null,
                 'idServiceError' => isset($errors['idService']) ? $errors['idService'][0] : null,
             ];
-            return response()->json($response, 422); // Devuelve el error como JSON
+            return response()->json($response, 422);
         }
 
         // Llenar los campos de la compañía
@@ -70,6 +74,7 @@ class CompanyController extends Controller
         $company->address = $request->address;
         $company->phone = $request->phone;
         $company->nit = $request->nit;
+        $company->email = $request->email;
         $company->statusCompany = $request->statusCompany;
 
         if ($request->hasFile('documents')) {
@@ -114,15 +119,8 @@ class CompanyController extends Controller
 
         $nameCompany = $company->name;
 
-        $roleIds = [1];
-
-        // Recupera los usuarios que son Super Administradores
-        $users = User::whereIn('idRole', $roleIds)->get();
-
-        // Envía el correo electrónico a cada uno de ellos
-        foreach ($users as $user) {
-            Mail::to($user->email)->send(new CompanyCreationNotification($nameCompany));
-        }
+        // Enviar el correo electrónico a la dirección de correo electrónico de la compañía registrada
+        Mail::to($company->email)->send(new CompanyApproved($nameCompany));
 
         return response()->json(['message' => 'La compañía ha sido aprobada exitosamente'], 200);
     }
@@ -130,6 +128,13 @@ class CompanyController extends Controller
     public function rejectCompany(Request $request, string $id)
     {
         $company = Company::findOrFail($id);
+
+        // Obtener el motivo de rechazo del cuerpo de la solicitud
+        $rejectionReason = $request->input('rejection_reason');
+        $nameCompany = $company->name;
+
+        // Enviar correo electrónico de rechazo a la compañía
+        Mail::to($company->email)->send(new CompanyRejected($nameCompany, $rejectionReason));
 
         // Eliminar los registros relacionados en la tabla companies_services
         $company->services()->detach();
@@ -195,6 +200,7 @@ class CompanyController extends Controller
                 'address' => 'required',
                 'nit' => 'required|unique:companies,nit,' . $id,
                 'phone' => 'required|unique:companies,phone,' . $id,
+                'email' => 'required|email|unique:companies,email,' . $id,
                 'statusCompany' => 'required',
                 'idService' => 'required|array|min:1',
             ], [
@@ -204,6 +210,8 @@ class CompanyController extends Controller
                 'nit.unique' => 'Ya existe una compañía registrada con este NIT.',
                 'phone.required' => 'El número de teléfono de la compañía es obligatorio.',
                 'phone.unique' => 'Ya existe una compañía registrada con este número de teléfono.',
+                'email.required' => 'El correo electrónico de la compañía es obligatorio.',
+                'email.unique' => 'Ya existe una compañia registrada con este correo electrónico',
                 'statusCompany.required' => 'El estado de la compañía es obligatorio.',
                 'idService.required' => 'Seleccione al menos un servicio.',
                 'idService.array' => 'Los servicios deben ser proporcionados como un arreglo.',
@@ -217,6 +225,7 @@ class CompanyController extends Controller
                 'addressError' => isset($errors['address']) ? $errors['address'][0] : null,
                 'nitError' => isset($errors['nit']) ? $errors['nit'][0] : null,
                 'phoneError' => isset($errors['phone']) ? $errors['phone'][0] : null,
+                'emailError' => isset($errors['email']) ? $errors['email'][0] : null,
                 'statusCompanyError' => isset($errors['statusCompany']) ? $errors['statusCompany'][0] : null,
                 'idServiceError' => isset($errors['idService']) ? $errors['idService'][0] : null,
             ];
@@ -231,6 +240,7 @@ class CompanyController extends Controller
         $company->address = $request->address;
         $company->phone = $request->phone;
         $company->nit = $request->nit;
+        $company->email = $request->email;
         $company->statusCompany = $request->statusCompany;
 
         //Guarda cambios
