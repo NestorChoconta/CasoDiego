@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import CreateCompany from "../Companies/CreateCompany";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
     const dispatch = useDispatch();
@@ -12,9 +15,10 @@ function Login() {
     const [verification_code, setVerificationCode] = useState("");
     const [error, setError] = useState("");
     const [token, setToken] = useState("");
-    const [showVerification, setShowVerification] = useState(false); // Controla si se muestra el formulario de verificación
-    const [verificationAlert, setVerificationAlert] = useState(""); // Controla la visibilidad de la alerta de verificación
+    const [verificationAlert, setVerificationAlert] = useState("");
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
+    const [showVerification, setShowVerification] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,7 +29,7 @@ function Login() {
             });
 
             let data = response.data;
-            const { access_token, verification_code } = response.data; // Obtener el código de verificación de la respuesta
+            const { access_token, verification_code } = response.data;
             setToken(access_token);
             Cookies.set("casoDiego", access_token);
 
@@ -44,7 +48,6 @@ function Login() {
             setVerificationAlert(verification_code);
             setVerificationAlert("El codigo fue enviado a su correo electronico");
 
-            // Mostrar el formulario de verificación después de iniciar sesión
             setShowVerification(true);
         } catch (error) {
             setError("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
@@ -55,15 +58,13 @@ function Login() {
     const handleVerificationSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Obtener el token de acceso almacenado en las cookies o en el almacenamiento local
             const token = Cookies.get("casoDiego");
     
-            // Realizar la solicitud al servidor para verificar el código
             const response = await axios.post("http://localhost:8000/api/verify-code", {
                 verification_code: verification_code,
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}` // Incluir el token de acceso en el encabezado
+                    Authorization: `Bearer ${token}`
                 }
             });
     
@@ -84,7 +85,20 @@ function Login() {
             console.log(error);
         }
     };
-    
+
+    const ModalCloseSinNoti = () =>{
+        setShowModal(false)
+    }
+
+
+    const closeModal = () => {
+        setShowModal(false);
+        toast.success("¡La compañía fue registrada y está lista para aprobación!");
+    };
+
+    const closeVerificationModal = () => {
+        setShowVerification(false);
+    };
 
     return (
         <div className="container-fluid vh-100 d-flex align-items-center justify-content-center">
@@ -120,33 +134,63 @@ function Login() {
                         Iniciar sesión
                     </button><br/><br/>
                 </form>
-                {/* Mostrar la alerta de verificación */}
+                <div style={{ marginLeft: 'auto' }}>
+                    <Link to="#" className="btn btn-link btn-md mx-1" onClick={() => setShowModal(true)}>
+                        ¿Deseas registrar tu compañía?
+                    </Link>
+                </div>
                 {verificationAlert && (
                     <div className="alert alert-info" role="alert">
                         Código de verificación: {verificationAlert}
                     </div>
                 )}
-                {/* Mostrar el formulario de verificación después de iniciar sesión */}
-                {showVerification && (
-                    <form onSubmit={handleVerificationSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="verification_code" className="form-label fs-5">
-                                Código de verificación:
-                            </label>
-                            <input
-                                type="text"
-                                id="verification_code"
-                                value={verification_code}
-                                onChange={(e) => setVerificationCode(e.target.value)}
-                                className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
-                            />
-                        </div>
-                        <button type="submit" className="btn btn-primary">
-                            Verificar Código
-                        </button>
-                    </form>
-                )}
             </div>
+            {showVerification && (
+                <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Verificación</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={closeVerificationModal}></button>
+                            </div>
+                            <div className="modal-body">
+                                <form onSubmit={handleVerificationSubmit}>
+                                    <div className="mb-3">
+                                        <label htmlFor="verification_code" className="form-label fs-5">
+                                            Código de verificación:
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="verification_code"
+                                            value={verification_code}
+                                            onChange={(e) => setVerificationCode(e.target.value)}
+                                            className="form-control border-0 rounded-0 rounded-end-2 rounded-start-2 border-bottom"
+                                        />
+                                    </div>
+                                    <button type="submit" className="btn btn-primary">
+                                        Verificar Código
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showModal && (
+                <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <div className="modal-dialog modal-dialog-centered modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Registrar compañía</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={() => ModalCloseSinNoti()}></button>
+                            </div>
+                            <div className="modal-body">
+                            <CreateCompany closeModal={() => closeModal()} ModalCloseSinNoti={() => ModalCloseSinNoti()} /><br/><br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
