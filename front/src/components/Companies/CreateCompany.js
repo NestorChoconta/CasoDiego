@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const endpoint = "http://localhost:8000/api"; // Base URL para las solicitudes API
 
-const CreateCompany = ({ closeModal, ModalCloseSinNoti}) => {
+const CreateCompany = ({ closeModal, ModalCloseSinNoti, handleCompanyRegistered}) => {
     const [services, setServices] = useState([]);
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
@@ -39,6 +39,7 @@ const CreateCompany = ({ closeModal, ModalCloseSinNoti}) => {
         setFileInput(e.target.files[0]);
         setDocuments(e.target.value);
     };
+
 
     // Manejar la validación del código de verificación
     const handleVerificationSubmit = async (e) => {
@@ -88,6 +89,7 @@ const CreateCompany = ({ closeModal, ModalCloseSinNoti}) => {
                 console.log(response);
 
                 closeModal();
+                handleCompanyRegistered();
                 navigate(-1);
             } catch (error) {
                 if (error.response && error.response.status === 422) {
@@ -112,6 +114,7 @@ const CreateCompany = ({ closeModal, ModalCloseSinNoti}) => {
     const handleGoBack = () => {
         ModalCloseSinNoti()
     };
+    
     
 
     // función para manejar el cambio en la selección de servicios

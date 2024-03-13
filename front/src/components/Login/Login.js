@@ -5,7 +5,7 @@ import { addUser } from "../../redux/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CreateCompany from "../Companies/CreateCompany";
-import { toast } from "react-toastify";
+import { ToastContainer ,toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
@@ -49,6 +49,7 @@ function Login() {
             setVerificationAlert("El codigo fue enviado a su correo electronico");
 
             setShowVerification(true);
+
         } catch (error) {
             setError("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
             console.log(error);
@@ -75,7 +76,7 @@ function Login() {
                 navigate("/MenuSuperAdmin");
             } else if (idRole === 2) {
                 navigate("/MenuAdmin");
-            } else if (idRole === 3) {
+            } else if (idRole === 3) {  
                 navigate("/MenuEmple");
             } else {
                 navigate("/");
@@ -93,6 +94,9 @@ function Login() {
 
     const closeModal = () => {
         setShowModal(false);
+    };
+
+    const handleCompanyRegistered = () => {
         toast.success("¡La compañía fue registrada y está lista para aprobación!");
     };
 
@@ -185,12 +189,13 @@ function Login() {
                                 <button type="button" className="btn-close" aria-label="Close" onClick={() => ModalCloseSinNoti()}></button>
                             </div>
                             <div className="modal-body">
-                            <CreateCompany closeModal={() => closeModal()} ModalCloseSinNoti={() => ModalCloseSinNoti()} /><br/><br/>
+                            <CreateCompany closeModal={() => closeModal()} ModalCloseSinNoti={() => ModalCloseSinNoti()} handleCompanyRegistered={() => handleCompanyRegistered()} /><br/><br/>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
+			<ToastContainer position="top-right" autoClose={3000} /> {/* Agrega el ToastContainer aquí */}
         </div>
     );
 }
