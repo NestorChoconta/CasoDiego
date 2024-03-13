@@ -22,6 +22,7 @@ const ListCompaniesForAproved = () => {
 	const [selectedCompanyId, setSelectedCompanyId] = useState(null);
     const [rejectionReason, setRejectionReason] = useState(""); //Almacena el mensaje de rechazo
     const [showRejectionModal, setShowRejectionModal] = useState(false); // Estado para controlar la visibilidad del modal de rechazo
+    const [showRejectionError, setShowRejectionError] = useState(false); // Estado para controlar si se muestra el error de rechazo
 
 	useEffect(() => {
 		if (Cookies.get("casoDiego") === undefined) {
@@ -82,6 +83,16 @@ const ListCompaniesForAproved = () => {
 
     const submitRejectionReason = async () => {
         try {
+			// Verifica si el motivo de rechazo está vacío
+			if (rejectionReason.trim() === "") {
+                // Mostrar el error si el motivo de rechazo está vacío
+                setShowRejectionError(true);
+                return;
+            }
+
+            // Si el motivo no está vacío, oculta cualquier mensaje de error anterior
+            setShowRejectionError(false);
+
             // Enviar solicitud para rechazar la compañía con el motivo proporcionado
             await axios.delete(`${endpoint}/company/${selectedCompanyId}/reject`, {
                 data: {
@@ -312,10 +323,14 @@ const ListCompaniesForAproved = () => {
                                                 <div className="modal-body">
                                                     <div className="form-group">
                                                         <textarea
-                                                            className="form-control"
+                                                            className={`form-control ${showRejectionError ? 'is-invalid' : ''}`}
                                                             value={rejectionReason}
-                                                            onChange={(e) => setRejectionReason(e.target.value)}
+                                                            onChange={(e) => {
+																setRejectionReason(e.target.value);
+																setShowRejectionError(false); // Ocultar el error al comenzar a escribir
+															}}
                                                         ></textarea>
+														{showRejectionError && <div className="invalid-feedback">Por favor escriba el motivo por el cual no se puede aprobar la compañía.</div>}
                                                     </div>
                                                 </div>
                                                 <div className="modal-footer">
