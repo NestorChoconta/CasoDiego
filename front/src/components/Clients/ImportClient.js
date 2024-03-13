@@ -21,7 +21,7 @@ const ImportClient = ({ closeModal, onImportFinish }) => {
 		}
 	}, []);
 
-	//Para el boton de cancelar 
+	//Para el boton de cancelar
 	const closeModalAndNavigate = () => {
 		closeModal();
 		navigate("/clientesSuper");
@@ -54,19 +54,25 @@ const ImportClient = ({ closeModal, onImportFinish }) => {
 			const formData = new FormData();
 			formData.append("file", file);
 
-			await axios.post(`${endpoint}/importarClientes`, formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			});
+			const response = await axios.post(
+				`${endpoint}/importarClientes`,
+				formData,
+				{
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				}
+			);
 
-			closeModal();
-			
+			if (!response.data.message === "Importación exitosa") {
+				toast.error("No se puede realizar la importación");
+				closeModal();
+			} else {
+				onImportFinish();
+			}
 		} catch (error) {
 			console.error("Error al importar el archivo", error);
-		} finally {
-			// Notificar a ListClients que la importación ha finalizado
-			onImportFinish();
+			toast.error("No se puede realizar la importación");
 		}
 	};
 
@@ -98,7 +104,7 @@ const ImportClient = ({ closeModal, onImportFinish }) => {
 						</div>
 						<div className="mb-3 text-center">
 							<Link
-								onClick={closeModalAndNavigate}
+								onClick={closeModal}
 								className="btn btn-warning btn-md mx-1"
 							>
 								Cancelar

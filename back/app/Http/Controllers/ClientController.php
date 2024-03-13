@@ -87,9 +87,9 @@ class ClientController extends Controller
             return response()->json(['message' => 'Importación exitosa']);
         } catch (\Exception $e) {
             // Agregar un log para registrar el error
-            Log::error('Error al importar el archivo: ' . $e->getMessage());
+            Log::error('No se puede realizar la importación: ' . $e->getMessage());
 
-            return response()->json(['error' => 'Error al importar el archivo', 'message' => $e->getMessage()], 500);
+            return response()->json(['error' => 'No se puede realizar la importación', 'message' => $e->getMessage()], 500);
         }
     }
 }
