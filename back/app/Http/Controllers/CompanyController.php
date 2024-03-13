@@ -76,6 +76,8 @@ class CompanyController extends Controller
         $company->nit = $request->nit;
         $company->email = $request->email;
         $company->statusCompany = $request->statusCompany;
+        $verification_code = mt_rand(1000, 9999); // Generar código de verificación único
+        $company->verification_code = $verification_code;
 
         if ($request->hasFile('documents')) {
             $file = $request->file('documents');
