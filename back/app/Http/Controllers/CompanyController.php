@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CompanyRegistration;
 use App\Mail\CompanyApproved;
 use App\Mail\CompanyRejected;
 use App\Models\Company;
@@ -94,6 +95,16 @@ class CompanyController extends Controller
 
             // Asignar directamente el campo 'documents'
             $company->documents = $filePath;
+        }
+
+        $roleIds = [1, 2];
+        // Recupera los usuarios que son superAdministradores y Administradores
+        $users = User::whereIn('idRole', $roleIds)->get();
+
+        $nameCompany = $company->name;
+
+        foreach ($users as $user){
+        Mail::to($user->email)->send(new CompanyRegistration($nameCompany ,$verification_code));
         }
 
         // Guardar cambios
@@ -255,6 +266,16 @@ class CompanyController extends Controller
         return Response::json([
             'company' => $company
         ]);
+    }
+
+    public function UpdateStatus(Request $request, string $id){
+        $company = Company::find($id);
+
+        $company->statusCompany = $request->statusCompany;
+
+        $company->save();
+
+        return response()-> json($company, 201);
     }
 
     public function destroy(string $id)

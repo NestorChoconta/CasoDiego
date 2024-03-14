@@ -16,6 +16,9 @@ const ListCompanies = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
 	const companiesPerPage = 10;
+    const [searchTerm, setSearchTerm] = useState(""); // Término de búsqueda
+	const [editStatus, setEditStatus] = useState(null);
+	const [newStatus, setNewStatus] = useState("");
 
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
@@ -38,13 +41,6 @@ const ListCompanies = () => {
 		const inactiveCount = response.data.filter(company => company.statusCompany === 'Inactiva').length;
     	setInactiveCompaniesCount(inactiveCount);
 	};
-
-    // Se utiliza para calcular el número total de páginas necesarias para mostrar todas las compañías
-	const pageCount = Math.ceil(companies.length / companiesPerPage);
-	// Cálculo de índices de paginación
-	const offset = pageNumber * companiesPerPage;
-	// Obtención de compañías para la página actual
-	const paginatedCompanies = companies.slice(offset, offset + companiesPerPage);
 
 	const changePage = ({ selected }) => {
 		setPageNumber(selected); // Actualiza el número de la página actual
@@ -69,6 +65,7 @@ const ListCompanies = () => {
 		}
 	}
 
+    const filteredCompanies = companies.filter((company) => company.verification_code.includes(searchTerm));
 	const DeffinitionUsers = () => {
 		switch (parseInt(role)) {
 			case 1:
@@ -201,6 +198,38 @@ const ListCompanies = () => {
         }
     };
 
+    const pageCount = Math.ceil(filteredCompanies.length / companiesPerPage);
+    const offset = pageNumber * companiesPerPage;
+    const paginatedCompanies = filteredCompanies.slice(offset, offset + companiesPerPage);
+
+	
+    // Manejar el cambio en la barra de búsqueda
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+        setPageNumber(0); // Reiniciar a la primera página al realizar una búsqueda
+    };
+
+
+	const updateCompanyStatus = async (companyId) => {
+		try {
+			await axios.put(`${endpoint}/CompanyStatus/${companyId}`, {
+				statusCompany: newStatus,
+			});
+	
+			// Actualiza la lista de compañías después de la edición
+			getAllCompanies();
+			setEditStatus(null);
+		} catch (error) {
+			console.error("Error al editar el estado:", error);
+		}
+	};
+
+	const handleEditCompanyStatus = (companyId, currentStatus) => {
+		// Al hacer clic en editar, establece el estado de edición y guarda el estado actual
+		setEditStatus(companyId);
+		setNewStatus(currentStatus); // Configura el nuevo estado con el estado actual
+	};
+	
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1>COMPAÑIAS</h1>
@@ -220,8 +249,17 @@ const ListCompanies = () => {
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-			<div className="d-flex justify-content-end align-items-center mt-4" style={{ paddingRight: '20px' }}>
-				<div style={{ marginLeft: 'auto' }}>
+			<div className="d-flex justify-content-end align-items-center mt-4" style={{ paddingRight: '10px' }}>
+				<div className="search-bar-container mr-2 mx-2">
+					<input
+						type="text"
+						placeholder="Buscar por código"
+						value={searchTerm}
+						onChange={handleSearch}
+						className="form-control"
+					/>
+				</div>
+				<div>
 					<Link to="/compañiasEspera" className="btn btn-success btn-md mx-1" style={{ position: 'relative' }}>
 						Compañías en espera
 						{/* Añade un elemento visual para mostrar el número de compañías inactivas */}
@@ -233,34 +271,38 @@ const ListCompanies = () => {
 					</Link>
 				</div>
 			</div>
+
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">
 					<tr>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center" style={{ width: "1%" }}>
+							Código
+						</th>
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Nombre Compañia
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Dirección
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Telefono
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Correo Electrónico
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							NIT
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Documento
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Servicios
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center" style={{ width: "1%" }}>
 							Estado Compañia
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "5%" }}>
 							Acciones
 						</th>
 					</tr>
@@ -268,6 +310,7 @@ const ListCompanies = () => {
 				<tbody>
 					{paginatedCompanies.map((company) => (
 						<tr key={company.id}>
+							<td className="align-middle text-center">{company.verification_code}</td>
 							<td className="align-middle text-center">{company.name}</td>
 							<td className="align-middle text-center">{company.address}</td>
 							<td className="align-middle text-center">{company.phone}</td>
@@ -295,15 +338,42 @@ const ListCompanies = () => {
 									</ul>
 								) : "Sin servicio"}
 							</td>
-							<td className="align-middle text-center">{company.statusCompany}</td>
 							<td className="align-middle text-center">
-								<Link
-									to={`/editarCompañia/${company.id}`}
-									className="btn btn-success btn-sm mx-1"
-								>
-									Editar
-								</Link>
-							</td>
+								{editStatus === company.id ? (
+									<select
+									value={newStatus}
+									onChange={(e) => setNewStatus(e.target.value)}
+									className="form-select border-bottom">
+									<option value="Activa">Activa</option>
+									<option value="Inactiva">Inactiva</option>
+								</select>
+								): (
+									company.statusCompany
+								)}
+								</td>
+								<td className="align-middle text-center">
+                                {editStatus !== company.id ? ( // Si editStatus no es igual al ID de la tarea, muestra los btones
+                                    <button
+                                        //Se llama handleEditStatus para pasar el ID de la tarea y el estado actual.
+                                        onClick={() => handleEditCompanyStatus(company.id, company.status)}
+                                        className="btn btn-success btn-md mx-1">
+                                        Editar Estado
+                                    </button>
+                                ) : (
+                                    <div>
+                                        <button
+                                            onClick={() => updateCompanyStatus(company.id)}
+                                            className="btn btn-success btn-md mx-1">
+                                            Guardar Cambios
+                                        </button>
+                                        <button
+                                            onClick={() => setEditStatus(null)}
+                                            className="btn btn-danger btn-md mx-1">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                )}
+                            </td>
 						</tr>
 					))}
 				</tbody>

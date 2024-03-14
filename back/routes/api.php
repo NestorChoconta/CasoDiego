@@ -46,6 +46,7 @@ Route::controller(CompanyController::class)->group(function () {
     Route::post('/company', 'VerifyCreateCompany'); // Ruta para crear el codigo y enviarlo por correo
     Route::get('/company/{id}', 'show');
     Route::put('/company/{id}', 'update');
+    Route::put('/CompanyStatus/{id}', 'UpdateStatus');
     Route::get('/companies/{id}/download', 'downloadDocument');
 });
 
