@@ -90,7 +90,6 @@ const CreateCompany = ({ closeModal, ModalCloseSinNoti, handleCompanyRegistered}
 
                 closeModal();
                 handleCompanyRegistered();
-                navigate(-1);
             } catch (error) {
                 if (error.response && error.response.status === 422) {
                     const { nitError, phoneError } = error.response.data;

@@ -12,7 +12,7 @@ const ListCompaniesForAproved = () => {
     const [companies, setCompanies] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const navigate = useNavigate();
-    const companiesPerPage = 11;
+    const companiesPerPage = 6;
     const token = Cookies.get("casoDiego");
     const decodificacionToken = jwtDecode(token);
     const role = decodificacionToken.sub;

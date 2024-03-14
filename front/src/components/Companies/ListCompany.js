@@ -216,6 +216,18 @@ const ListCompanies = () => {
 				statusCompany: newStatus,
 			});
 	
+			if (newStatus === "Inactiva") {
+				toast.warn("La compañía ahora está en espera", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				});
+			}
+
 			// Actualiza la lista de compañías después de la edición
 			getAllCompanies();
 			setEditStatus(null);
