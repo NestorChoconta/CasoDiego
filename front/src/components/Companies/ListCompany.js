@@ -17,6 +17,8 @@ const ListCompanies = () => {
 	const navigate = useNavigate();
 	const companiesPerPage = 10;
     const [searchTerm, setSearchTerm] = useState(""); // Término de búsqueda
+	const [editStatus, setEditStatus] = useState(null);
+	const [newStatus, setNewStatus] = useState("");
 
 	const token = Cookies.get("casoDiego");
 	const decodificacionToken = jwtDecode(token);
@@ -206,6 +208,28 @@ const ListCompanies = () => {
         setSearchTerm(event.target.value);
         setPageNumber(0); // Reiniciar a la primera página al realizar una búsqueda
     };
+
+
+	const updateCompanyStatus = async (companyId) => {
+		try {
+			await axios.put(`${endpoint}/CompanyStatus/${companyId}`, {
+				statusCompany: newStatus,
+			});
+	
+			// Actualiza la lista de compañías después de la edición
+			getAllCompanies();
+			setEditStatus(null);
+		} catch (error) {
+			console.error("Error al editar el estado:", error);
+		}
+	};
+
+	const handleEditCompanyStatus = (companyId, currentStatus) => {
+		// Al hacer clic en editar, establece el estado de edición y guarda el estado actual
+		setEditStatus(companyId);
+		setNewStatus(currentStatus); // Configura el nuevo estado con el estado actual
+	};
+	
 	return (
 		<div className="container-fluid mt-4 px-md-5">
 			<h1>COMPAÑIAS</h1>
@@ -251,34 +275,34 @@ const ListCompanies = () => {
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">
 					<tr>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center" style={{ width: "1%" }}>
 							Código
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Nombre Compañia
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Dirección
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Telefono
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Correo Electrónico
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							NIT
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Documento
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Servicios
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center" style={{ width: "1%" }}>
 							Estado Compañia
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "5%" }}>
 							Acciones
 						</th>
 					</tr>
@@ -314,15 +338,42 @@ const ListCompanies = () => {
 									</ul>
 								) : "Sin servicio"}
 							</td>
-							<td className="align-middle text-center">{company.statusCompany}</td>
 							<td className="align-middle text-center">
-								<Link
-									to={`/editarCompañia/${company.id}`}
-									className="btn btn-success btn-sm mx-1"
-								>
-									Editar
-								</Link>
-							</td>
+								{editStatus === company.id ? (
+									<select
+									value={newStatus}
+									onChange={(e) => setNewStatus(e.target.value)}
+									className="form-select border-bottom">
+									<option value="Activa">Activa</option>
+									<option value="Inactiva">Inactiva</option>
+								</select>
+								): (
+									company.statusCompany
+								)}
+								</td>
+								<td className="align-middle text-center">
+                                {editStatus !== company.id ? ( // Si editStatus no es igual al ID de la tarea, muestra los btones
+                                    <button
+                                        //Se llama handleEditStatus para pasar el ID de la tarea y el estado actual.
+                                        onClick={() => handleEditCompanyStatus(company.id, company.status)}
+                                        className="btn btn-success btn-md mx-1">
+                                        Editar Estado
+                                    </button>
+                                ) : (
+                                    <div>
+                                        <button
+                                            onClick={() => updateCompanyStatus(company.id)}
+                                            className="btn btn-success btn-md mx-1">
+                                            Guardar Cambios
+                                        </button>
+                                        <button
+                                            onClick={() => setEditStatus(null)}
+                                            className="btn btn-danger btn-md mx-1">
+                                            Cancelar
+                                        </button>
+                                    </div>
+                                )}
+                            </td>
 						</tr>
 					))}
 				</tbody>

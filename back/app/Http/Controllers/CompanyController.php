@@ -268,6 +268,16 @@ class CompanyController extends Controller
         ]);
     }
 
+    public function UpdateStatus(Request $request, string $id){
+        $company = Company::find($id);
+
+        $company->statusCompany = $request->statusCompany;
+
+        $company->save();
+
+        return response()-> json($company, 201);
+    }
+
     public function destroy(string $id)
     {
         //

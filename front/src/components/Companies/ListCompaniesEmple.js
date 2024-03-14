@@ -15,6 +15,7 @@ const ListCompaniesEmp = () => {
 	const [pageNumber, setPageNumber] = useState(0);
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState(""); // Término de búsqueda
 	const companiesPerPage = 10;
 
 	const token = Cookies.get("casoDiego");
@@ -39,12 +40,17 @@ const ListCompaniesEmp = () => {
     	setInactiveCompaniesCount(inactiveCount);
 	};
 
+
+	
+    const filteredCompanies = companies.filter((company) => company.name.includes(searchTerm));
+
     // Se utiliza para calcular el número total de páginas necesarias para mostrar todas las compañías
-	const pageCount = Math.ceil(companies.length / companiesPerPage);
+    const pageCount = Math.ceil(filteredCompanies.length / companiesPerPage);
 	// Cálculo de índices de paginación
-	const offset = pageNumber * companiesPerPage;
+    const offset = pageNumber * companiesPerPage;
 	// Obtención de compañías para la página actual
-	const paginatedCompanies = companies.slice(offset, offset + companiesPerPage);
+    const paginatedCompanies = filteredCompanies.slice(offset, offset + companiesPerPage);
+
 
 	const changePage = ({ selected }) => {
 		setPageNumber(selected); // Actualiza el número de la página actual
@@ -54,6 +60,14 @@ const ListCompaniesEmp = () => {
 	const toggleSidebar = () => {
 		setIsSidebarOpen(!isSidebarOpen);
 	};
+
+	// Manejar el cambio en la barra de búsqueda
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+        setPageNumber(0); // Reiniciar a la primera página al realizar una búsqueda
+    };
+
+	
 
 
 	const DeffinitionClients = () => {
@@ -189,41 +203,51 @@ const ListCompaniesEmp = () => {
 				☰ {/* Icono de hamburguesa */}
 			</button>
 			<Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+			<div className="search-bar-container mr-2 mx-2" style={{ width: "20%" }}>
+				<input
+					type="text"
+					placeholder="Buscar Compañia por Nombre"
+					value={searchTerm}
+					onChange={handleSearch}
+					className="form-control"
+				/>
+			</div>
 			<table className="table table-striped table-bordered shadow-lg table-hover mt-4">
 				<thead className="thead-light">
 					<tr>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
+							Codigo
+						</th>
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Nombre Compañia
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Dirección
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Telefono
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Correo Electrónico
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							NIT
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Documento
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Servicios
 						</th>
-						<th scope="col" className="col-1 align-middle text-center">
+						<th scope="col" className="col-1 align-middle text-center"style={{ width: "1%" }}>
 							Estado Compañia
-						</th>
-						<th scope="col" className="col-1 align-middle text-center">
-							Acciones
 						</th>
 					</tr>
 				</thead>
 				<tbody>
 					{paginatedCompanies.map((company) => (
 						<tr key={company.id}>
+							<td className="align-middle text-center">{company.verification_code}</td>
 							<td className="align-middle text-center">{company.name}</td>
 							<td className="align-middle text-center">{company.address}</td>
 							<td className="align-middle text-center">{company.phone}</td>
@@ -252,14 +276,6 @@ const ListCompaniesEmp = () => {
 								) : "Sin servicio"}
 							</td>
 							<td className="align-middle text-center">{company.statusCompany}</td>
-							<td className="align-middle text-center">
-								<Link
-									to={`/editarCompañia/${company.id}`}
-									className="btn btn-success btn-sm mx-1"
-								>
-									Editar
-								</Link>
-							</td>
 						</tr>
 					))}
 				</tbody>
