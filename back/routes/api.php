@@ -43,9 +43,8 @@ Route::controller(CompanyController::class)->group(function () {
     Route::post('/company/verify', 'store');
     Route::post('/company/{id}/approve', 'approveCompany'); // Ruta para aprobar una compañía
     Route::delete('/company/{id}/reject', 'rejectCompany'); // Ruta para rechazar y eliminar una compañía
-    Route::post('/company', 'VerifyCreateCompany'); // Ruta para crear el codigo y enviarlo por correo
     Route::get('/company/{id}', 'show');
-    Route::put('/company/{id}', 'update');
+    //Route::put('/company/{id}', 'update');
     Route::put('/CompanyStatus/{id}', 'UpdateStatus');
     Route::get('/companies/{id}/download', 'downloadDocument');
 });

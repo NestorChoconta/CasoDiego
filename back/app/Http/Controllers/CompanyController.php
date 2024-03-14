@@ -6,7 +6,6 @@ use App\Mail\CompanyRegistration;
 use App\Mail\CompanyApproved;
 use App\Mail\CompanyRejected;
 use App\Models\Company;
-use App\Mail\CompanyVerificationMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -158,26 +157,6 @@ class CompanyController extends Controller
         return response()->json(['message' => 'La compañía ha sido rechazada y eliminada exitosamente'], 200);
     }
 
-    public function VerifyCreateCompany(Request $request)
-    {
-        $verification_code = mt_rand(100000, 999999); // Generar código de verificación único
-
-        $companyName =$request->input('name');
-        $roleIds = [1, 2];
-        // Recupera los usuarios que son superAdministradores y Administradores
-        $users = User::whereIn('idRole', $roleIds)->get();
-
-        // Envía el correo electrónico a cada uno de ellos
-        foreach ($users as $user) {
-            Mail::to($user->email)->send(new CompanyVerificationMail($verification_code, $companyName));
-        }
-
-        // Envía el código de verificación en la respuesta
-        return Response::json([
-            'verification_code' => $verification_code
-        ]);
-    }
-
     public function downloadDocument(string $id)
     {
         $company = Company::find($id);
@@ -206,7 +185,7 @@ class CompanyController extends Controller
         return $company;
     }
 
-    public function update(Request $request, string $id)
+    /*public function update(Request $request, string $id)
     {
         try {
             $request->validate([
@@ -266,7 +245,7 @@ class CompanyController extends Controller
         return Response::json([
             'company' => $company
         ]);
-    }
+    }*/
 
     public function UpdateStatus(Request $request, string $id){
         $company = Company::find($id);
