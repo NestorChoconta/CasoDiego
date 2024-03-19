@@ -26,6 +26,7 @@ import ListCompany from "./components/Companies/ListCompany";
 import CompaniesForAproved from "./components/Companies/CompaniesForAproved";
 import ListCompaniesEmple from './components/Companies/ListCompaniesEmple';
 import CreateCompany from "./components/Companies/CreateCompany";
+import ListServices from "./components/Services/ListServices"
 //import EditCompany from "./components/Companies/EditCompany";
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
 					<Route path="/crearCompañia" element={<CreateCompany />} />
 					<Route path="/compañiasEspera" element={<CompaniesForAproved />} />
 					<Route path="/compañiasEmple" element={<ListCompaniesEmple />} />
+					<Route path="/Servicios" element={<ListServices />} />
 					{/*<Route path="/editarCompañia/:id" element={<EditCompany />} />*/}
 				</Routes>
 			</BrowserRouter>

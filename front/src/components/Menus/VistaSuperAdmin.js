@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import usuarios from '../../img/usuarios.png'
 import clientes from '../../img/clientes.png'
 import compañias from '../../img/compañias.png'
+import servicios from '../../img/servicios.png'
 import LogoutButton from "../Login/LogouthButton"
 import tareas from '../../img/tareas.png'
 import Cookies from "js-cookie"
@@ -62,16 +63,19 @@ const MenuSuperAdmin = () => {
 						</div>
 					</div>
 				</div>
-				<div className="col-md-4"><br/>
-					<div className="">
-						<img src="" className="" alt=""/>
+				<div className="col-md-4 mb-4" style={{ marginLeft: '170px' }}><br/>
+					<div className="card">
+						<img src={servicios} className="card-img-top mx-auto d-block mt-4 mb-3" style={{ width: '50%' }} alt=""/>
 						<div className="card-body">
-							<h1 className=""> </h1>
-							<p className=""></p>
+							<h1 className="card-title">SERVICIOS</h1>
+							<p className="card-text">Aqui puedes gestionar los servicios</p>
+							<a href="/Servicios" className="btn btn-success">
+								Ver servicios
+							</a>
 						</div>
 					</div>
 				</div>
-				<div className="col-md-4 mb-4"><br/>
+				<div className="col-md-4 mb-4" style={{ marginLeft: '10px' }}><br/>
 					<div className="card">
 						<img src={tareas} className="card-img-top mx-auto d-block mt-4 mb-3" style={{ width: '50%' }} alt=""/>
 						<div className="card-body">
