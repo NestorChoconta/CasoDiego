@@ -240,9 +240,6 @@ const ListClients = () => {
 							Telefono
 						</th>
 						<th scope="col" className="col-1 align-middle text-center">
-							Usuario
-						</th>
-						<th scope="col" className="col-1 align-middle text-center">
 							Compañia
 						</th>
 						<th scope="col" className="col-1 align-middle text-center">
@@ -273,11 +270,6 @@ const ListClients = () => {
 							</td>
 							<td className="align-middle text-center">{client.numDocument}</td>
 							<td className="align-middle text-center">{client.phone}</td>
-							<td className="align-middle text-center">
-								{client.users
-									? `${client.users.firstName || ""} ${client.users.Surname}`
-									: "Sin Usuario"}
-							</td>
 							<td className="align-middle text-center">
 								{client.companies ? client.companies.name : "Sin Compañia"}
 							</td>

@@ -65,14 +65,24 @@ const ImportClient = ({ closeModal, onImportFinish }) => {
 			);
 
 			if (!response.data.message === "Importación exitosa") {
-				toast.error("No se puede realizar la importación");
+				toast.error(
+					"No se puede realizar la importación porque la información ya está registrada en el sistema",
+					{
+						autoClose: 2000,
+					}
+				);
 				closeModal();
 			} else {
 				onImportFinish();
 			}
 		} catch (error) {
 			console.error("Error al importar el archivo", error);
-			toast.error("No se puede realizar la importación");
+			toast.error(
+				"No se puede realizar la importación porque la información ya está registrada en el sistema",
+				{
+					autoClose: 2000,
+				}
+			);
 		}
 	};
 
@@ -104,7 +114,7 @@ const ImportClient = ({ closeModal, onImportFinish }) => {
 						</div>
 						<div className="mb-3 text-center">
 							<Link
-								onClick={closeModal}
+								onClick={closeModalAndNavigate}
 								className="btn btn-warning btn-md mx-1"
 							>
 								Cancelar
