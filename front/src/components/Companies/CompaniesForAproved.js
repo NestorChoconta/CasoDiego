@@ -228,6 +228,7 @@ const ListCompaniesForAproved = () => {
                                 <button
                                     className="btn btn-primary btn-sm mx-1"
                                     onClick={(e) => handleFormSubmit(company.id, e)}
+                                    style={{ marginBottom:'3%' }}
                                 >
                                     Aprobar
                                 </button>
