@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import clientNormal from "../../img/clientNormal.png";
+import clientJudicial from "../../img/clientJudicial.png";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CreateCompany from "../Companies/CreateCompany";
+import CreateClient from "../Clients/CreateClient";
 import { ToastContainer ,toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -18,6 +21,8 @@ function Login() {
     const [verificationAlert, setVerificationAlert] = useState("");
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [showModalClient, setShowModalClient] = useState(false);
+    const [showModalCompany, setShowModalCompany] = useState(false);
     const [showVerification, setShowVerification] = useState(false);
     
 
@@ -77,7 +82,7 @@ function Login() {
                 navigate("/MenuSuperAdmin");
             } else if (idRole === 2) {
                 navigate("/MenuAdmin");
-            } else if (idRole === 3) {  
+            } else if (idRole === 3) {
                 navigate("/MenuEmple");
             } else {
                 navigate("/");
@@ -89,16 +94,19 @@ function Login() {
     };
 
     const ModalCloseSinNoti = () =>{
-        setShowModal(false)
+        setShowModal(false) // Cerrar el modal de selección de tipo de cliente
     }
-
-
-    const closeModal = () => {
-        setShowModal(false);
-    };
 
     const handleCompanyRegistered = () => {
         toast.success("¡La compañía fue registrada y está lista para aprobación!");
+        setShowModalCompany(false); // Cerrar el modal de registro de compañía
+        setShowModal(true); // Volver al modal de selección de tipo de cliente
+    };
+
+    const handleClientRegistered = () => {
+        toast.success("El cliente fue registrada exitosamente!");
+        setShowModalClient(false); // Cerrar el modal de registro de cliente
+        setShowModal(true); // Volver al modal de selección de tipo de cliente
     };
 
     const closeVerificationModal = () => {
@@ -183,20 +191,71 @@ function Login() {
             )}
             {showModal && (
                 <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                <div className="modal-dialog modal-dialog-centered modal-lg">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Tipo de cliente</h5>
+                            <button type="button" className="btn-close" aria-label="Close" onClick={() => ModalCloseSinNoti()}></button>
+                        </div>
+                        <div className="modal-body d-flex justify-content-center">
+                            <div className="row">
+                                <div className="col-md-6 d-flex flex-column align-items-center">
+                                    <div className="mb-3">
+                                        <img src={clientNormal} style={{ width: '40%' }} alt="Cliente Normal" className="img-fluid" />
+                                    </div>
+                                    <div className="mb-3">
+                                        <button className="btn btn-primary" onClick={() => { setShowModal(false); setShowModalClient(true); }}>Cliente Normal</button>
+                                    </div>
+                                </div>
+                                <div className="col-md-6 d-flex flex-column align-items-center">
+                                    <div className="mb-3">
+                                        <img src={clientJudicial} style={{ width: '50%' }} alt="Cliente Judicial" className="img-fluid" />
+                                    </div>
+                                    <div>
+                                        <button className="btn btn-primary" onClick={() => { setShowModal(false); setShowModalCompany(true); }}>Cliente Judicial</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            )}
+			{/* Modal para registrar un cliente normal */}
+            {showModalClient && (
+                <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Registrar compañía</h5>
-                                <button type="button" className="btn-close" aria-label="Close" onClick={() => ModalCloseSinNoti()}></button>
+                                <h5 className="modal-title">Registrar cliente normal</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={() => setShowModalClient(false)}></button>
                             </div>
                             <div className="modal-body">
-                            <CreateCompany closeModal={() => closeModal()} ModalCloseSinNoti={() => ModalCloseSinNoti()} handleCompanyRegistered={() => handleCompanyRegistered()} /><br/><br/>
+                                <CreateClient closeModal={() => setShowModalClient(false)} handleClientRegistered={handleClientRegistered} />
                             </div>
                         </div>
                     </div>
                 </div>
             )}
-			<ToastContainer position="top-right" autoClose={3000} /> {/* Agrega el ToastContainer aquí */}
+
+            {/* Modal para registrar una compañía */}
+            {showModalCompany && (
+                <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <div className="modal-dialog modal-dialog-centered modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Registrar cliente judicial</h5>
+                                <button type="button" className="btn-close" aria-label="Close" onClick={() => setShowModalCompany(false)}></button>
+                            </div>
+                            <div className="modal-body">
+                                <CreateCompany closeModal={() => setShowModalCompany(false)} handleCompanyRegistered={handleCompanyRegistered} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <ToastContainer position="top-right" autoClose={3000} />
         </div>
     );
 }
