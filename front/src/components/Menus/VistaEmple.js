@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import clientes from "../../img/clientes.png";
+import clientes from '../../img/dashClientes.png'
 import compañias from "../../img/compañias.png";
 import tareas from "../../img/tareas.png";
 import LogoutButton from "../Login/LogouthButton";
@@ -28,27 +28,15 @@ const VistaEmple = () => {
 				<br />
 			</div>
 			<br />
-			<div className="row">
-				<div className="col-md-4 ">
-					<div className="card">
-						<img src={clientes} className="card-img-top mx-auto d-block mt-2 mb-3" style={{ width: "50%" }} alt=""/>
-						<div className="card-body">
-							<h1 className="card-title">CLIENTES</h1>
-							<p className="card-text">Aqui puedes ver todos los clientes</p>
-							<a href="/clientes" className="btn btn-success">
-								Ver clientes
-							</a>
-						</div>
-					</div>
-				</div>
+			<div className="row justify-content-center">
 				<div className="col-md-4">
 					<div className="card">
-						<img src={compañias} className="card-img-top mx-auto d-block mt-4 mb-3" style={{ width: "50%" }} alt=""/>
+						<img src={clientes} className="card-img-top mx-auto d-block mt-3 mb-2" style={{ width: '50%', height: '175px' }} alt=""/>
 						<div className="card-body">
-							<h1 className="card-title">COMPAÑIAS</h1>
-							<p className="card-text">Aqui puedes ver todas las compañias</p>
-							<a href="/compañiasEmple" className="btn btn-success">
-								Ver Compañias
+							<h1 className="card-title">CLIENTES</h1>
+							<p className="card-text">Aqui puedes ver todos los clientes normales o juridicos</p>
+							<a href="/dashboardClientesEmp" className="btn btn-success">
+								Ver clientes
 							</a>
 						</div>
 					</div>

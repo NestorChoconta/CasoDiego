@@ -141,7 +141,7 @@ function Login() {
                 </form>
                 <div style={{ marginLeft: 'auto' }}>
                     <Link to="#" className="btn btn-link btn-md mx-1" onClick={() => setShowModal(true)}>
-                        ¿Deseas registrar tu compañía?
+                        ¿Deseas registrar un cliente?
                     </Link>
                 </div>
                 {verificationAlert && (

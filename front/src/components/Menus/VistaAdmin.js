@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import usuarios from '../../img/usuarios.png'
-import clientes from '../../img/clientes.png'
-import compañias from '../../img/compañias.png'
+import clientes from '../../img/dashClientes.png'
 import tareas from '../../img/tareas.png'
 import LogoutButton from "../Login/LogouthButton"
 import Cookies from "js-cookie"
@@ -40,11 +39,11 @@ const VistaAdmin = () => {
 				</div>
 				<div className="col-md-4">
 					<div className="card">
-						<img src={clientes} className="card-img-top mx-auto d-block mt-2 mb-3" style={{ width: '50%' }} alt=""/>
+						<img src={clientes} className="card-img-top mx-auto d-block mt-3 mb-2" style={{ width: '50%', height: '175px' }} alt=""/>
 						<div className="card-body">
 							<h1 className="card-title">CLIENTES</h1>
-							<p className="card-text">Aqui puedes ver todos los clientes</p>
-							<a href="/clientes" className="btn btn-success">
+							<p className="card-text">Aqui puedes ver todos los clientes normales o juridicos</p>
+							<a href="/dashboardClientesAdmin" className="btn btn-success">
 								Ver clientes
 							</a>
 						</div>
@@ -52,28 +51,7 @@ const VistaAdmin = () => {
 				</div>
 				<div className="col-md-4">
 					<div className="card">
-						<img src={compañias} className="card-img-top mx-auto d-block mt-4 mb-3" style={{ width: '50%' }} alt=""/>
-						<div className="card-body">
-							<h1 className="card-title">COMPAÑIAS</h1>
-							<p className="card-text">Aqui puedes ver todas las compañias</p>
-							<a href="/compañias" className="btn btn-success">
-								Ver Compañias
-							</a>
-						</div>
-					</div>
-				</div> 
-				<div className="col-md-4"><br/>
-					<div className="">
-						<img src="" className="" alt=""/>
-						<div className="card-body">
-							<h1 className="">  </h1>
-							<p className=""></p>
-						</div>
-					</div>
-				</div>
-				<div className="col-md-4"><br/>
-					<div className="card">
-						<img src={tareas} className="card-img-top mx-auto d-block mt-4 mb-3" style={{ width: '50%' }} alt=""/>
+						<img src={tareas} className="card-img-top mx-auto d-block mt-3 mb-1" style={{ width: '50%' }} alt=""/>
 						<div className="card-body">
 							<h1 className="card-title">TAREAS</h1>
 							<p className="card-text">Aqui puedes asignar tareas</p>
